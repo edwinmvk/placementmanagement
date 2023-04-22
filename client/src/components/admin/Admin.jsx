@@ -12,7 +12,9 @@ const Admin = () => {
         <div className="w-full flex flex-col overflow-y-scroll overflow-x-hidden">
           <Header />
           <Content />
-          <Footer />
+          <div className="h-full flex flex-col-reverse">
+            <Footer />
+          </div>
         </div>
       </div>
     </div>
