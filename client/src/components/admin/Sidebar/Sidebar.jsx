@@ -82,8 +82,8 @@ const Sidebar = () => {
 
   useEffect(() => {
     handleWindowSizeChange();
-    window.addEventListener("resize", handleWindowSizeChange);
-    return () => window.removeEventListener("resize", handleWindowSizeChange); // This code removes the event listener added to the window object for the "resize" event
+    window.addEventListener("resize", handleWindowSizeChange); // This code sets up an event listener for the "resize" event on the window object when the component mounts (i.e., when we load admin page)
+    return () => window.removeEventListener("resize", handleWindowSizeChange); // This code removes the event listener when the component unmounts (i.e., when we exit the admin page)
   }, []);
 
   const handleWindowSizeChange = () => {
