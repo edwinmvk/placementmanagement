@@ -12,13 +12,29 @@ export const Context = createContext(null);
 const ContextProvider = ({ children }) => {
   const [isCollapsed, setCollapsed] = useState(false);
 
-  const [googleUser, setGoogleUser] = useState(null);
+  const [unRegisteredGoogleUser, setUnRegisteredGoogleUser] = useState(null);
+  const [registeredGoogleUser, setRegisteredGoogleUser] = useState(null);
+
+  const checkUser = async (signedInUser) => {
+    try {
+      // const response = await fetch("/....");
+      // const data = await response.json();
+      const data = "unregistered";
+      if (data === "unregistered") {
+        setUnRegisteredGoogleUser(signedInUser);
+      } else if (data === "registered") {
+        setRegisteredGoogleUser(signedInUser);
+      }
+      console.log(signedInUser);
+    } catch (error) {
+      googleSignOut(); // signing out is necessary response is not obtained. If we didnt write this function, even though the page is protected and not shown, the user details are stil existing
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    // this code means that when the ContextProvider component mounts intially (i.e.,at the start of application), we are setting a function which automatically runs in background and checks for changes in Google Auth
     const unsubscribe = onAuthStateChanged(auth, (signedInUser) => {
-      setGoogleUser(signedInUser);
-      console.log(signedInUser);
+      checkUser(signedInUser); // this function sends the signedInUser object from firebase to the backend and checks whether the user is registered or not.
     });
     return () => {
       unsubscribe();
@@ -26,7 +42,7 @@ const ContextProvider = ({ children }) => {
   }, []);
 
   const [admin, setAdmin] = useState(() => {
-    // Load admin from localStorage if it exists and hasn't expired
+    // Load admin from localStorage upon refresh if it exists and hasn't expired
     const adminJson = localStorage.getItem("browseradmin");
     if (adminJson) {
       const { data, expiry } = JSON.parse(adminJson);
@@ -82,7 +98,8 @@ const ContextProvider = ({ children }) => {
         logout,
         googleSignIn,
         googleSignOut,
-        googleUser,
+        unRegisteredGoogleUser,
+        registeredGoogleUser,
         isCollapsed,
         setCollapsed,
       }}

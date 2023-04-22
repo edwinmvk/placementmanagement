@@ -8,6 +8,7 @@ import Home from "../pages/admin/Home/Home";
 import NewPlacement from "../pages/admin/NewPlacement/NewPlacement";
 import Responses from "../pages/admin/Responses/Responses";
 import ManageStudents from "../pages/admin/ManageStudents/ManageStudents";
+import RegisterUser from "../components/user/RegisterUser/RegisterUser";
 import User from "../components/user/User";
 import Error404 from "../components/error404/Error404";
 
@@ -31,11 +32,19 @@ const RoutesDef = () => {
         <Route path="manage" element={<ManageStudents />} />
       </Route>
       <Route
+        path="/register"
+        element={
+          <Protected.ProtectedUserUnregistered>
+            <RegisterUser />
+          </Protected.ProtectedUserUnregistered>
+        }
+      />
+      <Route
         path="/userprofile"
         element={
-          <Protected.ProtectedUser>
+          <Protected.ProtectedUserRegistered>
             <User />
-          </Protected.ProtectedUser>
+          </Protected.ProtectedUserRegistered>
         }
       />
       <Route path="*" element={<Error404></Error404>}></Route>

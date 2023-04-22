@@ -26,14 +26,14 @@ const Home = () => {
     <div className="mx-5">
       <Typography.Title level={3}>Dashboard</Typography.Title>
       <div className="flex flex-wrap">
-        <Card className="text-center m-3 md:w-40 w-full shadow-3 bg-gray-200 hover:shadow-md">
+        <Card className="text-center m-3 md:w-40 w-full bg-gradient-to-r from-white via-white to-neutral-100 shadow-lg hover:shadow-xl">
           <PushpinOutlined
             className="text-4xl rounded-md"
             style={{ color: "#4d3f3f", backgroundColor: "#e6d5d5" }}
           />
           <Statistic title="Total Placements" value={totplacements} />
         </Card>
-        <Card className="text-center m-3 md:w-40 w-full shadow-3 bg-gray-200 hover:shadow-md">
+        <Card className="text-center m-3 md:w-40 w-full bg-gradient-to-r from-white via-white to-neutral-100 shadow-lg hover:shadow-xl">
           <UserOutlined
             className="text-4xl rounded-md"
             style={{ color: "#1f5926", backgroundColor: "#cafacc" }}

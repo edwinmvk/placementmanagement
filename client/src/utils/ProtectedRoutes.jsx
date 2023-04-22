@@ -10,12 +10,24 @@ export const ProtectedAdmin = ({ children }) => {
   return children;
 };
 
-export const ProtectedUser = ({ children }) => {
-  const { googleUser } = useContext(Context);
-  if (!googleUser) {
+export const ProtectedUserUnregistered = ({ children }) => {
+  const { unRegisteredGoogleUser } = useContext(Context);
+  if (!unRegisteredGoogleUser) {
     return <Navigate to="/signin" replace />;
   }
   return children;
 };
 
-export default { ProtectedAdmin, ProtectedUser };
+export const ProtectedUserRegistered = ({ children }) => {
+  const { registeredGoogleUser } = useContext(Context);
+  if (!registeredGoogleUser) {
+    return <Navigate to="/signin" replace />;
+  }
+  return children;
+};
+
+export default {
+  ProtectedAdmin,
+  ProtectedUserUnregistered,
+  ProtectedUserRegistered,
+};
