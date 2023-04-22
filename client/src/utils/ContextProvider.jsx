@@ -15,6 +15,7 @@ const ContextProvider = ({ children }) => {
   const [googleUser, setGoogleUser] = useState(null);
 
   useEffect(() => {
+    // this code means that when the ContextProvider component mounts intially (i.e.,at the start of application), we are setting a function which automatically runs in background and checks for changes in Google Auth
     const unsubscribe = onAuthStateChanged(auth, (signedInUser) => {
       setGoogleUser(signedInUser);
       console.log(signedInUser);
