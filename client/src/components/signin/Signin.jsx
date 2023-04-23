@@ -30,52 +30,60 @@ const Signin = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col justify-center items-center bg-gradient-to-br from-sky-50 to-gray-200">
-      <div className="mx-3 p-7 rounded-xl bg-white shadow-xl">
-        <div className="space-y-4">
-          <img
-            src="https://nxtwave.imgix.net//company-happenings/hero-section-illustrate-desktop.svg?auto=format,compress&q=80"
-            loading="lazy"
-            className="w-20"
-            alt="tailus logo"
-          />
-          <h2 className="mb-8 text-4xl text-cyan-900 font-bold">
-            Sign in to apply for <br /> Placements.
-          </h2>
-        </div>
-        <div className="mt-16 grid space-y-4">
-          <button
-            onClick={handleGoogleSignIn}
-            className="group h-12 px-6 border-2 border-gray-300 rounded-full transition duration-300
+    <div className="h-full flex flex-col md:flex-row bg-neutral-100">
+      <div className="flex-1 flex justify-center items-center bg-cyan-950">
+        <img
+          src="https://tecdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+          alt="Sample image"
+        />
+      </div>
+      <div className="py-3 flex-1 flex flex-col justify-center items-center bg-gradient-to-br from-sky-50 to-gray-200">
+        <div className="m-3 p-7 rounded-xl bg-white shadow-xl">
+          <div className="space-y-4">
+            <img
+              src="https://nxtwave.imgix.net//company-happenings/hero-section-illustrate-desktop.svg?auto=format,compress&q=80"
+              loading="lazy"
+              className="w-20"
+              alt="tailus logo"
+            />
+            <h2 className="mb-8 text-4xl text-cyan-900 font-bold">
+              Sign in to apply for <br /> Placements.
+            </h2>
+          </div>
+          <div className="mt-16 grid space-y-4">
+            <button
+              onClick={handleGoogleSignIn}
+              className="group h-12 px-6 border-2 border-gray-300 rounded-full transition duration-300
      hover:border-blue-400 focus:bg-blue-50 active:bg-blue-100"
-          >
-            <div className="relative flex items-center space-x-4 justify-center">
-              <img
-                src="https://tailus.io/sources/blocks/social/preview/images/google.svg"
-                className="absolute left-0 w-6"
-                alt="google logo"
-              />
-              <span className="block w-max font-semibold tracking-wide text-gray-700 text-md transition duration-300 group-hover:text-blue-600">
-                Continue with Google
-              </span>
-            </div>
-          </button>
-          <button
-            onClick={navigateAdminSignin}
-            className="group h-12 px-6 border-2 border-gray-300 rounded-full transition duration-300
+            >
+              <div className="relative flex items-center space-x-4 justify-center">
+                <img
+                  src="https://tailus.io/sources/blocks/social/preview/images/google.svg"
+                  className="absolute left-0 w-6"
+                  alt="google logo"
+                />
+                <span className="block w-max font-semibold tracking-wide text-gray-700 text-md transition duration-300 group-hover:text-blue-600">
+                  Continue with Google
+                </span>
+              </div>
+            </button>
+            <button
+              onClick={navigateAdminSignin}
+              className="group h-12 px-6 border-2 border-gray-300 rounded-full transition duration-300
      hover:border-blue-400 focus:bg-blue-50 active:bg-blue-100"
-          >
-            <div className="relative flex items-center space-x-4 justify-center">
-              <span className="block w-max font-semibold tracking-wide text-gray-700 text-md transition duration-300 group-hover:text-blue-600">
-                Signin as Admin
-              </span>
-            </div>
-          </button>
-        </div>
-        <div className="mt-20 text-gray-600 text-center">
-          <p className="text-xs">
-            By proceeding, you agree to our Terms of Use
-          </p>
+            >
+              <div className="relative flex items-center space-x-4 justify-center">
+                <span className="block w-max font-semibold tracking-wide text-gray-700 text-md transition duration-300 group-hover:text-blue-600">
+                  Signin as Admin
+                </span>
+              </div>
+            </button>
+          </div>
+          <div className="mt-20 text-gray-600 text-center">
+            <p className="text-xs">
+              By proceeding, you agree to our Terms of Use
+            </p>
+          </div>
         </div>
       </div>
     </div>
