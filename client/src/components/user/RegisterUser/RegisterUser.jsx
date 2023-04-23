@@ -1,27 +1,32 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Context } from "../../../utils/ContextProvider";
 import { Button, Form, Typography, Input, InputNumber } from "antd";
 
 const RegisterUser = () => {
   const [form] = Form.useForm();
   const { unRegisteredGoogleUser, googleSignOut } = useContext(Context);
-
   const onFinish = async (values) => {
     // This async function is to send the form data to the server for updating the database
     try {
-      const response = await fetch("/.....", {
+      const response = await fetch("http://localhost:3000/api/user/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(values),
       });
-      const data = await response.json();
-      await googleSignOut();
+      const data = response.json();
+
+      if (response.status === 200) {
+        console.log(data);
+        alert("Registration Successful");
+        await googleSignOut(); // signout out function will take place only if the status is 200
+      } else {
+        console.log(data);
+        alert("Registration Unsuccessful. Please try again");
+      }
     } catch (error) {
-      console.error(error);
-    } finally {
-      console.log(values);
+      console.log(error);
     }
   };
 

@@ -11,11 +11,11 @@ const UserSchema = new mongoose.Schema({
   appliedplacements: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "AppliedPlacementsSchema",
+      ref: "appliedplacementschema",
     },
   ],
 });
 
-const userModel = mongoose.model("User", UserSchema);
+const userModel = mongoose.model("userschema", UserSchema);
 
 export default userModel;

@@ -5,14 +5,20 @@ import { Context } from "../../utils/ContextProvider";
 const AdminSignin = () => {
   const { admin, login } = useContext(Context);
   const navigate = useNavigate();
-  const [currentAdmin, setCurrentAdmin] = useState("");
+  const [adminobj, setAdminObj] = useState({
+    username: "",
+    password: "",
+  });
 
-  const handleLogin = () => {
-    login(currentAdmin);
+  const handleLogin = (event) => {
+    event.preventDefault();
+    login(adminobj);
   };
 
   useEffect(() => {
-    if (admin && admin === "admin") navigate("/admin");
+    if (admin) {
+      navigate("/admin");
+    }
   }, [admin]);
 
   return (
@@ -57,43 +63,56 @@ const AdminSignin = () => {
             Log in
           </h2>
           <div className="mt-12">
-            {/* <form> */}
-            <div>
-              <div className="text-sm font-bold text-gray-700 tracking-wide">
-                Username
-              </div>
-              <input
-                className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500"
-                type=""
-                placeholder="Enter your username"
-                onChange={(event) => {
-                  setCurrentAdmin(event.target.value);
-                }}
-              />
-            </div>
-            <div className="mt-8">
-              <div className="flex justify-between items-center">
+            <form onSubmit={handleLogin}>
+              <div>
                 <div className="text-sm font-bold text-gray-700 tracking-wide">
-                  Password
+                  Username
                 </div>
+                <input
+                  required
+                  name="username"
+                  className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500"
+                  type="text"
+                  placeholder="Enter your username"
+                  value={adminobj.username}
+                  onChange={(event) => {
+                    setAdminObj((prev) => {
+                      return { ...prev, username: event.target.value };
+                    });
+                  }}
+                />
               </div>
-              <input
-                className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500"
-                type=""
-                placeholder="Enter your password"
-              />
-            </div>
-            <div className="mt-10">
-              <button
-                onClick={handleLogin}
-                className="mb-3 bg-indigo-500 text-gray-100 p-4 w-full rounded-full tracking-wide
+              <div className="mt-8">
+                <div className="flex justify-between items-center">
+                  <div className="text-sm font-bold text-gray-700 tracking-wide">
+                    Password
+                  </div>
+                </div>
+                <input
+                  required
+                  name="password"
+                  className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500"
+                  type="password"
+                  placeholder="Enter your password"
+                  value={adminobj.password}
+                  onChange={(event) => {
+                    setAdminObj((prev) => {
+                      return { ...prev, password: event.target.value };
+                    });
+                  }}
+                />
+              </div>
+              <div className="mt-10">
+                <button
+                  type="submit"
+                  className="mb-3 bg-indigo-500 text-gray-100 p-4 w-full rounded-full tracking-wide
                                 font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-indigo-600
                                 shadow-lg"
-              >
-                Log In
-              </button>
-            </div>
-            {/* </form> */}
+                >
+                  Log In
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

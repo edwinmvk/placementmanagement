@@ -6,12 +6,12 @@ const AppliedPlacementsSchema = new mongoose.Schema({
   resume: { type: String, required: true },
   creator: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "userschema",
   },
 });
 
 const appliedPlacementsModel = mongoose.model(
-  "AppliedPlacements",
+  "appliedplacementschema",
   AppliedPlacementsSchema
 );
 

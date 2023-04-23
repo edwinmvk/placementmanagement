@@ -17,7 +17,7 @@ const ContextProvider = ({ children }) => {
 
   const checkUser = async (signedInUser) => {
     try {
-      const response = await fetch("http://localhost:3000/api/user/check", {
+      const response = await fetch("http://localhost:3000/api/user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -27,16 +27,16 @@ const ContextProvider = ({ children }) => {
         }),
       });
       const data = await response.json();
-      console.log(data);
-
-      // const data = "registered";
 
       if (data === "unregistered") {
+        console.log(data);
         setUnRegisteredGoogleUser(signedInUser);
       } else if (data === "registered") {
+        console.log(data);
         setRegisteredGoogleUser(signedInUser);
+      } else {
+        console.log(data);
       }
-      console.log(signedInUser);
     } catch (error) {
       googleSignOut(); // signing out is necessary response is not obtained. If we didnt write this function, even though the page is protected and not shown, the user details are stil existing
       console.error(error);
@@ -82,8 +82,27 @@ const ContextProvider = ({ children }) => {
     }
   }, [admin]);
 
-  const login = (currentAdmin) => {
-    setAdmin(currentAdmin);
+  const login = async (adminobj) => {
+    try {
+      if (adminobj) {
+        const response = await fetch("http://localhost:3000/api/admin", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(adminobj),
+        });
+        const data = await response.json();
+        if (response.status === 200) {
+          console.log(data);
+          setAdmin(adminobj);
+        } else {
+          console.log(data);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const logout = () => {

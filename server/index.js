@@ -5,6 +5,7 @@ import cors from "cors";
 import connectDB from "./mongodb/connectDB/connectDB.js";
 import userRouter from "./routes/userModel.routes.js";
 import appliedPlacementsRouter from "./routes/appliedPlacementsModel.routes.js";
+import adminRouter from "./routes/adminModel.routes.js";
 
 dotenv.config();
 
@@ -16,8 +17,9 @@ app.get("/", (req, res) => {
   res.send("Hi");
 });
 
-app.use("/api/user/check", userRouter);
-app.use("/api/user/appliedplacements", appliedPlacementsRouter);
+app.use("/api/user", userRouter);
+app.use("/api/appliedplacements", appliedPlacementsRouter);
+app.use("/api/admin", adminRouter);
 
 const startServer = async () => {
   try {
