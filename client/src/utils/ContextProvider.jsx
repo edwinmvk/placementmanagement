@@ -17,9 +17,20 @@ const ContextProvider = ({ children }) => {
 
   const checkUser = async (signedInUser) => {
     try {
-      // const response = await fetch("/....");
-      // const data = await response.json();
-      const data = "unregistered";
+      const response = await fetch("http://localhost:3000/api/user/check", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userid: parseInt(signedInUser.displayName.substring(0, 8)),
+        }),
+      });
+      const data = await response.json();
+      console.log(data);
+
+      // const data = "registered";
+
       if (data === "unregistered") {
         setUnRegisteredGoogleUser(signedInUser);
       } else if (data === "registered") {
@@ -34,7 +45,12 @@ const ContextProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (signedInUser) => {
-      checkUser(signedInUser); // this function sends the signedInUser object from firebase to the backend and checks whether the user is registered or not.
+      if (signedInUser) {
+        checkUser(signedInUser); // this function sends the signedInUser object from firebase to the backend and checks whether the user is registered or not.
+      } else {
+        setUnRegisteredGoogleUser(null);
+        setRegisteredGoogleUser(null);
+      }
     });
     return () => {
       unsubscribe();

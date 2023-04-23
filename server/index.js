@@ -4,7 +4,7 @@ import cors from "cors";
 
 import connectDB from "./mongodb/connectDB/connectDB.js";
 import userRouter from "./routes/userModel.routes.js";
-import userDetailsRouter from "./routes/userDetailsModel.routes.js";
+import appliedPlacementsRouter from "./routes/appliedPlacementsModel.routes.js";
 
 dotenv.config();
 
@@ -16,8 +16,8 @@ app.get("/", (req, res) => {
   res.send("Hi");
 });
 
-app.use("/api/user/profile", userRouter);
-app.use("/api/user/details", userDetailsRouter);
+app.use("/api/user/check", userRouter);
+app.use("/api/user/appliedplacements", appliedPlacementsRouter);
 
 const startServer = async () => {
   try {
