@@ -15,12 +15,15 @@ const RegisterUser = () => {
         },
         body: JSON.stringify(values),
       });
-      const data = response.json();
+      const data = await response.json();
 
       if (response.status === 200) {
         console.log(data);
         alert("Registration Successful");
         await googleSignOut(); // signout out function will take place only if the status is 200
+      } else if (response.status === 401) {
+        console.log(data);
+        alert("Registration Unsuccessful. Please use jec email id");
       } else {
         console.log(data);
         alert("Registration Unsuccessful. Please try again");

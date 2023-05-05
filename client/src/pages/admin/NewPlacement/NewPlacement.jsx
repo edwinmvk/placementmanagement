@@ -23,12 +23,12 @@ const NewPlacement = () => {
 
   const initialValues = {
     placementid: new Date().toISOString().slice(10),
-    dateField: moment(),
+    createdate: moment(),
   };
 
   const validateMessages = {
     required: "${label} is required!",
-    types: {
+    type: {
       number: "${label} is not a valid number!",
     },
     number: {
@@ -67,7 +67,7 @@ const NewPlacement = () => {
         >
           <Input />
         </Form.Item>
-        <Form.Item name="dateField" label="Date">
+        <Form.Item name="createdate" label="Current Date">
           <DatePicker disabled />
         </Form.Item>
 
