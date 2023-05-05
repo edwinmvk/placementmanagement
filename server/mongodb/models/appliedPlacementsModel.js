@@ -11,7 +11,7 @@ const AppliedPlacementsSchema = new mongoose.Schema({
 });
 
 const appliedPlacementsModel = mongoose.model(
-  "appliedplacementschema",
+  "appliedplacementsschema",
   AppliedPlacementsSchema
 );
 

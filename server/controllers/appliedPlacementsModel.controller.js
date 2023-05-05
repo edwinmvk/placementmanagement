@@ -5,10 +5,12 @@ const getAllPlacements = async (req, res) => {};
 const getPlacementsById = async (req, res) => {};
 const createPlacements = async (req, res) => {};
 const updatePlacements = async (req, res) => {};
+const deletePlacements = async (req, res) => {};
 
 export {
   getAllPlacements,
   getPlacementsById,
   createPlacements,
   updatePlacements,
+  deletePlacements,
 };

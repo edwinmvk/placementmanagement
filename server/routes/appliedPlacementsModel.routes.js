@@ -7,6 +7,7 @@ import {
   getPlacementsById,
   createPlacements,
   updatePlacements,
+  deletePlacements,
 } from "../controllers/appliedPlacementsModel.controller.js";
 
 const router = express.Router();
@@ -15,5 +16,6 @@ router.route("/").get(getAllPlacements);
 router.route("/:id").get(getPlacementsById);
 router.route("/").post(createPlacements);
 router.route("/:id").patch(updatePlacements);
+router.route("/:id").delete(deletePlacements);
 
 export default router;

@@ -11,7 +11,7 @@ const UserSchema = new mongoose.Schema({
   appliedplacements: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "appliedplacementschema",
+      ref: "appliedplacementsschema",
     },
   ],
 });

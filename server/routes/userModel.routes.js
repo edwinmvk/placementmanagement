@@ -8,6 +8,7 @@ import {
   getUserById,
   createUser,
   updateUser,
+  deleteUser,
 } from "../controllers/userModel.controller.js";
 
 const router = express.Router();
@@ -17,5 +18,6 @@ router.route("/").get(getAllUsers);
 router.route("/:id").get(getUserById);
 router.route("/register").post(createUser);
 router.route("/:id").patch(updateUser);
+router.route("/:id").delete(deleteUser);
 
 export default router;
