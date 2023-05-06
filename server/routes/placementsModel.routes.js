@@ -9,7 +9,7 @@ import {
 
 const router = express.Router();
 
-router.route("/").get(createPlacements);
+router.route("/").post(createPlacements);
 router.route("/").delete(deletePlacements);
 
 export default router;

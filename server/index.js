@@ -6,6 +6,7 @@ import connectDB from "./mongodb/connectDB/connectDB.js";
 import userRouter from "./routes/userModel.routes.js";
 import appliedPlacementsRouter from "./routes/appliedPlacementsModel.routes.js";
 import adminRouter from "./routes/adminModel.routes.js";
+import placementsRouter from "./routes/placementsModel.routes.js";
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.get("/", (req, res) => {
 app.use("/api/user", userRouter);
 app.use("/api/appliedplacements", appliedPlacementsRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/placements", placementsRouter);
 
 const startServer = async () => {
   try {
