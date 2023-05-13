@@ -1,4 +1,5 @@
 import adminModel from "../mongodb/models/adminModel.js";
+import mongoose from "mongoose";
 
 const getAdmin = async (req, res) => {
   try {
