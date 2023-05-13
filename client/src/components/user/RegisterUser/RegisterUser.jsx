@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Context } from "../../../utils/ContextProvider";
-import { Button, Form, Typography, Input, InputNumber } from "antd";
+import { Button, Form, Typography, Input, InputNumber, Modal } from "antd";
 
 const RegisterUser = () => {
   const [form] = Form.useForm();
@@ -18,15 +18,23 @@ const RegisterUser = () => {
       const data = await response.json();
 
       if (response.status === 200) {
-        console.log(data);
-        alert("Registration Successful");
+        Modal.success({
+          title: "Registration Successful",
+          okButtonProps: { className: "bg-blue-500" },
+        });
         await googleSignOut(); // signout out function will take place only if the status is 200
       } else if (response.status === 401) {
-        console.log(data);
-        alert("Registration Unsuccessful. Please use jec email id");
+        Modal.error({
+          title: "Registration Unsuccessful",
+          content: "Please use jec email id",
+          okButtonProps: { className: "bg-blue-500" },
+        });
       } else {
-        console.log(data);
-        alert("Registration Unsuccessful. Please try again");
+        Modal.error({
+          title: "Registration Unsuccessful",
+          content: "Please try again",
+          okButtonProps: { className: "bg-blue-500" },
+        });
       }
     } catch (error) {
       console.log(error);

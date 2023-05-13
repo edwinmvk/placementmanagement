@@ -6,6 +6,7 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import { auth } from "./Firebase";
+import { message } from "antd";
 
 export const Context = createContext(null);
 
@@ -29,10 +30,10 @@ const ContextProvider = ({ children }) => {
       const data = await response.json();
 
       if (data === "unregistered") {
-        console.log(data);
+        // console.log(data);
         setUnRegisteredGoogleUser(signedInUser);
       } else if (data === "registered") {
-        console.log(data);
+        // console.log(data);
         setRegisteredGoogleUser(signedInUser);
       } else {
         console.log(data);
@@ -94,10 +95,10 @@ const ContextProvider = ({ children }) => {
         });
         const data = await response.json();
         if (response.status === 200) {
-          console.log(data);
+          message.success(data);
           setAdmin(adminobj);
         } else {
-          console.log(data);
+          message.error(data);
         }
       }
     } catch (error) {

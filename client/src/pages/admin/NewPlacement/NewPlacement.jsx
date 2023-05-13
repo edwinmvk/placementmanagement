@@ -1,25 +1,50 @@
 import React from "react";
-import { Form, Input, Button, InputNumber, DatePicker, Typography } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  InputNumber,
+  DatePicker,
+  Typography,
+  Modal,
+} from "antd";
 import moment from "moment";
 
 const NewPlacement = () => {
   const [form] = Form.useForm();
 
-  // const sendData= async (values)=> { // This async function is to send the form data to the server for updating the database
-  //     try{
-  //         const response= await fetch('/.....', {
-  //         method: 'POST',
-  //         headers: {
-  //             'Content-Type': 'application/json'
-  //         },
-  //         body: JSON.stringify(values)
-  //         });
-  //         const data= await response.json();
-  //         console.log(data);
-  //     } catch(error){
-  //         console.error(error);
-  //     }
-  // }
+  const sendData = async (values) => {
+    if (typeof values !== "object") {
+      console.error("Error: values is not an object.");
+      return;
+    }
+
+    // This async function is to send the form data to the server for updating the database
+    try {
+      const response = await fetch("http://localhost:3000/api/placements", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+      const data = await response.json();
+      if (response.status === 200) {
+        Modal.success({
+          title: data,
+          okButtonProps: { className: "bg-blue-500" },
+        });
+      } else if (response.status === 500) {
+        Modal.error({
+          title: "Placement not created",
+          content: "Please try again",
+          okButtonProps: { className: "bg-blue-500" },
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const initialValues = {
     placementid: new Date().toISOString().slice(10),
@@ -40,7 +65,7 @@ const NewPlacement = () => {
     console.log(values);
     form.resetFields();
 
-    // sendData(values);
+    sendData(values);
   };
 
   return (
