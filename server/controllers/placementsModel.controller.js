@@ -23,36 +23,47 @@ const createPlacements = async (req, res) => {
       semester,
     } = req.body;
 
+    // findOne is used to obtain the 1st object from that schema
+    const adminObj = await adminModel.findOne();
+
+    if (!adminObj) {
+      return res.status(404).json("No admin in database");
+    }
+
     // start a new session for atomicity property
 
     const session = await mongoose.startSession();
     session.startTransaction();
 
-    const adminObj = await adminModel.findOne().session(session);
+    try {
+      // create a new placement in the database and provide reference with the adminObj
+      const newPlacement = await placementsModel.create({
+        companyname,
+        createdate,
+        placementid,
+        lastdate,
+        cgpa,
+        arrears,
+        semester,
+        description,
+        creator: adminObj._id,
+      });
 
-    if (!adminObj) throw new Error("Admin not found");
+      // also update the adminObj
+      adminObj.placements.push(newPlacement._id);
 
-    // create a new placement in the database and provide reference with the adminObj
-    const newPlacement = await placementsModel.create({
-      companyname,
-      createdate,
-      placementid,
-      lastdate,
-      cgpa,
-      arrears,
-      semester,
-      description,
-      creator: adminObj._id,
-    });
+      // .SAVE() is required in transaction during the creation and updation of data in database
+      await adminObj.save({ session });
 
-    // also update the adminObj
-    adminObj.placements.push(newPlacement._id);
+      await session.commitTransaction();
 
-    await adminObj.save({ session });
-
-    await session.commitTransaction();
-
-    res.status(200).json("Placement created successfully");
+      res.status(200).json("Placement created successfully");
+    } catch (error) {
+      await session.abortTransaction();
+      throw error;
+    } finally {
+      session.endSession();
+    }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
