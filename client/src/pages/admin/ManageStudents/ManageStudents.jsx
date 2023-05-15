@@ -1,22 +1,28 @@
 import React, { useState, useEffect } from "react";
-import { Typography, Table, Avatar, Modal, Input } from "antd";
+import { Typography, Table, Avatar, Modal, Input, message } from "antd";
 import { DeleteFilled, EditFilled } from "@ant-design/icons";
-import { LocalDetails } from "./LocalDetails";
+// import { LocalDetails } from "./LocalDetails";
 
 const ManageStudents = () => {
   const [statedata, setstatedata] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editRec, setEditRec] = useState(null);
 
-  // const fetchData= async ()=> {  // This is used to obtain the data from the server and set it to Hooks for the first time only
-  //     try{
-  //       const response= await fetch('/......');
-  //       const data= await response.json();
-  //       setstatedata(data);
-  //     } catch(error){
-  //          console.error(error);
-  //     }
-  // }
+  useEffect(() => {
+    fetchData();
+    // console.log(statedata);
+  }, []);
+
+  const fetchData = async () => {
+    // This is used to obtain the data from the server and set it to Hooks for the first time only
+    try {
+      const response = await fetch("http://localhost:3000/api/user");
+      const data = await response.json();
+      setstatedata(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   // const fetchUpdatedData= async ()=> {  // This async function is to fetch the new updated data from the server and update the statedata in the Hooks, even though they are already updated locally
   //     try{
@@ -28,37 +34,34 @@ const ManageStudents = () => {
   //     }
   // }
 
-  // const sendUpdatedData= async ()=> { // This async function is to send the updated state data to the server for updating the database
-  //     try{
-  //         const response= await fetch('/.....', {
-  //         method: 'POST',
-  //         headers: {
-  //             'Content-Type': 'application/json'
-  //         },
-  //         body: JSON.stringify(statedata)
-  //         });
-  //         const data= await response.json();
-  //         console.log(data);
-
-  //         // Fetch the updated data from backend and update the state
-  //         fetchUpdatedData();
-
-  //     } catch(error){
-  //         console.error(error);
-  //     }
-  // }
-
-  useEffect(() => {
-    // fetchData();
-
-    setstatedata(LocalDetails);
-    console.log(statedata);
-  }, []);
+  const sendUpdatedData = async (userid) => {
+    // This async function is to send the updated state data to the server for updating the database
+    try {
+      const response = await fetch(`http://localhost:3000/api/user/${userid}`, {
+        method: "DELETE",
+      });
+      const data = await response.json();
+      if (response.status === 200) {
+        message.success(data);
+        setstatedata((previousstatedata) => {
+          return previousstatedata.filter((student) => {
+            return student.userid !== userid;
+          });
+        });
+      } else if (response.status === 404) {
+        message.error("User not found in database");
+      } else if (response.status === 500) {
+        message.error("Please try again");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const columns = [
     {
       title: "Picture", // This is the column name in table which we can now itself
-      dataIndex: "picture", // This is the column name from the database which is already preassigned
+      dataIndex: "avatar", // This is the column name from the database which is already preassigned
       width: 80,
       render: (link) => {
         // for showing photos
@@ -66,16 +69,13 @@ const ManageStudents = () => {
       },
     },
     {
-      title: "Username",
-      dataIndex: `username`,
+      title: "User Id",
+      dataIndex: `userid`,
       width: 130,
-      render: (text) => {
-        return text.toUpperCase();
-      },
     },
     {
       title: "Name",
-      dataIndex: "name",
+      dataIndex: "username",
       width: 200,
     },
     {
@@ -91,8 +91,8 @@ const ManageStudents = () => {
       width: 100,
     },
     {
-      title: "SGPA",
-      dataIndex: "sgpa",
+      title: "CGPA",
+      dataIndex: "cgpa",
       sorter: true,
       width: 100,
     },
@@ -128,14 +128,8 @@ const ManageStudents = () => {
       okText: "Yes",
       okType: "danger",
       onOk: () => {
-        setstatedata((previousstatedata) => {
-          return previousstatedata.filter((student) => {
-            return student.username !== record.username;
-          });
-        });
-
-        // // sending the updated state data to the backend
-        // sendUpdatedData();
+        // sending the updated state data to the backend
+        sendUpdatedData(record.userid);
       },
     });
   };
@@ -154,8 +148,11 @@ const ManageStudents = () => {
       setstatedata((previousstatedata) => {
         // here we are updating the previous statedata array by reinserting the objects into the array based on condition
         return previousstatedata.map((student) => {
-          if (student.username === editRec.username) return editRec;
-          else return student;
+          if (student.username === editRec.username) {
+            return editRec;
+          } else {
+            return student;
+          }
         });
       });
 
@@ -189,11 +186,11 @@ const ManageStudents = () => {
     });
   };
 
-  const onChangeSgpa = (input) => {
+  const onChangeCgpa = (input) => {
     setEditRec((previouseditrec) => {
       let convertedvalue = parseFloat(input.target.value, 10);
       let checkedvalue = isNaN(convertedvalue) ? "" : convertedvalue;
-      return { ...previouseditrec, sgpa: checkedvalue };
+      return { ...previouseditrec, cgpa: checkedvalue };
     });
   };
 
@@ -207,6 +204,7 @@ const ManageStudents = () => {
         dataSource={statedata}
         scroll={{ y: 500 }}
         pagination={true}
+        rowKey="userid"
       ></Table>
 
       <Modal
@@ -233,12 +231,12 @@ const ManageStudents = () => {
           onChange={onChangeArrears}
         />
 
-        <label htmlFor="sgpa">SGPA :</label>
+        <label htmlFor="cgpa">CGPA :</label>
         <Input
           type="number"
-          id="sgpa"
-          value={editRec?.sgpa}
-          onChange={onChangeSgpa}
+          id="cgpa"
+          value={editRec?.cgpa}
+          onChange={onChangeCgpa}
         />
       </Modal>
     </div>

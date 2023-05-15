@@ -100,80 +100,72 @@ const Home = () => {
 //   );
 // };
 
-const data = [
-  {
-    placementid: 1234,
-    username: "jec20cs046",
-    status: "applied",
-    name: "Edwin",
-    resume: null,
-  },
-  {
-    placementid: 1234,
-    username: "jec20cs010",
-    status: "applied",
-    name: "Sarah",
-    resume: null,
-  },
-  {
-    placementid: 9090,
-    username: "jec20cs005",
-    status: "applied",
-    name: "Samuel",
-    resume: null,
-  },
-  {
-    placementid: 5678,
-    username: "jec20cs028",
-    status: "applied",
-    name: "Gregory",
-    resume: null,
-  },
-  {
-    placementid: 1234,
-    username: "jec20cs034",
-    status: "applied",
-    name: "Aswin",
-    resume: null,
-  },
-  {
-    placementid: 5678,
-    username: "jec20cs076",
-    status: "applied",
-    name: "Hazel",
-    resume: null,
-  },
-  {
-    placementid: 9090,
-    username: "jec20cs064",
-    status: "applied",
-    name: "Ken",
-    resume: null,
-  },
-  {
-    placementid: 9090,
-    username: "jec20cs035",
-    status: "applied",
-    name: "Augustin",
-    resume: null,
-  },
-];
-
-const columns = [
-  { title: "Placement ID", dataIndex: "placementid" },
-  { title: "Username", dataIndex: "username" },
-  { title: "Status", dataIndex: "status" },
-];
-
 const DatabaseData = () => {
+  const [statedata, setstatedata] = useState([]); // this state will eventually hold ALL the data from the DATABASE
   const [expandedRowKeys, setExpandedRowKeys] = useState([]);
 
+  const fetchData = async () => {
+    // This is used to obtain the data from the server and set it to Hooks
+    try {
+      const response = await fetch("http://localhost:3000/api/placements");
+      const data = await response.json();
+      setstatedata(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const columns = [
+    {
+      title: "Placement ID",
+      dataIndex: "placementid",
+      width: 150,
+    },
+    {
+      title: "Company name",
+      dataIndex: "companyname",
+      width: 200,
+    },
+    {
+      title: "Posted date",
+      dataIndex: "createdate",
+      width: 150,
+    },
+    {
+      title: "Last date",
+      dataIndex: "lastdate",
+      width: 150,
+    },
+    {
+      title: "Semester",
+      dataIndex: "semester",
+      width: 100,
+    },
+    {
+      title: "Min CGPA",
+      dataIndex: "cgpa",
+      width: 80,
+    },
+    {
+      title: "Max arrears",
+      dataIndex: "arrears",
+      width: 80,
+    },
+  ];
+
+  // When a row is expanded, the function adds the key of the expanded row to the expandedRowKeys array.
+  // If a row is being collapsed, the function removes its key from the expandedRowKeys array
   const handleRowExpand = (expanded, record) => {
+    // expanded is a boolean which is triggered by clicking the + or - button
     setExpandedRowKeys((prevState) => {
       if (expanded) {
-        return [...prevState, record.username];
+        return [...prevState, record.placementid];
       } else {
-        return prevState.filter((key) => key !== record.username);
+        return prevState.filter((key) => key !== record.placementid);
       }
     });
   };
@@ -181,20 +173,23 @@ const DatabaseData = () => {
   const expandedRowRender = (record) => {
     return (
       <p style={{ margin: 0 }}>
-        <strong>Name: </strong>
-        {record.name}
+        <strong>Description: </strong>
+        {record.description}
       </p>
     );
   };
 
   return (
     <Table
-      dataSource={data}
+      dataSource={statedata}
       columns={columns}
       expandedRowRender={expandedRowRender} // defines what component must be rendered in the expanded row
       onExpand={handleRowExpand}
       expandedRowKeys={expandedRowKeys}
-      rowKey="username" // Add the rowKey prop
+      rowKey="placementid"
+      bordered
+      pagination={true}
+      scroll={{ y: 500 }}
     />
   );
 };
