@@ -7,18 +7,16 @@ import {
   DatePicker,
   Typography,
   Modal,
+  message,
 } from "antd";
 import moment from "moment";
+import { v4 as uuidv4 } from "uuid";
 
 const NewPlacement = () => {
   const [form] = Form.useForm();
 
   const sendData = async (values) => {
-    if (typeof values !== "object") {
-      console.error("Error: values is not an object.");
-      return;
-    }
-
+    message.warning("Please wait for confirmation");
     // This async function is to send the form data to the server for updating the database
     try {
       const response = await fetch("http://localhost:3000/api/placements", {
@@ -31,6 +29,11 @@ const NewPlacement = () => {
       const data = await response.json();
       if (response.status === 200) {
         Modal.success({
+          title: data,
+          okButtonProps: { className: "bg-blue-500" },
+        });
+      } else if (response.status === 404) {
+        Modal.error({
           title: data,
           okButtonProps: { className: "bg-blue-500" },
         });
@@ -47,7 +50,7 @@ const NewPlacement = () => {
   };
 
   const initialValues = {
-    placementid: new Date().toISOString().slice(10),
+    placementid: uuidv4().substring(0, 6),
     createdate: moment(),
   };
 
@@ -62,10 +65,15 @@ const NewPlacement = () => {
   };
 
   const onFinish = (values) => {
-    console.log(values);
     form.resetFields();
 
-    sendData(values);
+    const formattedValues = {
+      ...values,
+      createdate: moment(values.createdate).format("YYYY-MM-DD"),
+      lastdate: moment(values.lastdate).format("YYYY-MM-DD"),
+    };
+
+    sendData(formattedValues);
   };
 
   return (
