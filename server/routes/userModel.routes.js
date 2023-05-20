@@ -5,7 +5,6 @@ import express from "express";
 import {
   checkAllUsers,
   getAllUsers,
-  getUserById,
   createUser,
   updateUser,
   deleteUser,
@@ -15,7 +14,6 @@ const router = express.Router();
 
 router.route("/").post(checkAllUsers);
 router.route("/").get(getAllUsers);
-router.route("/:id").get(getUserById);
 router.route("/register").post(createUser);
 router.route("/:id").patch(updateUser);
 router.route("/:id").delete(deleteUser);

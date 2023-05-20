@@ -24,16 +24,6 @@ const ManageStudents = () => {
     }
   };
 
-  // const fetchUpdatedData= async ()=> {  // This async function is to fetch the new updated data from the server and update the statedata in the Hooks, even though they are already updated locally
-  //     try{
-  //       const response= await fetch('/....');
-  //       const updatedData= await response.json();
-  //       setstatedata(updatedData);
-  //     } catch(error){
-  //          console.error(error);
-  //     }
-  // }
-
   const sendUpdatedData = async (userid) => {
     // This async function is to send the updated state data to the server for updating the database
     try {
@@ -58,6 +48,41 @@ const ManageStudents = () => {
     }
   };
 
+  const sendPatchedData = async (userid) => {
+    // This async function is to send the updated state data to the server for updating the database
+    try {
+      const response = await fetch(`http://localhost:3000/api/user/${userid}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editRec),
+      });
+      const data = await response.json();
+      if (response.status === 200) {
+        message.success(data);
+        setstatedata((previousstatedata) => {
+          // here we are updating the previous statedata array by reinserting the objects into the array based on condition
+          return previousstatedata.map((student) => {
+            if (student.username === editRec.username) {
+              return editRec;
+            } else {
+              return student;
+            }
+          });
+        });
+        setIsEditing(false);
+        setEditRec(null);
+      } else if (response.status === 404) {
+        message.error("User not found in database");
+      } else if (response.status === 500) {
+        message.error("Please try again");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const columns = [
     {
       title: "Picture", // This is the column name in table which we can now itself
@@ -70,7 +95,7 @@ const ManageStudents = () => {
     },
     {
       title: "User Id",
-      dataIndex: `userid`,
+      dataIndex: "userid",
       width: 130,
     },
     {
@@ -145,22 +170,8 @@ const ManageStudents = () => {
     // some method return a boolean true even if any one of the value is an empty string, else it returns false
 
     if (!hasEmptyString) {
-      setstatedata((previousstatedata) => {
-        // here we are updating the previous statedata array by reinserting the objects into the array based on condition
-        return previousstatedata.map((student) => {
-          if (student.username === editRec.username) {
-            return editRec;
-          } else {
-            return student;
-          }
-        });
-      });
-
-      // // sending the updated state data to the backend
-      // sendUpdatedData();
-
-      setIsEditing(false);
-      setEditRec(null);
+      // sending the updated state data to the backend
+      sendPatchedData(editRec.userid);
     } else {
       Modal.error({
         title: "All Fields Required !",
@@ -196,8 +207,9 @@ const ManageStudents = () => {
 
   return (
     <div className="mx-5">
-      <Typography.Title level={3}>Manage Student Details</Typography.Title>
-
+      <div className="px-2.5 py-0.5 mb-4 w-fit bg-stone-50 rounded-md">
+        <Typography.Title level={3}>Manage Student Details</Typography.Title>
+      </div>
       <Table
         bordered
         columns={columns}

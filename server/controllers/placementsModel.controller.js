@@ -4,8 +4,8 @@ import mongoose from "mongoose";
 
 const getPlacements = async (req, res) => {
   try {
-    const placements = await placementsModel.find();
-    res.json(placements);
+    const placements = await placementsModel.find({});
+    res.status(200).json(placements);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

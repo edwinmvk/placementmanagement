@@ -19,7 +19,7 @@ const checkAllUsers = async (req, res) => {
 const getAllUsers = async (req, res) => {
   try {
     const users = await userModel.find({});
-    res.json(users);
+    res.status(200).json(users);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -48,18 +48,55 @@ const createUser = async (req, res) => {
   }
 };
 
-const updateUser = async (req, res) => {};
+const updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { cgpa, arrears, passoutyear } = req.body;
 
-const getUserById = async (req, res) => {};
+    // Finds the required user by the id
+    const userToUpdate = await userModel.findOne({ userid: id });
+    // .populate("appliedplacements");  // this replaces the referenced id of the 'appliedplacements key' with the referenced schema, for performing the operations
+
+    // Check if the user exists
+    if (!userToUpdate) {
+      return res.status(404).json("User not found");
+    }
+
+    // start a new session for atomicity property
+
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+      // Patch the user
+      await userModel
+        .findOneAndUpdate(
+          { userid: id }, // id to update
+          { cgpa, arrears, passoutyear } // fields to be patched
+          // { new: true } // Return the updated user object (optional)
+        )
+        .session(session);
+      await session.commitTransaction();
+      return res.status(200).json("Fields updated");
+    } catch (error) {
+      await session.abortTransaction();
+      throw error;
+    } finally {
+      session.endSession();
+    }
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
 
 const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Find the user and populate the 'appliedplacements' field
+    // Finds the required user by the id
     const userToDelete = await userModel
       .findOne({ userid: id })
-      .populate("appliedplacements");
+      .populate("appliedplacements"); // this replaces the referenced id of the 'appliedplacements key' with the referenced schema, for performing the operations
 
     // Check if the user exists
     if (!userToDelete) {
@@ -97,11 +134,4 @@ const deleteUser = async (req, res) => {
   }
 };
 
-export {
-  checkAllUsers,
-  getAllUsers,
-  getUserById,
-  createUser,
-  updateUser,
-  deleteUser,
-};
+export { checkAllUsers, getAllUsers, createUser, updateUser, deleteUser };
