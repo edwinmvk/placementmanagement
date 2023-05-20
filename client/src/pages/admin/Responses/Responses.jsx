@@ -223,7 +223,9 @@ const Responses = () => {
 
   return (
     <div className="mx-5">
-      <Typography.Title level={3}>Responses</Typography.Title>
+      <div className="px-2.5 py-0.5 mb-4 w-fit bg-stone-50 rounded-md">
+        <Typography.Title level={3}>Responses</Typography.Title>
+      </div>
       <Table
         columns={columns}
         dataSource={groupedData}

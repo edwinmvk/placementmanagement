@@ -24,16 +24,18 @@ const Home = () => {
 
   return (
     <div className="mx-5">
-      <Typography.Title level={3}>Dashboard</Typography.Title>
-      <div className="flex flex-wrap">
-        <Card className="text-center m-3 md:w-40 w-full bg-gradient-to-r from-white via-white to-neutral-100 shadow-lg hover:shadow-xl">
+      <div className="px-2.5 py-0.5 mb-4 w-fit bg-stone-50 rounded-md">
+        <Typography.Title level={3}>Dashboard</Typography.Title>
+      </div>
+      <div className="flex flex-wrap gap-x-4">
+        <Card className="rounded-md text-center mb-3 md:w-40 w-full bg-gradient-to-r from-white via-white to-neutral-100 shadow-lg hover:shadow-xl">
           <PushpinOutlined
             className="text-4xl rounded-md"
             style={{ color: "#4d3f3f", backgroundColor: "#e6d5d5" }}
           />
           <Statistic title="Total Placements" value={totplacements} />
         </Card>
-        <Card className="text-center m-3 md:w-40 w-full bg-gradient-to-r from-white via-white to-neutral-100 shadow-lg hover:shadow-xl">
+        <Card className="rounded-md text-center mb-3 md:w-40 w-full bg-gradient-to-r from-white via-white to-neutral-100 shadow-lg hover:shadow-xl">
           <UserOutlined
             className="text-4xl rounded-md"
             style={{ color: "#1f5926", backgroundColor: "#cafacc" }}
@@ -46,59 +48,6 @@ const Home = () => {
     </div>
   );
 };
-
-// const DatabaseData = () => {
-//   const [statedata, setstatedata] = useState([]); // this state will eventually hold ALL the data from the DATABASE
-
-//   const fetchData = async () => {
-//     // This is used to obtain the data from the server and set it to Hooks
-//     try {
-//       const response = await fetch("http://jsonplaceholder.typicode.com/posts");
-//       const data = await response.json();
-//       setstatedata(data);
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchData();
-//   }, []);
-
-//   const columns = [
-//     {
-//       title: "Placement Id", // This is the column name in table which we can name
-//       dataIndex: "id", // This is the colunm name from the database which we cannot name
-//       width: 150,
-//     },
-//     {
-//       title: "Posted Date",
-//       sorter: true,
-//       dataIndex: "id",
-//       width: 150,
-//     },
-//     {
-//       title: "Company Name",
-//       dataIndex: "userId",
-//       width: 150,
-//     },
-//     {
-//       title: "Description",
-//       dataIndex: "body",
-//       width: 300,
-//     },
-//   ];
-
-//   return (
-//     <Table
-//       bordered
-//       columns={columns}
-//       dataSource={statedata}
-//       pagination={true}
-//       scroll={{ y: 500 }}
-//     ></Table>
-//   );
-// };
 
 const DatabaseData = () => {
   const [statedata, setstatedata] = useState([]); // this state will eventually hold ALL the data from the DATABASE

@@ -199,7 +199,7 @@ const Sidebar = () => {
   return (
     <>
       <Sider
-        className="m-2 rounded-xl"
+        className="m-1 rounded-md"
         trigger={true} // this is used to remove the black arrrow on the side of Sider component
         theme="dark"
         collapsible
@@ -220,7 +220,9 @@ const Sidebar = () => {
           {isCollapsed ? (
             <br />
           ) : (
-            <h1 className="p-2 text-slate-50 text-3xl">ADMIN</h1>
+            <h1 className="p-2 text-white text-3xl font-sans font-bold">
+              ADMIN
+            </h1>
           )}
         </div>
         <Menu
