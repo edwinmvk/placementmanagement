@@ -11,7 +11,7 @@ import {
   AuditOutlined,
 } from "@ant-design/icons";
 import image from "./admin.png";
-import { LocalDetails } from "./LocalDetails";
+// import { LocalDetails } from "./LocalDetails";
 
 const { Sider } = Layout;
 
@@ -25,59 +25,8 @@ const Sidebar = () => {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
-  // const fetchData= async ()=> {  // This is used to obtain the data from the server and set it to Hooks for the first time only
-  //     try{
-  //       const response= await fetch('/......');
-  //       const data= await response.json();
-  //       setstatedata(data);
-  //     } catch(error){
-  //          console.error(error);
-  //     }
-  // }
-
-  // const fetchUpdatedData= async ()=> {  // This async function is to fetch the new updated data from the server and update the statedata in the Hooks, even though they are already updated locally
-  //     try{
-  //       const response= await fetch('/....');
-  //       const updatedData= await response.json();
-  //       setstatedata(updatedData);
-  //     } catch(error){
-  //          console.error(error);
-  //     }
-  // }
-
-  // const sendUpdatedData= async ()=> { // This async function is to send the updated state data to the server for updating the database
-  //     try{
-  //         const response= await fetch('/.....', {
-  //         method: 'POST',
-  //         headers: {
-  //             'Content-Type': 'application/json'
-  //         },
-  //         body: JSON.stringify(statedata)
-  //         });
-  //         const data= await response.json();
-  //         console.log(data);
-
-  //         // Fetch the updated data from backend and update the state
-  //         fetchUpdatedData();
-
-  //         setTimeout(() => {
-  //         message.success('Password updated successfully');
-  //         setLoading(false);
-  //         }, 2000);
-  //         setTimeout(()=> {
-  //             form.resetFields();
-  //             setIsEditing(false)
-  //         }, 3500)
-  //     } catch(error){
-  //         console.error(error);
-  //     }
-  // }
-
   useEffect(() => {
-    // fetchData();
-
-    setstatedata(LocalDetails);
-    console.log(statedata);
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -97,6 +46,61 @@ const Sidebar = () => {
   useEffect(() => {
     setCurrentPath(location.pathname);
   }, [location.pathname]); // the state changes when the location.pathname changes
+
+  const fetchData = async () => {
+    // This is used to obtain the data from the server and set it to Hooks for the first time only
+    try {
+      const response = await fetch(`http://localhost:3000/api/admin`);
+      const data = await response.json();
+      setstatedata([data]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const sendUpdatedData = async (values) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/admin/${values.username}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        }
+      );
+      const data = await response.json();
+
+      if (response.status === 200) {
+        setstatedata((previousstatedata) => {
+          return previousstatedata.map((passwordobj) => {
+            if (passwordobj.username === values.username) {
+              return { ...passwordobj, password: values.newpassword };
+            } else {
+              return passwordobj; // Return the original object when the condition is not met
+            }
+          });
+        });
+        message.success(data);
+        setLoading(false);
+        form.resetFields();
+        form.setFieldsValue({
+          username: values.username,
+          oldpassword: values.newpassword,
+        });
+        setTimeout(() => {
+          setIsEditing(false);
+        }, 1500);
+      } else if (response.status === 404) {
+        message.error(data);
+      } else if (response.status === 500) {
+        message.error("Please try again");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const passwordHandleClick = () => {
     // this function is written first becz we cannot access 'passwordHandleClick' funtion in the MenuContents array before initialization
@@ -143,8 +147,8 @@ const Sidebar = () => {
   ];
 
   const initialValues = {
-    username: statedata[0]?.username,
-    oldpassword: statedata[0]?.password,
+    username: statedata?.[0]?.username,
+    oldpassword: statedata?.[0]?.password,
   };
 
   const validateNewPassword = (rule, value) => {
@@ -164,32 +168,14 @@ const Sidebar = () => {
   };
 
   const onCancel = () => {
+    form.resetFields();
     setIsEditing(false);
   };
 
   const onFinish = (values) => {
-    console.log(values);
     setLoading(true);
-    setstatedata((previousstatedata) => {
-      // here we are updating the previous statedata array by reinserting the objects into the array based on condition
-      return previousstatedata.map((passwordobj) => {
-        if (passwordobj.username === values.username) {
-          return { ...passwordobj, password: values.newpassword };
-        } else return passwordobj;
-      });
-    });
-
-    // Even though React has not updated the component's state yet, we can still pass the updated state directly to the api call
-    // sendUpdatedData();
-
-    setTimeout(() => {
-      message.success("Password updated successfully");
-      setLoading(false);
-    }, 2000);
-    setTimeout(() => {
-      form.resetFields();
-      setIsEditing(false);
-    }, 3500);
+    // call backend function to update details
+    sendUpdatedData(values);
   };
 
   const onFinishFailed = (errorInfo) => {
