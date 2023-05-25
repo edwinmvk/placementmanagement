@@ -1,4 +1,5 @@
 import express from "express";
+import multer from "multer";
 
 // Import all the controllers
 
@@ -11,10 +12,11 @@ import {
 } from "../controllers/userModel.controller.js";
 
 const router = express.Router();
+const upload = multer({ dest: "uploads/" });
 
 router.route("/").post(checkAllUsers);
 router.route("/").get(getAllUsers);
-router.route("/register").post(createUser);
+router.route("/register").post(upload.single("avatar"), createUser);
 router.route("/:id").patch(updateUser);
 router.route("/:id").delete(deleteUser);
 

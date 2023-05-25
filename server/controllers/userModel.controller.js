@@ -1,6 +1,16 @@
 import userModel from "../mongodb/models/userModel.js";
 import appliedPlacementsModel from "../mongodb/models/appliedPlacementsModel.js";
 import mongoose from "mongoose";
+import * as dotenv from "dotenv";
+import { v2 as cloudinary } from "cloudinary";
+import { promises as fs } from "fs";
+
+dotenv.config();
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const checkAllUsers = async (req, res) => {
   try {
@@ -26,25 +36,46 @@ const getAllUsers = async (req, res) => {
 };
 
 const createUser = async (req, res) => {
+  let photoUrl = null;
   try {
-    const { userid, username, email, passoutyear, arrears, cgpa, avatar } =
-      req.body;
-    if (email.substring(email.indexOf("@") + 1) === "jecc.ac.in") {
-      await userModel.create({
-        userid,
-        username,
-        email,
-        passoutyear,
-        arrears,
-        cgpa,
-        avatar,
-      });
-      return res.status(200).json("Successfully registered");
-    } else {
-      return res.status(401).json("Email domain not recogonized");
+    const { userid, username, email, passoutyear, arrears, cgpa } = req.body;
+    if (req.file) {
+      const { path } = req.file;
+      const uploadedPhoto = await cloudinary.uploader.upload(path);
+      photoUrl = uploadedPhoto.secure_url;
+      await fs.unlink(path);
+    }
+
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+      if (email.substring(email.indexOf("@") + 1) === "jecc.ac.in") {
+        await userModel.create({
+          userid: userid,
+          username: username,
+          email: email,
+          passoutyear: passoutyear,
+          arrears: arrears,
+          cgpa: cgpa,
+          avatar: photoUrl,
+        });
+
+        await session.commitTransaction();
+        return res.status(200).json("Successfully registered");
+      } else {
+        return res.status(401).json("Email domain not recognized");
+      }
+    } catch (error) {
+      await session.abortTransaction();
+      throw error;
+    } finally {
+      session.endSession();
     }
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({
+      message: "An error occurred while creating the user",
+      error: error.message,
+    });
   }
 };
 
