@@ -30,14 +30,14 @@ const Signin = () => {
   };
 
   return (
-    <div className="h-full flex flex-col md:flex-row bg-neutral-100">
-      <div className="flex-1 flex justify-center items-center bg-cyan-950">
+    <div className="h-full flex flex-col md:flex-row">
+      <div className="flex-1 flex justify-center items-center bg-gradient-to-br from-sky-50 to-gray-200">
         <img
           src="https://tecdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
           alt="Sample image"
         />
       </div>
-      <div className="py-3 flex-1 flex flex-col justify-center items-center bg-gradient-to-br from-sky-50 to-gray-200">
+      <div className="py-3 flex-1 flex flex-col justify-center items-center bg-sky-950">
         <div className="m-3 p-7 rounded-xl bg-white shadow-xl">
           <div className="space-y-4">
             <img
