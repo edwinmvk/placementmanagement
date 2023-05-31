@@ -6,7 +6,7 @@ import Footer from "./Footer/Footer";
 
 const Admin = () => {
   return (
-    <div className="flex flex-col bg-stone-200">
+    <div className="flex flex-col bg-stone-100">
       <div className="h-screen flex flex-row">
         <Sidebar />
         <div className="w-full flex flex-col overflow-y-scroll overflow-x-hidden">

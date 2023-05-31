@@ -1,6 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../../utils/ContextProvider";
+import placementcell from "../admin/Sidebar/placementcell.png";
 // import { GoogleButton } from "react-google-button";
 
 const Signin = () => {
@@ -41,9 +42,9 @@ const Signin = () => {
         <div className="m-3 p-7 rounded-xl bg-white shadow-xl">
           <div className="space-y-4">
             <img
-              src="https://nxtwave.imgix.net//company-happenings/hero-section-illustrate-desktop.svg?auto=format,compress&q=80"
+              src={placementcell}
               loading="lazy"
-              className="w-20"
+              className="w-20 rounded-full"
               alt="tailus logo"
             />
             <h2 className="mb-8 text-4xl text-cyan-900 font-bold">

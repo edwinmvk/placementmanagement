@@ -1,17 +1,18 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Context } from "../../../utils/ContextProvider";
-import { Badge, Button, Drawer, List } from "antd";
+import { Badge, Button, Drawer, Calendar, List, Modal } from "antd";
 import {
   BellFilled,
+  CalendarOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
 } from "@ant-design/icons";
-// import "tachyons";
 
 const Header = () => {
   const { isCollapsed, setCollapsed } = useContext(Context);
   const [notify, setNotify] = useState([]);
   const [notifyDrawer, setNotifyDrawer] = useState(false);
+  const [isCalender, setIsCalender] = useState(false);
 
   const fetchData = async () => {
     // This is used to obtain the data from the server and set it to Hooks
@@ -40,22 +41,34 @@ const Header = () => {
   }, []);
 
   return (
-    <div className="m-3 flex justify-between border-b border-gray-300">
-      <Button
-        type="default"
-        onClick={() => setCollapsed(!isCollapsed)}
-        style={{
-          marginBottom: 10,
-        }}
-      >
+    <div className="m-2 mb-5 p-2 flex justify-between items-center rounded-md shadow-md bg-stone-50">
+      <Button type="default" onClick={() => setCollapsed(!isCollapsed)}>
         {isCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
       </Button>
-      <Badge count={notify.length} /*dot*/>
-        <BellFilled
+      <div className="flex justify-between gap-x-4">
+        <CalendarOutlined
           className="text-2xl my-1 cursor-pointer"
-          onClick={() => setNotifyDrawer(true)}
+          onClick={() => setIsCalender(true)}
         />
-      </Badge>
+        <Badge count={notify.length} /*dot*/>
+          <BellFilled
+            className="text-2xl my-1 cursor-pointer"
+            onClick={() => setNotifyDrawer(true)}
+          />
+        </Badge>
+      </div>
+
+      <Modal
+        title={<h1 className="font-bold text-2xl">Calender</h1>}
+        open={isCalender}
+        onCancel={() => setIsCalender(false)}
+        maskClosable={true} // this will make the Model not disappear even if we click outside the Model
+        footer={null}
+        width={1000}
+        className="h-5/6 overflow-y-scroll rounded-md"
+      >
+        <Calendar className="rounded-md" />
+      </Modal>
       <Drawer
         title="Notifications"
         open={notifyDrawer}
