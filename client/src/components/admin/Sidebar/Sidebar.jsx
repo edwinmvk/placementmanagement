@@ -1,7 +1,16 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Context } from "../../../utils/ContextProvider";
-import { Layout, Menu, Modal, Button, Form, Input, message } from "antd";
+import {
+  Layout,
+  Menu,
+  Modal,
+  Button,
+  Form,
+  Input,
+  message,
+  Dropdown,
+} from "antd";
 import {
   HomeOutlined,
   AudioOutlined,
@@ -9,8 +18,10 @@ import {
   PlusCircleOutlined,
   LogoutOutlined,
   AuditOutlined,
+  RightOutlined,
 } from "@ant-design/icons";
-import image from "./admin.png";
+import placementcell from "./placementcell.png";
+import admin from "./admin.png";
 // import { LocalDetails } from "./LocalDetails";
 
 const { Sider } = Layout;
@@ -132,6 +143,9 @@ const Sidebar = () => {
       icon: <AuditOutlined />,
       key: "/admin/manage",
     },
+  ];
+
+  const items = [
     {
       label: "Change Password",
       icon: <KeyOutlined />,
@@ -183,12 +197,12 @@ const Sidebar = () => {
   };
 
   return (
-    <>
+    <Layout>
       <Sider
-        className="m-1 rounded-md"
-        trigger={true} // this is used to remove the black arrrow on the side of Sider component
-        theme="dark"
+        mode="vertical"
+        trigger={null} // this is used to remove the black arrrow on the side of Sider component
         collapsible
+        theme="dark"
         collapsedWidth={80}
         collapsed={isCollapsed}
         width="200px"
@@ -201,13 +215,15 @@ const Sidebar = () => {
           backgroundSize: "70px 120px",
         }}
       >
-        <div className="mt-5 mx-3 flex flex-col items-center justify-center border-b-2 border-opacity-50 border-gray-300">
-          <img alt="" src={image} width={100} />
-          {isCollapsed ? (
-            <br />
-          ) : (
-            <h1 className="p-2 text-white text-3xl font-sans font-bold">
-              ADMIN
+        <div
+          className={`p-2 flex flex-row items-center justify-center backdrop-blur-sm bg-white/30 ${
+            isCollapsed ? "m-2 rounded-full" : "m-0"
+          }`}
+        >
+          <img alt="" src={placementcell} width={50} className="rounded-full" />
+          {isCollapsed ? null : (
+            <h1 className="m-2 text-white text-lg font-extrabold uppercase">
+              Placement Cell
             </h1>
           )}
         </div>
@@ -222,13 +238,33 @@ const Sidebar = () => {
               : () => {}; // this is done to prevent the routing of changepassword, inorder to display only the Model
           }}
           style={{
+            marginTop: "10px",
             background: "transparent",
             color: "white",
             border: "none",
           }}
-        ></Menu>
+        />
+        <div className="absolute bottom-0 right-0 left-0 m-2 cursor-pointer">
+          <Dropdown
+            menu={{
+              items,
+              selectable: true,
+            }}
+          >
+            <div className="p-2 flex items-center justify-around gap-x-2 border border-solid border-transparent bg-white/30 rounded-md">
+              <img alt="" src={admin} width={30} className="rounded-full" />
+              {isCollapsed ? (
+                <></>
+              ) : (
+                <>
+                  <h1 className="text-lg font-bold">Admin</h1>
+                  <RightOutlined />
+                </>
+              )}
+            </div>
+          </Dropdown>
+        </div>
       </Sider>
-
       <Modal
         title="Change Password"
         open={isEditing}
@@ -283,7 +319,7 @@ const Sidebar = () => {
           </Form.Item>
         </Form>
       </Modal>
-    </>
+    </Layout>
   );
 };
 
