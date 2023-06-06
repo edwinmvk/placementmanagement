@@ -1,27 +1,22 @@
-import React, { useContext } from "react";
-import { Context } from "../../utils/ContextProvider";
+import React from "react";
+import Header from "../admin/Header/Header";
+import UserSideBar from "./UserSidebar/UserSideBar";
+import UserContent from "./UserContent/UserContent";
+import Footer from "../admin/Footer/Footer";
 
 const User = () => {
-  const { registeredGoogleUser, googleSignOut } = useContext(Context);
-
-  const handleSignOut = async () => {
-    try {
-      await googleSignOut();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
-    <div>
-      <h1 className="text-3xl">
-        Welcome User <br />
-        {registeredGoogleUser.displayName.substring(9)}
-      </h1>
-      <br /> <br />
-      <button className="border" onClick={handleSignOut}>
-        Signout
-      </button>
+    <div className="flex flex-col bg-stone-100">
+      <div className="h-screen flex flex-row">
+        <UserSideBar />
+        <div className="w-full flex flex-col overflow-y-scroll overflow-x-hidden">
+          <Header />
+          <UserContent />
+          <div className="h-full mt-3 flex flex-col-reverse border-t-3">
+            <Footer />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
