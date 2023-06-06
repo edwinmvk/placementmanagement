@@ -20,8 +20,8 @@ import {
   AuditOutlined,
   RightOutlined,
 } from "@ant-design/icons";
-import placementcell from "./placementcell.png";
-import admin from "./admin.png";
+import placementcell from "../../assets/placementcell.png";
+import admin from "../../assets/admin.png";
 // import { LocalDetails } from "./LocalDetails";
 
 const { Sider } = Layout;
