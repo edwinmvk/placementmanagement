@@ -29,9 +29,19 @@ const checkAllUsers = async (req, res) => {
 const getAllUsers = async (req, res) => {
   try {
     const users = await userModel.find({});
-    res.status(200).json(users);
+    return res.status(200).json(users);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const getUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await userModel.findOne({ userid: id });
+    return res.status(200).json(user);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -165,4 +175,11 @@ const deleteUser = async (req, res) => {
   }
 };
 
-export { checkAllUsers, getAllUsers, createUser, updateUser, deleteUser };
+export {
+  checkAllUsers,
+  getAllUsers,
+  getUserById,
+  createUser,
+  updateUser,
+  deleteUser,
+};

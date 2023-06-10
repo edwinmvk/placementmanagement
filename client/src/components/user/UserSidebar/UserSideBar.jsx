@@ -5,13 +5,11 @@ import { Layout, Menu, Dropdown } from "antd";
 import {
   HomeOutlined,
   AudioOutlined,
-  PlusCircleOutlined,
   LogoutOutlined,
   AuditOutlined,
   RightOutlined,
 } from "@ant-design/icons";
 import placementcell from "../../assets/placementcell.png";
-import admin from "../../assets/admin.png";
 
 const { Sider } = Layout;
 
@@ -21,8 +19,24 @@ const UserSideBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [currentPath, setCurrentPath] = useState("/userprofile");
+  const [statedata, setstatedata] = useState(null);
+
+  const fetchData = async (id) => {
+    // This is used to obtain the data from the server and set it to Hooks for the first time only
+    try {
+      const response = await fetch(`http://localhost:3000/api/user/${id}`);
+      const data = await response.json();
+      setstatedata(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
+    const userid = parseInt(registeredGoogleUser?.displayName.substring(0, 8));
+
+    fetchData(userid);
+
     handleWindowSizeChange();
     window.addEventListener("resize", handleWindowSizeChange); // This code sets up an event listener for the "resize" event on the window object when the component mounts (i.e., when we load admin page)
     return () => window.removeEventListener("resize", handleWindowSizeChange); // This code removes the event listener when the component unmounts (i.e., when we exit the admin page)
@@ -53,11 +67,6 @@ const UserSideBar = () => {
       label: "Home",
       icon: <HomeOutlined />,
       key: "/userprofile",
-    },
-    {
-      label: "All Placements",
-      icon: <PlusCircleOutlined />,
-      key: "/userprofile/allplacements",
     },
     {
       label: "For Me",
@@ -134,14 +143,17 @@ const UserSideBar = () => {
             }}
           >
             <div className="p-2 flex items-center justify-around gap-x-2 border border-solid border-transparent bg-white/30 rounded-md">
-              <img alt="" src={admin} width={30} className="rounded-full" />
+              <img
+                alt=""
+                src={statedata?.avatar}
+                width={30}
+                className="rounded-full"
+              />
               {isCollapsed ? (
                 <></>
               ) : (
                 <>
-                  <h1 className="text-lg font-bold">
-                    {registeredGoogleUser.displayName.substring(9)}
-                  </h1>
+                  <h1 className="text-lg font-bold">{statedata?.username}</h1>
                   <RightOutlined />
                 </>
               )}

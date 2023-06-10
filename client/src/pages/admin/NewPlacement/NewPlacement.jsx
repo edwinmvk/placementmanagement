@@ -50,7 +50,7 @@ const NewPlacement = () => {
   };
 
   const initialValues = {
-    placementid: uuidv4().substring(0, 6),
+    placementid: uuidv4().substring(0, 8),
     createdate: moment(),
   };
 
@@ -65,13 +65,13 @@ const NewPlacement = () => {
   };
 
   const onFinish = (values) => {
-    form.resetFields();
-
     const formattedValues = {
       ...values,
-      createdate: moment(values.createdate).format("YYYY-MM-DD"),
-      lastdate: moment(values.lastdate).format("YYYY-MM-DD"),
+      createdate: moment(values.createdate._d).format("YYYY-MM-DD"), // _d is the key in the moment library that contanins the necessary date info to be converted
+      lastdate: moment(values.lastdate.$d).format("YYYY-MM-DD"), // $d is the key in the DatePicker component that contains the necessary date info to be converted
     };
+
+    form.resetFields();
 
     sendData(formattedValues);
   };
@@ -152,14 +152,14 @@ const NewPlacement = () => {
             <InputNumber />
           </Form.Item>
           <Form.Item
-            name="semester"
-            label="Current Semester"
+            name="passoutyear"
+            label="Passoutyear"
             rules={[
               {
                 type: "number",
                 required: true,
-                min: 1,
-                max: 8,
+                min: 2024,
+                max: 2028,
               },
             ]}
           >

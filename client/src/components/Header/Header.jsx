@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Context } from "../../../utils/ContextProvider";
+import { Context } from "../../utils/ContextProvider";
 import { Badge, Button, Drawer, Calendar, List, Modal } from "antd";
 import {
   BellFilled,
@@ -64,10 +64,8 @@ const Header = () => {
         onCancel={() => setIsCalender(false)}
         maskClosable={true} // this will make the Model not disappear even if we click outside the Model
         footer={null}
-        width={1000}
-        className="h-5/6 overflow-y-scroll rounded-md"
       >
-        <Calendar className="rounded-md" />
+        <Calendar fullscreen={false} className="rounded-md" />
       </Modal>
       <Drawer
         title="Notifications"

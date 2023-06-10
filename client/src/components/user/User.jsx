@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "../admin/Header/Header";
+import Header from "../Header/Header";
 import UserSideBar from "./UserSidebar/UserSideBar";
 import UserContent from "./UserContent/UserContent";
 import Footer from "../admin/Footer/Footer";

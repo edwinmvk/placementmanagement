@@ -12,7 +12,6 @@ import RegisterUser from "../components/user/RegisterUser/RegisterUser";
 import User from "../components/user/User";
 import Error404 from "../components/error404/Error404";
 import UserHome from "../pages/user/UserHome/UserHome";
-import AllPlacements from "../pages/user/AllPlacements/AllPlacements";
 import ForMe from "../pages/user/ForMe/ForMe";
 import AppliedPlacements from "../pages/user/AppliedPlacements/AppliedPlacements";
 
@@ -52,7 +51,6 @@ const RoutesDef = () => {
         }
       >
         <Route path="" element={<UserHome />} />
-        <Route path="allplacements" element={<AllPlacements />} />
         <Route path="forme" element={<ForMe />} />
         <Route path="appliedplacements" element={<AppliedPlacements />} />
       </Route>

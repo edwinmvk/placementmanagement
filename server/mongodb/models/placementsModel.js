@@ -7,7 +7,7 @@ const PlacementsSchema = new mongoose.Schema({
   lastdate: { type: String, required: true },
   cgpa: { type: Number, required: true },
   arrears: { type: Number, required: true },
-  semester: { type: Number, required: true },
+  passoutyear: { type: Number, required: true },
   description: { type: String, required: true },
   creator: {
     type: mongoose.Schema.Types.ObjectId,

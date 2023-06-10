@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Typography, Table, Avatar, Modal, Input, message } from "antd";
 import { DeleteFilled, EditFilled } from "@ant-design/icons";
-// import { LocalDetails } from "./LocalDetails";
 
 const ManageStudents = () => {
   const [statedata, setstatedata] = useState([]);
@@ -10,7 +9,6 @@ const ManageStudents = () => {
 
   useEffect(() => {
     fetchData();
-    // console.log(statedata);
   }, []);
 
   const fetchData = async () => {

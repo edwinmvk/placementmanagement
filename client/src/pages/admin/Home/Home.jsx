@@ -83,26 +83,46 @@ const DatabaseData = () => {
       title: "Posted date",
       dataIndex: "createdate",
       width: 150,
+      defaultSortOrder: "descend",
+      sorter: (a, b) => {
+        const dateA = new Date(a.createdate); // we are doing this because the date in the table is in string foramt
+        const dateB = new Date(b.createdate);
+        return dateA - dateB;
+      },
     },
     {
       title: "Last date",
       dataIndex: "lastdate",
       width: 150,
+      sorter: (a, b) => {
+        const dateA = new Date(a.lastdate);
+        const dateB = new Date(b.lastdate);
+        return dateA - dateB;
+      },
     },
     {
-      title: "Semester",
-      dataIndex: "semester",
-      width: 100,
+      title: "Passoutyear",
+      dataIndex: "passoutyear",
+      width: 150,
+      sorter: (a, b) => {
+        return a.passoutyear - b.passoutyear;
+      },
     },
     {
       title: "Min CGPA",
       dataIndex: "cgpa",
       width: 80,
+      sorter: (a, b) => {
+        return a.cgpa - b.cgpa;
+      },
     },
     {
       title: "Max arrears",
       dataIndex: "arrears",
       width: 80,
+      sorter: (a, b) => {
+        return a.arrears - b.arrears;
+      },
     },
   ];
 

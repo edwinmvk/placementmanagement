@@ -1,5 +1,7 @@
 import adminModel from "../mongodb/models/adminModel.js";
 import placementsModel from "../mongodb/models/placementsModel.js";
+import appliedPlacementsModel from "../mongodb/models/appliedPlacementsModel.js";
+import userModel from "../mongodb/models/userModel.js";
 import mongoose from "mongoose";
 
 const getPlacements = async (req, res) => {
@@ -10,6 +12,60 @@ const getPlacements = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+const getPlacementsById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // get all the placements from placement model
+    const allPlacements = await placementsModel.find({});
+
+    // get all the placements applied by this user from applied placement model
+    const appliedPlacements = await appliedPlacementsModel.find({
+      placementid: id,
+    });
+
+    // Extract the placement IDs from the applied placements
+    const appliedPlacementIds = appliedPlacements.map(
+      (placement) => placement.placementid
+    );
+
+    // seperate the applied placements from nonapplied placements using the applied placement's id
+    const filteredPlacements = allPlacements.filter((placement) => {
+      return !appliedPlacementIds.includes(placement.placementid);
+    });
+
+    // get the specified student's detail from user model
+    const studentDetail = await userModel.findOne({ userid: id });
+
+    // again filter the filtered placements based on cgpa
+    const cgpaFiltered = filteredPlacements.filter((placement) => {
+      return studentDetail.cgpa >= placement.cgpa;
+    });
+
+    // filter the cgpafiltered based on arrears
+    const arrearsFiltered = cgpaFiltered.filter((placement) => {
+      return studentDetail.arrears <= placement.arrears;
+    });
+
+    // filter the arrearsfiltered based on passout year
+    const passoutyearFiltered = arrearsFiltered.filter((placements) => {
+      return studentDetail.passoutyear === placements.passoutyear;
+    });
+
+    // finally filter based on dates
+    const formeFiltered = passoutyearFiltered.filter((placements) => {
+      const currentDate = new Date();
+      const convertedLastDate = new Date(placements.lastdate);
+      return convertedLastDate <= currentDate;
+    });
+
+    return res.status(200).json(formeFiltered);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 const createPlacements = async (req, res) => {
   try {
     const {
@@ -20,7 +76,7 @@ const createPlacements = async (req, res) => {
       createdate,
       lastdate,
       placementid,
-      semester,
+      passoutyear,
     } = req.body;
 
     // findOne is used to obtain the 1st object from that schema
@@ -44,7 +100,7 @@ const createPlacements = async (req, res) => {
         lastdate,
         cgpa,
         arrears,
-        semester,
+        passoutyear,
         description,
         creator: adminObj._id,
       });
@@ -71,4 +127,4 @@ const createPlacements = async (req, res) => {
 
 const deletePlacements = async (req, res) => {};
 
-export { createPlacements, deletePlacements, getPlacements };
+export { createPlacements, deletePlacements, getPlacements, getPlacementsById };

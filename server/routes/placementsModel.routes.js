@@ -4,6 +4,7 @@ import express from "express";
 
 import {
   getPlacements,
+  getPlacementsById,
   createPlacements,
   deletePlacements,
 } from "../controllers/placementsModel.controller.js";
@@ -11,6 +12,7 @@ import {
 const router = express.Router();
 
 router.route("/").get(getPlacements);
+router.route("/:id").get(getPlacementsById);
 router.route("/").post(createPlacements);
 router.route("/").delete(deletePlacements);
 
