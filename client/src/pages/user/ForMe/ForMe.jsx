@@ -58,21 +58,21 @@ const ForMe = () => {
         return dateA - dateB;
       },
     },
-    {
-      title: "Passoutyear",
-      dataIndex: "passoutyear",
-      width: 150,
-    },
-    {
-      title: "Min CGPA",
-      dataIndex: "cgpa",
-      width: 80,
-    },
-    {
-      title: "Max arrears",
-      dataIndex: "arrears",
-      width: 80,
-    },
+    // {
+    //   title: "Passoutyear",
+    //   dataIndex: "passoutyear",
+    //   width: 150,
+    // },
+    // {
+    //   title: "Min CGPA",
+    //   dataIndex: "cgpa",
+    //   width: 80,
+    // },
+    // {
+    //   title: "Max arrears",
+    //   dataIndex: "arrears",
+    //   width: 80,
+    // },
   ];
 
   // When a row is expanded, the function adds the key of the expanded row to the expandedRowKeys array.

@@ -276,7 +276,7 @@ const RegisterUser = () => {
                           }}
                           rules={[
                             {
-                              required: false,
+                              required: true,
                             },
                             {
                               validator: (_, fileList) =>
