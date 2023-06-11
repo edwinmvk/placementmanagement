@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Context } from "../../../utils/ContextProvider";
-import { Layout, Menu, Dropdown } from "antd";
+import { Layout, Menu, Dropdown, Modal, Upload, message } from "antd";
 import {
   HomeOutlined,
   AudioOutlined,
@@ -20,6 +20,9 @@ const UserSideBar = () => {
   const location = useLocation();
   const [currentPath, setCurrentPath] = useState("/userprofile");
   const [statedata, setstatedata] = useState(null);
+  const [isModelOpen, setIsModelOpen] = useState(false);
+  const [list, setList] = useState([]);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const fetchData = async (id) => {
     // This is used to obtain the data from the server and set it to Hooks for the first time only
@@ -62,6 +65,52 @@ const UserSideBar = () => {
     }
   };
 
+  const sizeChecking = (fileList) => {
+    // this if condition is necessary for the delete button to work
+    if (fileList.length > 0) {
+      if (fileList[0].size > 614400) {
+        message.error("File size exceeded");
+        setList([]); // Clear the fileList state
+        return;
+      }
+    }
+    setList(fileList); // Update the fileList state
+  };
+
+  const onCancel = () => {
+    setList([]);
+    setIsModelOpen(false);
+  };
+
+  const onOk = async () => {
+    if (list.length > 0) {
+      setIsButtonDisabled(true);
+      try {
+        const userid = statedata?.userid;
+        const formData = new FormData();
+        formData.append("avatar", list[0]?.originFileObj);
+        formData.append("avatarpublicid", statedata?.avatarpublicid);
+        const response = await fetch(
+          `http://localhost:3000/api/user/userupdate/${userid}`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const data = await response.json();
+        if (response.status === 200) {
+          message.success("Picture updated");
+        } else if (response.status === 500) {
+          message.error("Updation failed");
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsButtonDisabled(false);
+        onCancel();
+      }
+    }
+  };
   const MenuContents = [
     {
       label: "Home",
@@ -82,9 +131,15 @@ const UserSideBar = () => {
 
   const items = [
     {
-      label: "Logout",
+      label: "Change picture",
       icon: <LogoutOutlined />,
       key: "1",
+      onClick: () => setIsModelOpen(true),
+    },
+    {
+      label: "Logout",
+      icon: <LogoutOutlined />,
+      key: "2",
       onClick: logoutHandleClick,
     },
   ];
@@ -161,6 +216,29 @@ const UserSideBar = () => {
           </Dropdown>
         </div>
       </Sider>
+      <Modal
+        title={<h1 className="font-bold text-2xl">Change profile picture</h1>}
+        open={isModelOpen}
+        maskClosable={false} // this will make the Model not disappear even if we click outside the Model
+        okButtonProps={{ className: "bg-blue-500", disabled: isButtonDisabled }}
+        onCancel={onCancel}
+        onOk={onOk}
+      >
+        <Upload.Dragger
+          maxCount={1}
+          multiple={false}
+          listType="picture"
+          showUploadList={{ showRemoveIcon: true }}
+          accept=".png, .jpg, .jpeg"
+          fileList={list}
+          onChange={(event) => sizeChecking(event.fileList)}
+        >
+          Drag and drop Profile picture here
+          <br />
+          (formats: .png, ,jpg) (maxsize: 500kb)
+        </Upload.Dragger>
+      </Modal>
+      ;
     </Layout>
   );
 };
