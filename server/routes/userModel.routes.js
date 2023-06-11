@@ -8,7 +8,8 @@ import {
   getAllUsers,
   getUserById,
   createUser,
-  updateUser,
+  updateUserByAdmin,
+  updateUserByUser,
   deleteUser,
 } from "../controllers/userModel.controller.js";
 
@@ -19,7 +20,8 @@ router.route("/").post(checkAllUsers);
 router.route("/").get(getAllUsers);
 router.route("/:id").get(getUserById);
 router.route("/register").post(upload.single("avatar"), createUser);
-router.route("/:id").patch(updateUser);
+router.route("/:id").patch(updateUserByAdmin);
+router.route("/userupdate/:id").post(upload.single("avatar"), updateUserByUser);
 router.route("/:id").delete(deleteUser);
 
 export default router;

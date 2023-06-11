@@ -47,12 +47,14 @@ const getUserById = async (req, res) => {
 
 const createUser = async (req, res) => {
   let photoUrl = null;
+  let photoId = null;
   try {
     const { userid, username, email, passoutyear, arrears, cgpa } = req.body;
     if (req.file) {
       const { path } = req.file;
       const uploadedPhoto = await cloudinary.uploader.upload(path);
       photoUrl = uploadedPhoto.secure_url;
+      photoId = uploadedPhoto.public_id;
       await fs.unlink(path);
     }
 
@@ -68,6 +70,7 @@ const createUser = async (req, res) => {
           arrears: arrears,
           cgpa: cgpa,
           avatar: photoUrl,
+          avatarpublicid: photoId,
         });
 
         await session.commitTransaction();
@@ -77,7 +80,7 @@ const createUser = async (req, res) => {
       }
     } catch (error) {
       await session.abortTransaction();
-      throw error;
+      throw new Error();
     } finally {
       session.endSession();
     }
@@ -89,7 +92,7 @@ const createUser = async (req, res) => {
   }
 };
 
-const updateUser = async (req, res) => {
+const updateUserByAdmin = async (req, res) => {
   try {
     const { id } = req.params;
     const { cgpa, arrears, passoutyear } = req.body;
@@ -121,7 +124,48 @@ const updateUser = async (req, res) => {
       return res.status(200).json("Fields updated");
     } catch (error) {
       await session.abortTransaction();
-      throw error;
+      throw new Error();
+    } finally {
+      session.endSession();
+    }
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const updateUserByUser = async (req, res) => {
+  let photoUrl = null;
+  let photoId = null;
+  try {
+    const { id } = req.params;
+    const { avatarpublicid } = req.body;
+    if (req.file) {
+      const { path } = req.file;
+      const replacedPhoto = await cloudinary.uploader.upload(path, {
+        public_id: avatarpublicid,
+        overwrite: true, // Overwrite the existing file
+      });
+      photoUrl = replacedPhoto.secure_url;
+      photoId = replacedPhoto.public_id;
+      await fs.unlink(path);
+    }
+
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+      // Patch the user
+      await userModel
+        .findOneAndUpdate(
+          { userid: id }, // id to update
+          { avatar: photoUrl, avatarpublicid: photoId } // fields to be patched
+        )
+        .session(session);
+      await session.commitTransaction();
+      return res.status(200).json({ res: photoUrl });
+    } catch (error) {
+      await session.abortTransaction();
+      throw new Error();
     } finally {
       session.endSession();
     }
@@ -166,7 +210,7 @@ const deleteUser = async (req, res) => {
       return res.status(200).json("Deleted");
     } catch (error) {
       await session.abortTransaction();
-      throw error;
+      throw new Error();
     } finally {
       session.endSession();
     }
@@ -180,6 +224,7 @@ export {
   getAllUsers,
   getUserById,
   createUser,
-  updateUser,
+  updateUserByAdmin,
+  updateUserByUser,
   deleteUser,
 };

@@ -7,7 +7,8 @@ const UserSchema = new mongoose.Schema({
   passoutyear: { type: Number, required: true },
   arrears: { type: Number, required: true },
   cgpa: { type: Number, required: true },
-  avatar: { type: String },
+  avatar: { type: String, required: true },
+  avatarpublicid: { type: String, required: true },
   appliedplacements: [
     {
       type: mongoose.Schema.Types.ObjectId,
