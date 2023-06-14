@@ -95,33 +95,45 @@ const ManageStudents = () => {
       title: "User Id",
       dataIndex: "userid",
       width: 130,
+      align: "center",
     },
     {
       title: "Name",
       dataIndex: "username",
       width: 200,
+      align: "center",
     },
     {
       title: "Passout Year",
       dataIndex: "passoutyear",
-      sorter: true,
       width: 150,
+      align: "center",
+      sorter: (a, b) => {
+        return a.passoutyear - b.passoutyear;
+      },
     },
     {
       title: "Arrears",
       dataIndex: "arrears",
-      sorter: true,
       width: 100,
+      align: "center",
+      sorter: (a, b) => {
+        return a.arrears - b.arrears;
+      },
     },
     {
       title: "CGPA",
       dataIndex: "cgpa",
-      sorter: true,
       width: 100,
+      align: "center",
+      sorter: (a, b) => {
+        return a.cgpa - b.cgpa;
+      },
     },
     {
       title: "Actions",
       width: 100,
+      align: "center",
       render: (_, record) => {
         // record means the ALL DATA in that ROW only, _ is datatype in dataIndex (here null)
         return (

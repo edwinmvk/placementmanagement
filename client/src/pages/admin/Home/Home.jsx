@@ -73,16 +73,19 @@ const DatabaseData = () => {
       title: "Placement ID",
       dataIndex: "placementid",
       width: 150,
+      align: "center",
     },
     {
       title: "Company name",
       dataIndex: "companyname",
       width: 200,
+      align: "center",
     },
     {
       title: "Posted date",
       dataIndex: "createdate",
       width: 150,
+      align: "center",
       defaultSortOrder: "descend",
       sorter: (a, b) => {
         const dateA = new Date(a.createdate); // we are doing this because the date in the table is in string foramt
@@ -94,6 +97,7 @@ const DatabaseData = () => {
       title: "Last date",
       dataIndex: "lastdate",
       width: 150,
+      align: "center",
       sorter: (a, b) => {
         const dateA = new Date(a.lastdate);
         const dateB = new Date(b.lastdate);
@@ -104,6 +108,7 @@ const DatabaseData = () => {
       title: "Passoutyear",
       dataIndex: "passoutyear",
       width: 150,
+      align: "center",
       sorter: (a, b) => {
         return a.passoutyear - b.passoutyear;
       },
@@ -112,6 +117,7 @@ const DatabaseData = () => {
       title: "Min CGPA",
       dataIndex: "cgpa",
       width: 80,
+      align: "center",
       sorter: (a, b) => {
         return a.cgpa - b.cgpa;
       },
@@ -120,6 +126,7 @@ const DatabaseData = () => {
       title: "Max arrears",
       dataIndex: "arrears",
       width: 80,
+      align: "center",
       sorter: (a, b) => {
         return a.arrears - b.arrears;
       },
