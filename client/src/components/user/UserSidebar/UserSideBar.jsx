@@ -4,10 +4,11 @@ import { Context } from "../../../utils/ContextProvider";
 import { Layout, Menu, Dropdown, Modal, Upload, message } from "antd";
 import {
   HomeOutlined,
-  AudioOutlined,
+  MonitorOutlined,
   LogoutOutlined,
   AuditOutlined,
   RightOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import placementcell from "../../assets/placementcell.png";
 
@@ -85,6 +86,7 @@ const UserSideBar = () => {
   const onOk = async () => {
     if (list.length > 0) {
       setIsButtonDisabled(true);
+      message.warning("Please wait for confirmation");
       try {
         const userid = statedata?.userid;
         const formData = new FormData();
@@ -111,6 +113,7 @@ const UserSideBar = () => {
       }
     }
   };
+
   const MenuContents = [
     {
       label: "Home",
@@ -119,7 +122,7 @@ const UserSideBar = () => {
     },
     {
       label: "For Me",
-      icon: <AudioOutlined />,
+      icon: <MonitorOutlined />,
       key: "/userprofile/forme",
     },
     {
@@ -132,7 +135,7 @@ const UserSideBar = () => {
   const items = [
     {
       label: "Change picture",
-      icon: <LogoutOutlined />,
+      icon: <UserOutlined />,
       key: "1",
       onClick: () => setIsModelOpen(true),
     },
