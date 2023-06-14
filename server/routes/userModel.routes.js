@@ -10,6 +10,7 @@ import {
   createUser,
   updateUserByAdmin,
   updateUserByUser,
+  uploadResume,
   deleteUser,
 } from "../controllers/userModel.controller.js";
 
@@ -22,6 +23,7 @@ router.route("/:id").get(getUserById);
 router.route("/register").post(upload.single("avatar"), createUser);
 router.route("/:id").patch(updateUserByAdmin);
 router.route("/userupdate/:id").post(upload.single("avatar"), updateUserByUser);
+router.route("/resume/:id").post(upload.single("resumeurl"), uploadResume);
 router.route("/:id").delete(deleteUser);
 
 export default router;

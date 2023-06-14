@@ -174,6 +174,79 @@ const updateUserByUser = async (req, res) => {
   }
 };
 
+const uploadResume = async (req, res) => {
+  let resumeUrl = null;
+  let resumeId = null;
+  try {
+    const { id } = req.params;
+    if (req.body.resumepublicid) {
+      const { resumepublicid } = req.body;
+      // this is for replacng the already uploaded resume
+      if (req.file) {
+        const { path } = req.file;
+        const replacedResume = await cloudinary.uploader.upload(path, {
+          public_id: resumepublicid,
+          overwrite: true, // Overwrite the existing file
+        });
+        resumeUrl = replacedResume.secure_url;
+        resumeId = replacedResume.public_id;
+        await fs.unlink(path);
+      }
+
+      const session = await mongoose.startSession();
+      session.startTransaction();
+
+      try {
+        // Patch the user
+        await userModel
+          .findOneAndUpdate(
+            { userid: id }, // id to update
+            { resumeurl: resumeUrl, resumepublicid: resumeId } // fields to be patched
+          )
+          .session(session);
+        await session.commitTransaction();
+        return res.status(200).json({ res: resumeUrl });
+      } catch (error) {
+        await session.abortTransaction();
+        throw new Error();
+      } finally {
+        session.endSession();
+      }
+    }
+    // this is for new resume upload
+    else {
+      if (req.file) {
+        const { path } = req.file;
+        const uploadedResume = await cloudinary.uploader.upload(path);
+        resumeUrl = uploadedResume.secure_url;
+        resumeId = uploadedResume.public_id;
+        await fs.unlink(path);
+      }
+      const session = await mongoose.startSession();
+      session.startTransaction();
+
+      try {
+        // Patch the user
+        await userModel
+          .findOneAndUpdate(
+            { userid: id }, // id to update
+            { resumeurl: resumeUrl, resumepublicid: resumeId } // fields to be patched
+          )
+          .session(session);
+        await session.commitTransaction();
+        return res.status(200).json({ res: resumeUrl });
+      } catch (error) {
+        await session.abortTransaction();
+        throw new Error();
+      } finally {
+        session.endSession();
+      }
+    }
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
@@ -226,5 +299,6 @@ export {
   createUser,
   updateUserByAdmin,
   updateUserByUser,
+  uploadResume,
   deleteUser,
 };

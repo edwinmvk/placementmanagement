@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Table, Typography } from "antd";
+import { Button, Modal, Table, Typography, Upload, message } from "antd";
 import { Context } from "../../../utils/ContextProvider";
+import { SelectOutlined } from "@ant-design/icons";
 
 const ForMe = () => {
   const [statedata, setstatedata] = useState([]); // this state will eventually hold ALL the data from the DATABASE
@@ -8,6 +9,11 @@ const ForMe = () => {
 
   const { registeredGoogleUser } = useContext(Context);
   const userid = parseInt(registeredGoogleUser?.displayName.substring(0, 8));
+
+  const [userDetails, setUserDetails] = useState(null);
+  const [list, setList] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -21,6 +27,17 @@ const ForMe = () => {
       );
       const data = await response.json();
       setstatedata(data);
+      fetchUserDetails();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function fetchUserDetails() {
+    try {
+      const response = await fetch(`http://localhost:3000/api/user/${userid}`);
+      const data = await response.json();
+      setUserDetails(data);
     } catch (error) {
       console.error(error);
     }
@@ -31,16 +48,19 @@ const ForMe = () => {
       title: "Placement ID",
       dataIndex: "placementid",
       width: 150,
+      align: "center",
     },
     {
       title: "Company name",
       dataIndex: "companyname",
-      width: 200,
+      width: 170,
+      align: "center",
     },
     {
       title: "Posted date",
       dataIndex: "createdate",
-      width: 150,
+      width: 130,
+      align: "center",
       defaultSortOrder: "descend",
       sorter: (a, b) => {
         const dateA = new Date(a.createdate); // we are doing this because the date in the table is in string foramt
@@ -51,28 +71,33 @@ const ForMe = () => {
     {
       title: "Last date",
       dataIndex: "lastdate",
-      width: 150,
+      width: 130,
+      align: "center",
       sorter: (a, b) => {
         const dateA = new Date(a.lastdate);
         const dateB = new Date(b.lastdate);
         return dateA - dateB;
       },
     },
-    // {
-    //   title: "Passoutyear",
-    //   dataIndex: "passoutyear",
-    //   width: 150,
-    // },
-    // {
-    //   title: "Min CGPA",
-    //   dataIndex: "cgpa",
-    //   width: 80,
-    // },
-    // {
-    //   title: "Max arrears",
-    //   dataIndex: "arrears",
-    //   width: 80,
-    // },
+    {
+      title: "Action",
+      width: 150,
+      align: "center",
+      render: (_, record) => {
+        return (
+          <Button
+            type="primary"
+            shape="round"
+            icon={<SelectOutlined />}
+            size="large"
+            className="bg-blue-500 text-white"
+            onClick={() => onApply(record)}
+          >
+            Apply
+          </Button>
+        );
+      },
+    },
   ];
 
   // When a row is expanded, the function adds the key of the expanded row to the expandedRowKeys array.
@@ -88,6 +113,64 @@ const ForMe = () => {
     });
   };
 
+  function onApply(record) {
+    if (statedata.resumeurl) {
+      console.log(record);
+    } else {
+      message.error("No resume uploaded. Please upload a resume and try again");
+    }
+  }
+
+  const onOk = async () => {
+    if (list.length > 0) {
+      setIsButtonDisabled(true);
+      message.warning("Please wait for confirmation");
+      try {
+        const id = userDetails?.userid;
+        const formData = new FormData();
+        formData.append("resumeurl", list[0]?.originFileObj); // contains the file of newly uploaded resume
+        userDetails?.resumepublicid
+          ? formData.append("resumepublicid", userDetails?.resumepublicid)
+          : null; // contains if there are any previous uploaded resume
+        const response = await fetch(
+          `http://localhost:3000/api/user/resume/${id}`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const data = await response.json();
+        if (response.status === 200) {
+          message.success("Resume uploaded");
+        } else if (response.status === 500) {
+          message.error("Upload failed");
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsButtonDisabled(false);
+        onCancel();
+      }
+    }
+  };
+
+  const onCancel = () => {
+    setList([]);
+    setIsModalVisible(false);
+  };
+
+  const sizeChecking = (fileList) => {
+    // this if condition is necessary for the delete button to work
+    if (fileList.length > 0) {
+      if (fileList[0].size > 614400) {
+        message.error("File size exceeded");
+        setList([]); // Clear the fileList state
+        return;
+      }
+    }
+    setList(fileList); // Update the fileList state
+  };
+
   const expandedRowRender = (record) => {
     return (
       <p style={{ margin: 0 }}>
@@ -99,9 +182,20 @@ const ForMe = () => {
 
   return (
     <div className="mx-5">
-      <div className="px-2.5 py-0.5 mb-4 w-fit bg-stone-50 rounded-md">
-        <Typography.Title level={3}>Placements For Me</Typography.Title>
+      <div className="flex justify-between">
+        <div className="px-2.5 py-0.5 mb-4 w-fit bg-stone-50 rounded-md">
+          <Typography.Title level={3}>Placements For Me</Typography.Title>
+        </div>
+        <Button
+          type="text"
+          className="bg-green-500 text-white"
+          onClick={() => setIsModalVisible(true)}
+          icon={<SelectOutlined />}
+        >
+          Upload Resume
+        </Button>
       </div>
+
       <Table
         dataSource={statedata}
         columns={columns}
@@ -113,6 +207,39 @@ const ForMe = () => {
         pagination={true}
         scroll={{ y: 500 }}
       />
+      <Modal
+        title="Upload Resume"
+        open={isModalVisible}
+        maskClosable={false} // this will make the Model not disappear even if we click outside the Model
+        okButtonProps={{ className: "bg-blue-500", disabled: isButtonDisabled }}
+        okText="Upload"
+        onOk={onOk}
+        onCancel={onCancel}
+      >
+        <Upload.Dragger
+          maxCount={1}
+          multiple={false}
+          showUploadList={{ showRemoveIcon: true }}
+          accept=".pdf"
+          fileList={list}
+          onChange={(event) => sizeChecking(event.fileList)}
+        >
+          Drag and drop your resume here
+          <br />
+          (formats: .pdf) (maxsize: 500kb)
+        </Upload.Dragger>
+        <Button
+          type="text"
+          className="m-1 bg-green-500 text-white"
+          onClick={() => {
+            userDetails?.resumeurl
+              ? window.open(userDetails?.resumeurl, "_blank")
+              : null;
+          }}
+        >
+          View previous Resume
+        </Button>
+      </Modal>
     </div>
   );
 };
