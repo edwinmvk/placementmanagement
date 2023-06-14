@@ -57,7 +57,7 @@ const getPlacementsById = async (req, res) => {
     const formeFiltered = passoutyearFiltered.filter((placements) => {
       const currentDate = new Date();
       const convertedLastDate = new Date(placements.lastdate);
-      return convertedLastDate <= currentDate;
+      return currentDate <= convertedLastDate;
     });
 
     return res.status(200).json(formeFiltered);

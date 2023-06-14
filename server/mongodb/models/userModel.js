@@ -9,6 +9,8 @@ const UserSchema = new mongoose.Schema({
   cgpa: { type: Number, required: true },
   avatar: { type: String, required: true },
   avatarpublicid: { type: String, required: true },
+  resumeurl: { type: String },
+  resumepublicid: { type: String },
   appliedplacements: [
     {
       type: mongoose.Schema.Types.ObjectId,
