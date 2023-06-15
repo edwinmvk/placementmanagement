@@ -22,7 +22,8 @@ const ManageStudents = () => {
     }
   };
 
-  const sendUpdatedData = async (userid) => {
+  const sendDeleteData = async (userid) => {
+    message.warning("Please wait for confirmation. This may take some time");
     // This async function is to send the updated state data to the server for updating the database
     try {
       const response = await fetch(`http://localhost:3000/api/user/${userid}`, {
@@ -164,7 +165,7 @@ const ManageStudents = () => {
       okType: "danger",
       onOk: () => {
         // sending the updated state data to the backend
-        sendUpdatedData(record.userid);
+        sendDeleteData(record.userid);
       },
     });
   };
