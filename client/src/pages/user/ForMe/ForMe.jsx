@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Modal, Table, Typography, Upload, message } from "antd";
 import { Context } from "../../../utils/ContextProvider";
-import { SelectOutlined } from "@ant-design/icons";
+import { CloudUploadOutlined, SelectOutlined } from "@ant-design/icons";
 
 const ForMe = () => {
   const [statedata, setstatedata] = useState([]); // this state will eventually hold ALL the data from the DATABASE
@@ -27,6 +27,7 @@ const ForMe = () => {
       );
       const data = await response.json();
       setstatedata(data);
+
       fetchUserDetails();
     } catch (error) {
       console.error(error);
@@ -93,7 +94,7 @@ const ForMe = () => {
             className="bg-blue-500 text-white"
             onClick={() => onApply(record)}
           >
-            Apply
+            Apply now
           </Button>
         );
       },
@@ -113,9 +114,60 @@ const ForMe = () => {
     });
   };
 
-  function onApply(record) {
-    if (statedata.resumeurl) {
-      console.log(record);
+  async function onApply(record) {
+    if (userDetails?.resumeurl) {
+      try {
+        const id = userDetails?.userid;
+        const response = await fetch(
+          `http://localhost:3000/api/appliedplacements/${id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              placementid: record.placementid,
+              companyname: record.companyname,
+              status: "Applied for preliminary",
+              cgpa: userDetails?.cgpa,
+              arrears: userDetails?.arrears,
+              passoutyear: userDetails?.passoutyear,
+              resumeurl: userDetails?.resumeurl,
+            }),
+          }
+        );
+
+        const data = await response.json();
+
+        if (response.status === 200) {
+          Modal.success({
+            title: data,
+            content:
+              "Please check your status in the Applied Placements section",
+            okButtonProps: { className: "bg-blue-500" },
+          });
+
+          // remove the applied placement from the statedata
+          setstatedata((prev) => {
+            return prev.filter((placement) => {
+              return placement.placementid !== record.placementid;
+            });
+          });
+        } else if (response.status === 404) {
+          Modal.error({
+            title: data,
+            okButtonProps: { className: "bg-blue-500" },
+          });
+        } else if (response.status === 500) {
+          Modal.error({
+            title: "Application not recieved",
+            content: "Please try again",
+            okButtonProps: { className: "bg-blue-500" },
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
     } else {
       message.error("No resume uploaded. Please upload a resume and try again");
     }
@@ -142,6 +194,8 @@ const ForMe = () => {
         const data = await response.json();
         if (response.status === 200) {
           message.success("Resume uploaded");
+          // refresh the userDetails state
+          fetchUserDetails();
         } else if (response.status === 500) {
           message.error("Upload failed");
         }
@@ -190,7 +244,7 @@ const ForMe = () => {
           type="text"
           className="bg-green-500 text-white"
           onClick={() => setIsModalVisible(true)}
-          icon={<SelectOutlined />}
+          icon={<CloudUploadOutlined />}
         >
           Upload Resume
         </Button>
