@@ -14,7 +14,7 @@ const router = express.Router();
 
 router.route("/").get(getAllPlacements);
 router.route("/:id").get(getPlacementsById);
-router.route("/").post(createPlacements);
+router.route("/:id").post(createPlacements);
 router.route("/:id").patch(updatePlacements);
 router.route("/:id").delete(deletePlacements);
 

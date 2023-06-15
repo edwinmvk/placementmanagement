@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import * as dotenv from "dotenv";
 import { v2 as cloudinary } from "cloudinary";
 import { promises as fs } from "fs";
+import { error } from "console";
 
 dotenv.config();
 cloudinary.config({
@@ -80,7 +81,7 @@ const createUser = async (req, res) => {
       }
     } catch (error) {
       await session.abortTransaction();
-      throw new Error();
+      throw error;
     } finally {
       session.endSession();
     }
@@ -124,7 +125,7 @@ const updateUserByAdmin = async (req, res) => {
       return res.status(200).json("Fields updated");
     } catch (error) {
       await session.abortTransaction();
-      throw new Error();
+      throw error;
     } finally {
       session.endSession();
     }
@@ -165,7 +166,7 @@ const updateUserByUser = async (req, res) => {
       return res.status(200).json({ res: photoUrl });
     } catch (error) {
       await session.abortTransaction();
-      throw new Error();
+      throw error;
     } finally {
       session.endSession();
     }
@@ -208,7 +209,7 @@ const uploadResume = async (req, res) => {
         return res.status(200).json({ res: resumeUrl });
       } catch (error) {
         await session.abortTransaction();
-        throw new Error();
+        throw error;
       } finally {
         session.endSession();
       }
@@ -237,7 +238,7 @@ const uploadResume = async (req, res) => {
         return res.status(200).json({ res: resumeUrl });
       } catch (error) {
         await session.abortTransaction();
-        throw new Error();
+        throw error;
       } finally {
         session.endSession();
       }
@@ -270,11 +271,31 @@ const deleteUser = async (req, res) => {
       const appliedPlacementsIds = userToDelete.appliedplacements.map(
         (ap) => ap._id
       );
+
       await appliedPlacementsModel
         .deleteMany({
           _id: { $in: appliedPlacementsIds },
         })
         .session(session);
+
+      // Delete the avatar and resume from cloudinary
+      await cloudinary.uploader.destroy(
+        userToDelete.avatarpublicid,
+        (error, result) => {
+          if (error) {
+            console.log("Error deleting file:", error);
+          }
+        }
+      );
+
+      await cloudinary.uploader.destroy(
+        userToDelete.resumepublicid,
+        (error, result) => {
+          if (error) {
+            console.log("Error deleting file:", error);
+          }
+        }
+      );
 
       // Delete the user
       await userModel.findOneAndDelete({ userid: id }).session(session);
@@ -283,7 +304,7 @@ const deleteUser = async (req, res) => {
       return res.status(200).json("Deleted");
     } catch (error) {
       await session.abortTransaction();
-      throw new Error();
+      throw error;
     } finally {
       session.endSession();
     }

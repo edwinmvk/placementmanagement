@@ -1,15 +1,14 @@
 import adminModel from "../mongodb/models/adminModel.js";
 import placementsModel from "../mongodb/models/placementsModel.js";
-import appliedPlacementsModel from "../mongodb/models/appliedPlacementsModel.js";
 import userModel from "../mongodb/models/userModel.js";
 import mongoose from "mongoose";
 
 const getPlacements = async (req, res) => {
   try {
     const placements = await placementsModel.find({});
-    res.status(200).json(placements);
+    return res.status(200).json(placements);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -20,13 +19,18 @@ const getPlacementsById = async (req, res) => {
     // get all the placements from placement model
     const allPlacements = await placementsModel.find({});
 
-    // get all the placements applied by this user from applied placement model
-    const appliedPlacements = await appliedPlacementsModel.find({
-      placementid: id,
-    });
+    // // get all the placements applied by this user from applied placement model
+    // const appliedPlacements = await appliedPlacementsModel.find({
+    //   placementid: id,
+    // });
+
+    // get all the placements applied by this user from user model
+    const studentDetail = await userModel
+      .findOne({ userid: id })
+      .populate("appliedplacements");
 
     // Extract the placement IDs from the applied placements
-    const appliedPlacementIds = appliedPlacements.map(
+    const appliedPlacementIds = studentDetail.appliedplacements.map(
       (placement) => placement.placementid
     );
 
@@ -34,9 +38,6 @@ const getPlacementsById = async (req, res) => {
     const filteredPlacements = allPlacements.filter((placement) => {
       return !appliedPlacementIds.includes(placement.placementid);
     });
-
-    // get the specified student's detail from user model
-    const studentDetail = await userModel.findOne({ userid: id });
 
     // again filter the filtered placements based on cgpa
     const cgpaFiltered = filteredPlacements.filter((placement) => {
@@ -113,7 +114,7 @@ const createPlacements = async (req, res) => {
 
       await session.commitTransaction();
 
-      res.status(200).json("Placement created successfully");
+      return res.status(200).json("Placement created successfully");
     } catch (error) {
       await session.abortTransaction();
       throw error;
@@ -121,7 +122,7 @@ const createPlacements = async (req, res) => {
       session.endSession();
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
