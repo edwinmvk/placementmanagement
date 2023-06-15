@@ -1,12 +1,15 @@
 import mongoose from "mongoose";
 
-const connectDB = (url) => {
+const connectDB = async (mongodbURL) => {
+  // strictQuery means that queries with undefined fields will throw an error instead of ignoring them
   mongoose.set("strictQuery", true);
-  // show msg if the connection is successful with mongodb
-  mongoose
-    .connect(url)
-    .then(() => console.log("MongoDB connected"))
-    .catch((error) => console.log(error));
+  try {
+    await mongoose.connect(mongodbURL);
+    // show msg if the connection is successful with mongodb
+    console.log("MongoDB connected");
+  } catch (error) {
+    console.error("Failed to connect to MongoDB:", error);
+  }
 };
 
 export default connectDB;

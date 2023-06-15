@@ -26,10 +26,11 @@ app.use("/api/placements", placementsRouter);
 const startServer = async () => {
   try {
     // connect to database
-    connectDB(process.env.MONGODB_URL);
+    await connectDB(process.env.MONGODB_URL);
 
+    // the server wil not run if the connectDB fails due to await
     app.listen(3000, () => console.log("Server started at port 3000"));
-  } catch {
+  } catch (error) {
     console.log(error);
   }
 };
