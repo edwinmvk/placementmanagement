@@ -30,6 +30,13 @@ const Signin = () => {
     navigate("/signin/admin");
   };
 
+  const backgroundstyles = {
+    background: `radial-gradient(circle at 100% 50%, transparent 20%, rgba(255,255,255,.3) 21%, rgba(255,255,255,.3) 34%, transparent 35%, transparent),
+      radial-gradient(circle at 0% 50%, transparent 20%, rgba(255,255,255,.3) 21%, rgba(255,255,255,.3) 34%, transparent 35%, transparent) 0 -50px`,
+    backgroundColor: "slategray",
+    backgroundSize: "75px 100px",
+  };
+
   return (
     <div className="h-full flex flex-col md:flex-row">
       <div className="flex-1 flex justify-center items-center bg-gradient-to-br from-sky-50 to-gray-200">
@@ -38,16 +45,19 @@ const Signin = () => {
           alt="Sample image"
         />
       </div>
-      <div className="py-3 flex-1 flex flex-col justify-center items-center bg-sky-950">
+      <div
+        style={backgroundstyles}
+        className="py-3 flex-1 flex flex-col justify-center items-center"
+      >
         <div className="m-3 p-7 rounded-xl bg-white shadow-xl">
           <div className="space-y-4">
             <img
               src={placementcell}
               loading="lazy"
-              className="w-20 rounded-full"
+              className="w-20 rounded-full shadow-md"
               alt="tailus logo"
             />
-            <h2 className="mb-8 text-4xl text-cyan-900 font-bold">
+            <h2 className="mb-8 text-4xl text-blue-950 font-bold">
               Sign in to apply for <br /> Placements.
             </h2>
           </div>
