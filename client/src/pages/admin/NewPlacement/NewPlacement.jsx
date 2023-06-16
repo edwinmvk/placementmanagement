@@ -78,12 +78,12 @@ const NewPlacement = () => {
 
   return (
     <div className="mx-5">
-      <div className="px-2.5 py-0.5 mb-4 w-fit bg-stone-50 rounded-md">
+      <div className="px-2.5 py-0.5 mb-4 w-fit bg-stone-100 shadow-lg rounded-md">
         <Typography.Title level={3}>
           Create New Placement Drive
         </Typography.Title>
       </div>
-      <div className="mt-3 p-3 w-full lg:w-4/5 bg-stone-50 rounded-md">
+      <div className="mt-3 p-3 w-full lg:w-4/5 bg-stone-100 shadow-sm rounded-md">
         <Form
           className="max-w-4xl"
           form={form}

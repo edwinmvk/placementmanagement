@@ -257,8 +257,8 @@ const Sidebar = () => {
                 <></>
               ) : (
                 <>
-                  <h1 className="text-lg font-bold">Admin</h1>
-                  <RightOutlined />
+                  <h1 className="text-lg font-bold text-gray-200">Admin</h1>
+                  <RightOutlined className="text-gray-200" />
                 </>
               )}
             </div>

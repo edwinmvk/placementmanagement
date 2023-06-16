@@ -223,7 +223,7 @@ const Responses = () => {
 
   return (
     <div className="mx-5">
-      <div className="px-2.5 py-0.5 mb-4 w-fit bg-stone-50 rounded-md">
+      <div className="px-2.5 py-0.5 mb-4 w-fit bg-stone-100 shadow-lg rounded-md">
         <Typography.Title level={3}>Responses</Typography.Title>
       </div>
       <Table

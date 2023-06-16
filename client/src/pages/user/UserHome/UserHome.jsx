@@ -24,32 +24,32 @@ const UserHome = () => {
 
   return (
     <div className="mx-5">
-      <div className="px-2.5 py-0.5 mb-4 w-fit bg-stone-50 rounded-md">
+      <div className="px-2.5 py-0.5 mb-4 w-fit bg-stone-100 shadow-lg rounded-md">
         <Typography.Title level={3}>Dashboard</Typography.Title>
       </div>
       <div className="flex flex-wrap gap-x-4">
-        <Card className="rounded-md text-center mb-3 md:w-40 w-full bg-gradient-to-r from-white via-white to-neutral-100 shadow-lg hover:shadow-xl">
+        <Card className="rounded-md text-center mb-3 md:w-40 w-full bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl hover:duration-300">
           <PushpinOutlined
             className="text-4xl rounded-md"
             style={{ color: "#4d3f3f", backgroundColor: "#e6d5d5" }}
           />
           <Statistic title="Total Placements" value={totplacements} />
         </Card>
-        <Card className="rounded-md text-center mb-3 md:w-40 w-full bg-gradient-to-r from-white via-white to-neutral-100 shadow-lg hover:shadow-xl">
+        <Card className="rounded-md text-center mb-3 md:w-40 w-full bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl hover:duration-300">
           <UserOutlined
             className="text-4xl rounded-md"
             style={{ color: "#1f5926", backgroundColor: "#cafacc" }}
           />
           <Statistic title="Total Students" value={totstudents} />
         </Card>
-        <Card className="rounded-md text-center mb-3 md:w-40 w-full bg-gradient-to-r from-white via-white to-neutral-100 shadow-lg hover:shadow-xl">
+        <Card className="rounded-md text-center mb-3 md:w-40 w-full bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl hover:duration-300">
           <UserOutlined
             className="text-4xl rounded-md"
             style={{ color: "#1f5926", backgroundColor: "#cafacc" }}
           />
           <Statistic title="Total Students" value={totstudents} />
         </Card>
-        <Card className="rounded-md text-center mb-3 md:w-40 w-full bg-gradient-to-r from-white via-white to-neutral-100 shadow-lg hover:shadow-xl">
+        <Card className="rounded-md text-center mb-3 md:w-40 w-full bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl hover:duration-300">
           <UserOutlined
             className="text-4xl rounded-md"
             style={{ color: "#1f5926", backgroundColor: "#cafacc" }}
