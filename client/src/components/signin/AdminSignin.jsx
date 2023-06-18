@@ -9,10 +9,13 @@ const AdminSignin = () => {
     username: "",
     password: "",
   });
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
+    setIsButtonDisabled(true);
     event.preventDefault();
-    login(adminobj);
+    await login(adminobj);
+    setIsButtonDisabled(false);
   };
 
   useEffect(() => {
@@ -104,10 +107,13 @@ const AdminSignin = () => {
               </div>
               <div className="mt-10">
                 <button
+                  disabled={isButtonDisabled}
                   type="submit"
-                  className="mb-3 bg-indigo-500 text-gray-100 p-4 w-full rounded-full tracking-wide
-                                font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-indigo-600
-                                shadow-lg"
+                  className={`mb-3 bg-indigo-500 text-gray-100 p-4 w-full rounded-full tracking-wide
+                  font-semibold font-display focus:outline-none focus:shadow-outline 
+                  shadow-lg ${
+                    isButtonDisabled ? `bg-blue-300 ` : `hover:bg-indigo-600`
+                  }`}
                 >
                   Log In
                 </button>

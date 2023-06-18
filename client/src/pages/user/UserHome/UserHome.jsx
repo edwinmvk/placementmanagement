@@ -1,63 +1,103 @@
-import React, { useState, useEffect } from "react";
-import { Card, Statistic, Table, Typography } from "antd";
-import { PushpinOutlined, UserOutlined } from "@ant-design/icons";
+import React, { useState, useEffect, useContext } from "react";
+import { Card, Space, Statistic, Table, Typography } from "antd";
+import {
+  CarryOutOutlined,
+  PercentageOutlined,
+  ReconciliationOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
+import { Context } from "../../../utils/ContextProvider";
 import "../../../components/CustomTableCss/CustomTable.css"; // Import the CSS file
 
 const UserHome = () => {
-  const [totplacements, settotplacements] = useState(0);
-  const [totstudents, settotstudents] = useState(0);
+  const { registeredGoogleUser } = useContext(Context);
+  const userid = parseInt(registeredGoogleUser?.displayName.substring(0, 8));
 
-  const fetchData = async () => {
-    // This is used to obtain the data from the server and set it to Hooks
-    try {
-      const response = await fetch("https://dummyjson.com/carts/1");
-      const data = await response.json();
-      settotplacements(data.totalProducts);
-      settotstudents(data.total);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const [statedata, setstatedata] = useState();
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  async function fetchData() {
+    // This is used to obtain the data from the server and set it to Hooks
+    try {
+      const response = await fetch(`http://localhost:3000/api/user/${userid}`);
+      const data = await response.json();
+      setstatedata(data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <div className="mx-5">
       <div className="px-2.5 py-0.5 mb-4 w-fit bg-stone-100 shadow-lg rounded-md">
         <Typography.Title level={3}>Dashboard</Typography.Title>
       </div>
-      <div className="flex flex-wrap gap-x-4">
-        <Card className="rounded-md text-center mb-3 md:w-40 w-full bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl transition delay-50 duration-300 ease-in-out">
-          <PushpinOutlined
-            className="text-4xl rounded-md"
-            style={{ color: "#4d3f3f", backgroundColor: "#e6d5d5" }}
-          />
-          <Statistic title="Total Placements" value={totplacements} />
-        </Card>
-        <Card className="rounded-md text-center mb-3 md:w-40 w-full bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl transition delay-50 duration-300 ease-in-out">
-          <UserOutlined
-            className="text-4xl rounded-md"
-            style={{ color: "#1f5926", backgroundColor: "#cafacc" }}
-          />
-          <Statistic title="Total Students" value={totstudents} />
-        </Card>
-        <Card className="rounded-md text-center mb-3 md:w-40 w-full bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl transition delay-50 duration-300 ease-in-out">
-          <UserOutlined
-            className="text-4xl rounded-md"
-            style={{ color: "#1f5926", backgroundColor: "#cafacc" }}
-          />
-          <Statistic title="Total Students" value={totstudents} />
-        </Card>
-        <Card className="rounded-md text-center mb-3 md:w-40 w-full bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl transition delay-50 duration-300 ease-in-out">
-          <UserOutlined
-            className="text-4xl rounded-md"
-            style={{ color: "#1f5926", backgroundColor: "#cafacc" }}
-          />
-          <Statistic title="Total Students" value={totstudents} />
-        </Card>
-      </div>
+      <Space direction="horizontal">
+        <div className="flex flex-wrap gap-2">
+          <Card className="w-full md:w-60 bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl transition delay-50 duration-300 ease-in-out">
+            <div className="flex justify-center">
+              <Space direction="horizontal">
+                <UserOutlined className="text-4xl" style={{ color: "" }} />
+                <Statistic
+                  title="Student Id"
+                  value={statedata?.userid}
+                  formatter={(value) => String(value)}
+                  className="ml-2"
+                />
+              </Space>
+            </div>
+          </Card>
+          <Card className="w-full md:w-40 bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl transition delay-50 duration-300 ease-in-out">
+            <div className="flex justify-center">
+              <Space direction="horizontal">
+                <PercentageOutlined
+                  className="text-4xl"
+                  style={{ color: "green" }}
+                />
+                <Statistic
+                  title="Average CGPA"
+                  value={String(statedata?.cgpa)}
+                  className="ml-2"
+                />
+              </Space>
+            </div>
+          </Card>
+          <Card className="w-full md:w-40 bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl transition delay-50 duration-300 ease-in-out">
+            <div className="flex justify-center">
+              <Space direction="horizontal">
+                <ReconciliationOutlined
+                  className="text-4xl"
+                  style={{ color: "#c95149" }}
+                />
+                <Statistic
+                  title="Arrears"
+                  value={statedata?.arrears}
+                  className="ml-2"
+                />
+              </Space>
+            </div>
+          </Card>
+          <Card className="w-full md:w-40 bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl transition delay-50 duration-300 ease-in-out">
+            <div className="flex justify-center">
+              <Space direction="horizontal">
+                <CarryOutOutlined
+                  className="text-4xl"
+                  style={{ color: "#d4b148" }}
+                />
+                <Statistic
+                  title="Passout year"
+                  value={String(statedata?.passoutyear)}
+                  formatter={(value) => String(value)}
+                  className="ml-2"
+                />
+              </Space>
+            </div>
+          </Card>
+        </div>
+      </Space>
       <Typography.Title level={4}>All Placements</Typography.Title>
       <DatabaseData />
     </div>
@@ -89,12 +129,18 @@ const DatabaseData = () => {
       dataIndex: "placementid",
       width: 150,
       align: "center",
+      render: (text) => {
+        return text.toUpperCase();
+      },
     },
     {
       title: "Company name",
       dataIndex: "companyname",
       width: 200,
       align: "center",
+      render: (text) => {
+        return text.toUpperCase();
+      },
     },
     {
       title: "Posted date",

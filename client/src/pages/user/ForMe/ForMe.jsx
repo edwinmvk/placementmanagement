@@ -50,12 +50,18 @@ const ForMe = () => {
       dataIndex: "placementid",
       width: 150,
       align: "center",
+      render: (text) => {
+        return text.toUpperCase();
+      },
     },
     {
       title: "Company name",
       dataIndex: "companyname",
       width: 170,
       align: "center",
+      render: (text) => {
+        return text.toUpperCase();
+      },
     },
     {
       title: "Posted date",
@@ -128,7 +134,7 @@ const ForMe = () => {
             body: JSON.stringify({
               placementid: record.placementid,
               companyname: record.companyname,
-              status: "Applied for preliminary",
+              status: "Applied for Preliminary",
               cgpa: userDetails?.cgpa,
               arrears: userDetails?.arrears,
               passoutyear: userDetails?.passoutyear,

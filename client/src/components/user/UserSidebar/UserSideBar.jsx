@@ -213,7 +213,7 @@ const UserSideBar = () => {
                 <></>
               ) : (
                 <div className="flex items-center w-2/3">
-                  <h1 className="text-lg font-bold text-gray-200">
+                  <h1 className="text-md font-bold text-gray-200">
                     {statedata?.username}
                   </h1>
                   <RightOutlined className="text-gray-200" />

@@ -4,7 +4,6 @@ import mongoose from "mongoose";
 import * as dotenv from "dotenv";
 import { v2 as cloudinary } from "cloudinary";
 import { promises as fs } from "fs";
-import { error } from "console";
 
 dotenv.config();
 cloudinary.config({
@@ -248,6 +247,18 @@ const uploadResume = async (req, res) => {
   }
 };
 
+const getAppliedPlacementsById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userObj = await userModel
+      .findOne({ userid: id })
+      .populate("appliedplacements");
+    return res.status(200).json(userObj.appliedplacements);
+  } catch (error) {
+    return res.status(500).json("baad");
+  }
+};
+
 const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
@@ -321,5 +332,6 @@ export {
   updateUserByAdmin,
   updateUserByUser,
   uploadResume,
+  getAppliedPlacementsById,
   deleteUser,
 };

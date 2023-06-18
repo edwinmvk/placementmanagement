@@ -1,7 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Modal, Table, Typography, Upload, message } from "antd";
+import { Button, Table, Tag, Typography } from "antd";
 import { Context } from "../../../utils/ContextProvider";
-import { EyeOutlined } from "@ant-design/icons";
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  EyeOutlined,
+} from "@ant-design/icons";
 import "../../../components/CustomTableCss/CustomTable.css";
 
 const AppliedPlacements = () => {
@@ -9,36 +13,75 @@ const AppliedPlacements = () => {
   const userid = parseInt(registeredGoogleUser?.displayName.substring(0, 8));
 
   const [statedata, setstatedata] = useState([]);
-  const [userDetails, setUserDetails] = useState(null);
 
   useEffect(() => {
-    fetchData();
+    appliedPlacements();
   }, []);
 
-  async function fetchData() {
-    // This is used to obtain the data from the server and set it to Hooks
+  async function appliedPlacements() {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/placements/${userid}`
+        `http://localhost:3000/api/user/appliedplacements/${userid}`
       );
       const data = await response.json();
+      console.log(data);
       setstatedata(data);
-
-      fetchUserDetails();
     } catch (error) {
       console.error(error);
     }
   }
 
-  async function fetchUserDetails() {
-    try {
-      const response = await fetch(`http://localhost:3000/api/user/${userid}`);
-      const data = await response.json();
-      setUserDetails(data);
-    } catch (error) {
-      console.error(error);
+  const displaytags = (statustext) => {
+    switch (statustext) {
+      case "Applied for Preliminary":
+        return (
+          <Tag color="orange">
+            <div className="flex items-center gap-x-1 h-8">
+              <CheckCircleOutlined spin />
+              <h3>Applied for Preliminary</h3>
+            </div>
+          </Tag>
+        );
+      case "Eligible for Round 1":
+        return (
+          <Tag color="purple">
+            <div className="flex items-center gap-x-1 h-8">
+              <CheckCircleOutlined spin />
+              <h3>Eligible for Round 1</h3>
+            </div>
+          </Tag>
+        );
+      case "Eligible for Round 2":
+        return (
+          <Tag color="purple">
+            <div className="flex items-center gap-x-1 h-8">
+              <CheckCircleOutlined spin />
+              <h3>Eligible for Round 2</h3>
+            </div>
+          </Tag>
+        );
+      case "You have been Placed":
+        return (
+          <Tag color="green">
+            <div className="flex items-center gap-x-1 h-8">
+              <CheckOutlined />
+              <h3>You have been Placed</h3>
+            </div>
+          </Tag>
+        );
+      case "Failed":
+        return (
+          <Tag color="red">
+            <div className="flex items-center gap-x-1 h-8">
+              <CloseCircleOutlined />
+              <h3>Failed</h3>
+            </div>
+          </Tag>
+        );
+      default:
+        return <Tag>Unknown</Tag>;
     }
-  }
+  };
 
   const columns = [
     {
@@ -46,30 +89,37 @@ const AppliedPlacements = () => {
       dataIndex: "placementid",
       width: 150,
       align: "center",
+      render: (text) => {
+        return text.toUpperCase();
+      },
     },
     {
       title: "Company name",
       dataIndex: "companyname",
       width: 170,
       align: "center",
-    },
-    {
-      title: "Posted date",
-      dataIndex: "createdate",
-      width: 130,
-      align: "center",
-      defaultSortOrder: "descend",
-      sorter: (a, b) => {
-        const dateA = new Date(a.createdate); // we are doing this because the date in the table is in string foramt
-        const dateB = new Date(b.createdate);
-        return dateA - dateB;
+      render: (text) => {
+        return text.toUpperCase();
       },
     },
+    // {
+    //   title: "Posted date",
+    //   dataIndex: "createdate",
+    //   width: 130,
+    //   align: "center",
+    //   defaultSortOrder: "descend",
+    //   sorter: (a, b) => {
+    //     const dateA = new Date(a.createdate); // we are doing this because the date in the table is in string foramt
+    //     const dateB = new Date(b.createdate);
+    //     return dateA - dateB;
+    //   },
+    // },
     {
       title: "Status",
       dataIndex: "status",
       width: 150,
       align: "center",
+      render: (text) => displaytags(text),
     },
 
     {
@@ -83,7 +133,11 @@ const AppliedPlacements = () => {
             icon={<EyeOutlined />}
             size="large"
             className="bg-orange-500 text-white hover:bg-white"
-            onClick={() => console.log("Hi")}
+            onClick={() => {
+              if (record.offerletterurl) {
+                window.open(record.offerletterurl, "_blank");
+              }
+            }}
           >
             View
           </Button>
