@@ -10,7 +10,7 @@ import {
   RightOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import placementcell from "../../assets/placementcell.png";
+import placementcell from "../../../assets/placementcell.png";
 
 const { Sider } = Layout;
 
@@ -201,21 +201,23 @@ const UserSideBar = () => {
             }}
           >
             <div className="p-2 flex items-center justify-around gap-x-2 border border-solid border-transparent bg-white/30 rounded-md">
-              <img
-                alt=""
-                src={statedata?.avatar}
-                width={30}
-                className="rounded-full"
-              />
+              <div className="rounded-full w-10 h-10 overflow-hidden">
+                <img
+                  alt=""
+                  src={statedata?.avatar}
+                  className="object-cover h-full w-full"
+                />
+              </div>
+
               {isCollapsed ? (
                 <></>
               ) : (
-                <>
+                <div className="flex items-center w-2/3">
                   <h1 className="text-lg font-bold text-gray-200">
                     {statedata?.username}
                   </h1>
                   <RightOutlined className="text-gray-200" />
-                </>
+                </div>
               )}
             </div>
           </Dropdown>

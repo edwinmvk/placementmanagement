@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Card, Statistic, Table, Typography } from "antd";
 import { PushpinOutlined, UserOutlined } from "@ant-design/icons";
+import "../../../components/CustomTableCss/CustomTable.css";
 
 const Home = () => {
   const [totplacements, settotplacements] = useState(0);
@@ -157,6 +158,7 @@ const DatabaseData = () => {
 
   return (
     <Table
+      className="custom-table"
       dataSource={statedata}
       columns={columns}
       expandedRowRender={expandedRowRender} // defines what component must be rendered in the expanded row

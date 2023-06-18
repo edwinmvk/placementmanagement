@@ -20,7 +20,7 @@ const User = () => {
 
   return (
     <div style={divStyle}>
-      <div className="flex flex-col backdrop-blur	bg-stone-100/60">
+      <div className="flex flex-col backdrop-blur	bg-stone-50/60">
         <div className="h-screen flex flex-row">
           <UserSideBar />
           <div className="w-full flex flex-col overflow-y-scroll overflow-x-hidden">

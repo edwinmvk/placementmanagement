@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../../utils/ContextProvider";
-import placementcell from "../assets/placementcell.png";
+import placementcell from "../../assets/placementcell.png";
 // import { GoogleButton } from "react-google-button";
 
 const Signin = () => {

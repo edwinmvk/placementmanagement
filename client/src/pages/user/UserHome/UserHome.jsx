@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Card, Statistic, Table, Typography } from "antd";
 import { PushpinOutlined, UserOutlined } from "@ant-design/icons";
+import "../../../components/CustomTableCss/CustomTable.css"; // Import the CSS file
 
 const UserHome = () => {
   const [totplacements, settotplacements] = useState(0);
@@ -28,28 +29,28 @@ const UserHome = () => {
         <Typography.Title level={3}>Dashboard</Typography.Title>
       </div>
       <div className="flex flex-wrap gap-x-4">
-        <Card className="rounded-md text-center mb-3 md:w-40 w-full bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl hover:duration-300">
+        <Card className="rounded-md text-center mb-3 md:w-40 w-full bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl transition delay-50 duration-300 ease-in-out">
           <PushpinOutlined
             className="text-4xl rounded-md"
             style={{ color: "#4d3f3f", backgroundColor: "#e6d5d5" }}
           />
           <Statistic title="Total Placements" value={totplacements} />
         </Card>
-        <Card className="rounded-md text-center mb-3 md:w-40 w-full bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl hover:duration-300">
+        <Card className="rounded-md text-center mb-3 md:w-40 w-full bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl transition delay-50 duration-300 ease-in-out">
           <UserOutlined
             className="text-4xl rounded-md"
             style={{ color: "#1f5926", backgroundColor: "#cafacc" }}
           />
           <Statistic title="Total Students" value={totstudents} />
         </Card>
-        <Card className="rounded-md text-center mb-3 md:w-40 w-full bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl hover:duration-300">
+        <Card className="rounded-md text-center mb-3 md:w-40 w-full bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl transition delay-50 duration-300 ease-in-out">
           <UserOutlined
             className="text-4xl rounded-md"
             style={{ color: "#1f5926", backgroundColor: "#cafacc" }}
           />
           <Statistic title="Total Students" value={totstudents} />
         </Card>
-        <Card className="rounded-md text-center mb-3 md:w-40 w-full bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl hover:duration-300">
+        <Card className="rounded-md text-center mb-3 md:w-40 w-full bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl transition delay-50 duration-300 ease-in-out">
           <UserOutlined
             className="text-4xl rounded-md"
             style={{ color: "#1f5926", backgroundColor: "#cafacc" }}
@@ -171,6 +172,7 @@ const DatabaseData = () => {
 
   return (
     <Table
+      className="custom-table"
       dataSource={statedata}
       columns={columns}
       expandedRowRender={expandedRowRender} // defines what component must be rendered in the expanded row

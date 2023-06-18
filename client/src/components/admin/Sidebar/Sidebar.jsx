@@ -20,8 +20,8 @@ import {
   AuditOutlined,
   RightOutlined,
 } from "@ant-design/icons";
-import placementcell from "../../assets/placementcell.png";
-import admin from "../../assets/admin.png";
+import placementcell from "../../../assets/placementcell.png";
+import admin from "../../../assets/admin.png";
 // import { LocalDetails } from "./LocalDetails";
 
 const { Sider } = Layout;
@@ -252,7 +252,14 @@ const Sidebar = () => {
             }}
           >
             <div className="p-2 flex items-center justify-around gap-x-2 border border-solid border-transparent bg-white/30 rounded-md">
-              <img alt="" src={admin} width={30} className="rounded-full" />
+              <div className="rounded-full w-10 h-10 overflow-hidden">
+                <img
+                  alt=""
+                  src={admin}
+                  className="object-cover h-full w-full"
+                />
+              </div>
+
               {isCollapsed ? (
                 <></>
               ) : (

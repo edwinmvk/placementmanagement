@@ -2,14 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 import { Button, Modal, Table, Typography, Upload, message } from "antd";
 import { Context } from "../../../utils/ContextProvider";
 import { CloudUploadOutlined, SelectOutlined } from "@ant-design/icons";
+import "../../../components/CustomTableCss/CustomTable.css";
 
 const ForMe = () => {
-  const [statedata, setstatedata] = useState([]); // this state will eventually hold ALL the data from the DATABASE
-  const [expandedRowKeys, setExpandedRowKeys] = useState([]);
-
   const { registeredGoogleUser } = useContext(Context);
   const userid = parseInt(registeredGoogleUser?.displayName.substring(0, 8));
 
+  const [statedata, setstatedata] = useState([]); // this state will eventually hold ALL the data from the DATABASE
+  const [expandedRowKeys, setExpandedRowKeys] = useState([]);
   const [userDetails, setUserDetails] = useState(null);
   const [list, setList] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -251,6 +251,7 @@ const ForMe = () => {
       </div>
 
       <Table
+        className="custom-table"
         dataSource={statedata}
         columns={columns}
         expandedRowRender={expandedRowRender} // defines what component must be rendered in the expanded row

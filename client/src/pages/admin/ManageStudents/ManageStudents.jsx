@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Typography, Table, Avatar, Modal, Input, message } from "antd";
 import { DeleteFilled, EditFilled } from "@ant-design/icons";
+import "../../../components/CustomTableCss/CustomTable.css";
 
 const ManageStudents = () => {
   const [statedata, setstatedata] = useState([]);
@@ -222,6 +223,7 @@ const ManageStudents = () => {
         <Typography.Title level={3}>Manage Student Details</Typography.Title>
       </div>
       <Table
+        className="custom-table"
         bordered
         columns={columns}
         dataSource={statedata}

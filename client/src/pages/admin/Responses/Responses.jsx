@@ -7,6 +7,7 @@ import {
   DownloadOutlined,
 } from "@ant-design/icons";
 import _ from "lodash";
+import "../../../components/CustomTableCss/CustomTable.css";
 import { LocalDetails } from "./LocalDetails";
 
 const Responses = () => {
@@ -227,6 +228,7 @@ const Responses = () => {
         <Typography.Title level={3}>Responses</Typography.Title>
       </div>
       <Table
+        className="custom-table"
         columns={columns}
         dataSource={groupedData}
         scroll={{ y: 500 }}

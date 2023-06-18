@@ -1,0 +1,21 @@
+.custom-table .ant-table-thead > tr > th {
+  background-color: rgba(
+    202,
+    199,
+    199,
+    0.377
+  ); /* Set the header background color to a lighter gray */
+}
+
+.custom-table .ant-table-thead > tr > td {
+  background-color: rgba(
+    202,
+    199,
+    199,
+    0.377
+  ); /* Set the header background color to a lighter gray */
+}
+
+.custom-table .ant-table-tbody > tr > td {
+  border-color: #cecccc; /* Set the border color of table cells */
+}
