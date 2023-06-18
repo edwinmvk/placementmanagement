@@ -83,7 +83,7 @@ const AppliedPlacements = () => {
             icon={<EyeOutlined />}
             size="large"
             className="bg-orange-500 text-white hover:bg-white"
-            onClick={() => console.log("hello")}
+            onClick={() => console.log("Hi")}
           >
             View
           </Button>
