@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Typography, Table, Avatar, Modal, Input, message } from "antd";
 import { DeleteFilled, EditFilled } from "@ant-design/icons";
 import "../../../components/CustomTableCss/CustomTable.css";
+import CSVbutton from "../../../components/CSVbutton/CSVbutton";
 
 const ManageStudents = () => {
   const [statedata, setstatedata] = useState([]);
@@ -222,8 +223,13 @@ const ManageStudents = () => {
 
   return (
     <div className="mx-5">
-      <div className="px-2.5 py-0.5 mb-4 w-fit bg-stone-100 shadow-lg rounded-md">
-        <Typography.Title level={3}>Manage Student Details</Typography.Title>
+      <div className="flex justify-between items-center">
+        <div className="px-2.5 py-0.5 mb-4 w-fit bg-stone-100 shadow-lg rounded-md">
+          <Typography.Title level={3}>Manage Student Details</Typography.Title>
+        </div>
+        <span>
+          <CSVbutton data={statedata} />
+        </span>
       </div>
       <Table
         className="custom-table"
