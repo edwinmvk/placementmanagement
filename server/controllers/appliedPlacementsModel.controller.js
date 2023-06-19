@@ -2,7 +2,21 @@ import mongoose from "mongoose";
 import appliedPlacementsModel from "../mongodb/models/appliedPlacementsModel.js";
 import userModel from "../mongodb/models/userModel.js";
 
-const getAllPlacementIds = async (req, res) => {};
+const getAllPlacementIds = async (req, res) => {
+  try {
+    const data = await appliedPlacementsModel.aggregate([
+      {
+        $group: {
+          _id: "$placementid",
+          companyname: { $first: "$companyname" },
+        },
+      },
+    ]);
+    return res.status(200).json(data);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
 
 const createPlacements = async (req, res) => {
   try {

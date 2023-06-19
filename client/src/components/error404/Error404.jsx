@@ -3,7 +3,7 @@ import "./Error404.css";
 
 const Error404 = () => {
   return (
-    <div class="bg-gray-100 h-screen justify-center">
+    <div class="h-screen justify-center">
       <center class="mt-24 m-auto">
         <svg
           class="emoji-404 "
@@ -109,7 +109,7 @@ const Error404 = () => {
           href="/signin"
           class="text-gray-500 font-mono text-xl bg-gray-200 p-3 rounded-md hover:shadow-md"
         >
-          Go back to Login
+          Go back
         </a>
       </center>
     </div>

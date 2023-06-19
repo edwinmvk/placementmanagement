@@ -104,6 +104,9 @@ const ManageStudents = () => {
       dataIndex: "username",
       width: 200,
       align: "center",
+      render: (text) => {
+        return text.toUpperCase();
+      },
     },
     {
       title: "Passout Year",

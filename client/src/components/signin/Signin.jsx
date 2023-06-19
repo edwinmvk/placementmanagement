@@ -27,7 +27,7 @@ const Signin = () => {
   }, [unRegisteredGoogleUser, registeredGoogleUser]);
 
   const navigateAdminSignin = () => {
-    navigate("/signin/admin");
+    navigate("/adminsignin");
   };
 
   const backgroundstyles = {

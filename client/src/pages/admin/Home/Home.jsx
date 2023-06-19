@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Card, Statistic, Table, Typography } from "antd";
-import { PushpinOutlined, UserOutlined } from "@ant-design/icons";
+import { Space, Card, Statistic, Table, Typography } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 import "../../../components/CustomTableCss/CustomTable.css";
 
 const Home = () => {
-  const [totplacements, settotplacements] = useState(0);
-  const [totstudents, settotstudents] = useState(0);
-
   const fetchData = async () => {
     // This is used to obtain the data from the server and set it to Hooks
     try {
       const response = await fetch("https://dummyjson.com/carts/1");
       const data = await response.json();
-      settotplacements(data.totalProducts);
-      settotstudents(data.total);
     } catch (error) {
       console.error(error);
     }
@@ -28,22 +23,23 @@ const Home = () => {
       <div className="px-2.5 py-0.5 mb-4 w-fit bg-stone-100 shadow-lg rounded-md">
         <Typography.Title level={3}>Dashboard</Typography.Title>
       </div>
-      <div className="flex flex-wrap gap-x-4">
-        <Card className="rounded-md text-center mb-3 md:w-40 w-full bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl hover:duration-300">
-          <PushpinOutlined
-            className="text-4xl rounded-md"
-            style={{ color: "#4d3f3f", backgroundColor: "#e6d5d5" }}
-          />
-          <Statistic title="Total Placements" value={totplacements} />
-        </Card>
-        <Card className="rounded-md text-center mb-3 md:w-40 w-full bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl hover:duration-300">
-          <UserOutlined
-            className="text-4xl rounded-md"
-            style={{ color: "#1f5926", backgroundColor: "#cafacc" }}
-          />
-          <Statistic title="Total Students" value={totstudents} />
-        </Card>
-      </div>
+      <Space direction="horizontal" className="mb-4">
+        <div className="flex flex-wrap gap-2">
+          <Card className="w-full md:w-60 bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl transition delay-50 duration-300 ease-in-out">
+            <div className="flex justify-center">
+              <Space direction="horizontal">
+                <UserOutlined className="text-4xl" style={{ color: "" }} />
+                <Statistic
+                  title="Total Students"
+                  value={2222}
+                  formatter={(value) => String(value)}
+                  className="ml-2"
+                />
+              </Space>
+            </div>
+          </Card>
+        </div>
+      </Space>
       <Typography.Title level={4}>All Placements</Typography.Title>
       <DatabaseData />
     </div>
@@ -75,12 +71,18 @@ const DatabaseData = () => {
       dataIndex: "placementid",
       width: 150,
       align: "center",
+      render: (text) => {
+        return text.toUpperCase();
+      },
     },
     {
       title: "Company name",
       dataIndex: "companyname",
       width: 200,
       align: "center",
+      render: (text) => {
+        return text.toUpperCase();
+      },
     },
     {
       title: "Posted date",

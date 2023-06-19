@@ -24,7 +24,6 @@ const AppliedPlacements = () => {
         `http://localhost:3000/api/user/appliedplacements/${userid}`
       );
       const data = await response.json();
-      console.log(data);
       setstatedata(data);
     } catch (error) {
       console.error(error);

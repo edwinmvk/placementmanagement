@@ -35,7 +35,7 @@ const UserHome = () => {
       <div className="px-2.5 py-0.5 mb-4 w-fit bg-stone-100 shadow-lg rounded-md">
         <Typography.Title level={3}>Dashboard</Typography.Title>
       </div>
-      <Space direction="horizontal">
+      <Space direction="horizontal" className="mb-4">
         <div className="flex flex-wrap gap-2">
           <Card className="w-full md:w-60 bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl transition delay-50 duration-300 ease-in-out">
             <div className="flex justify-center">
