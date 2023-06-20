@@ -38,17 +38,14 @@ const Signin = () => {
   };
 
   return (
-    <div className="h-full flex flex-col md:flex-row">
-      <div className="flex-1 flex justify-center items-center bg-gradient-to-br from-sky-50 to-gray-200">
-        <img
-          src="https://tecdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
-          alt="Sample image"
-        />
-      </div>
-      <div
-        style={backgroundstyles}
-        className="py-3 flex-1 flex flex-col justify-center items-center"
-      >
+    <div
+      className="h-full flex flex-col md:flex-row"
+      style={{
+        backgroundImage:
+          "url('https://tecdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp')",
+      }}
+    >
+      <div className="py-3 flex-1 flex flex-col justify-center items-center backdrop-blur-lg bg-white/50">
         <div className="m-3 p-7 rounded-xl bg-white shadow-xl">
           <div className="space-y-4">
             <img

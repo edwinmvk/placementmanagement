@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Typography, Table, Button, Modal, Tag } from "antd";
 import {
   CheckCircleOutlined,
@@ -15,6 +15,7 @@ const EditStatus = () => {
   const [statedata, setstatedata] = useState([]);
   const [statusTag, setStatusTag] = useState(null);
 
+  const { id } = useParams();
   const navigate = useNavigate();
 
   // const fetchData= async ()=> {  // This is used to obtain the data from the server and set it to Hooks for the first time only
@@ -228,7 +229,12 @@ const EditStatus = () => {
   return (
     <div className="mx-5">
       <div className="px-2.5 py-0.5 mb-4 w-fit bg-stone-100 shadow-lg rounded-md">
-        <Typography.Title level={3}>Responses</Typography.Title>
+        <Typography.Title level={3}>Edit Status</Typography.Title>
+      </div>
+      <div className="px-2.5 py-0.5 mb-4 w-fit bg-stone-50 shadow-lg rounded-md">
+        <Typography.Title level={4}>
+          Placement id: {id.toUpperCase()}
+        </Typography.Title>
       </div>
       <Table
         className="custom-table"
@@ -241,3 +247,19 @@ const EditStatus = () => {
 };
 
 export default EditStatus;
+
+// import React from "react";
+// import { useNavigate, useParams } from "react-router-dom";
+
+// const EditStatus = () => {
+//   const { id } = useParams();
+//   const navigate = useNavigate();
+
+//   return (
+//     <div>
+
+//     </div>
+//   );
+// };
+
+// export default EditStatus;
