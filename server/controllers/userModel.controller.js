@@ -289,24 +289,50 @@ const deleteUser = async (req, res) => {
         })
         .session(session);
 
-      // Delete the avatar and resume from cloudinary
-      await cloudinary.uploader.destroy(
-        userToDelete.avatarpublicid,
-        (error, result) => {
-          if (error) {
-            console.log("Error deleting file:", error);
+      // Delete the avatar, resume, offerletter from cloudinary if they are present
+      if (userToDelete.avatarpublicid) {
+        await cloudinary.uploader.destroy(
+          userToDelete.avatarpublicid,
+          (error, result) => {
+            if (error) {
+              console.log("Error deleting file:", error);
+            }
           }
-        }
-      );
+        );
+      }
 
-      await cloudinary.uploader.destroy(
-        userToDelete.resumepublicid,
-        (error, result) => {
-          if (error) {
-            console.log("Error deleting file:", error);
+      if (userToDelete.resumepublicid) {
+        await cloudinary.uploader.destroy(
+          userToDelete.resumepublicid,
+          (error, result) => {
+            if (error) {
+              console.log("Error deleting file:", error);
+            }
           }
-        }
-      );
+        );
+      }
+
+      // // extract the offerletterpublic id from the user's applied placement array
+      // offerLetterPublicId = userToDelete.appliedplacements.map((placement) => {
+      //   if (placement.offerletterpublicid) {
+      //     return placement.offerletterpublicid;
+      //   }
+      // });
+
+      // // Filter out undefined values because they can have undefined values instead of null which cause errors
+      // offerLetterPublicId = offerLetterPublicId.filter(
+      //   (id) => id !== undefined
+      // );
+
+      // if (offerLetterPublicId.length > 0) {
+      //   for (const id of offerLetterPublicId) {
+      //     await cloudinary.uploader.destroy(id, (error, result) => {
+      //       if (error) {
+      //         console.log("Error deleting file:", error);
+      //       }
+      //     });
+      //   }
+      // }
 
       // Delete the user
       await userModel.findOneAndDelete({ userid: id }).session(session);
