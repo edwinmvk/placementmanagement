@@ -36,13 +36,13 @@ const Responses = () => {
       <Typography.Title level={5}>
         Click to edit the status of responses
       </Typography.Title>
-      <div className="bg-stone-100 p-5 h-screen rounded-lg overflow-y-scroll">
+      <div className="bg-stone-100 p-5 px-8 h-screen rounded-lg overflow-y-scroll">
         {statedata.map((placement, index) => {
           return (
             <div
               key={index} // Use index as the key
               onClick={() => navigateToEditStatus(placement._id)}
-              className="flex items-center justify-between p-5 w-full h-14 mb-3 rounded-lg shadow-md bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:scale-105 transition delay-50 duration-300 ease-in-out"
+              className="bg-white cursor-pointer flex items-center justify-between p-5 w-full h-14 mb-3 rounded-lg shadow-sm hover:scale-x-105 transition delay-50 duration-200 ease-in-out"
             >
               <div className="flex items-center justify-between gap-x-5">
                 <span className="flex items-center gap-x-2">
@@ -68,7 +68,7 @@ const Responses = () => {
                   <h1 className="mt-1">
                     {placement.companyname.toUpperCase()}
                   </h1>
-                </span>{" "}
+                </span>
               </div>
               <div>
                 <RightOutlined />

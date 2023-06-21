@@ -1,8 +1,11 @@
 import mongoose from "mongoose";
 import appliedPlacementsModel from "../mongodb/models/appliedPlacementsModel.js";
 import userModel from "../mongodb/models/userModel.js";
+import { v2 as cloudinary } from "cloudinary";
+import { promises as fs } from "fs";
 
 const getAllPlacementIds = async (req, res) => {
+  // this function returns an array of objects containing all the unique placement ids along with their names
   try {
     const data = await appliedPlacementsModel.aggregate([
       {
@@ -75,6 +78,126 @@ const createPlacements = async (req, res) => {
   }
 };
 
-const updatePlacements = async (req, res) => {};
+const getPlacementsById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const data = await appliedPlacementsModel
+      .find({ placementid: id })
+      .populate("creator");
+    return res.status(200).json(data);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
 
-export { getAllPlacementIds, createPlacements, updatePlacements };
+const updatePlacementsOfferLetter = async (req, res) => {
+  let offerLetterUrl = null;
+  let offerLetterId = null;
+  try {
+    const { id } = req.params;
+    const { placementid } = req.body;
+
+    // this is for replacng the already uploaded offer letter
+    if (req.body.offerletterpublicid) {
+      const { offerletterpublicid } = req.body;
+      if (req.file) {
+        const { path } = req.file;
+        const replacedOfferLetter = await cloudinary.uploader.upload(path, {
+          public_id: offerletterpublicid,
+          overwrite: true, // Overwrite the existing file
+        });
+        offerLetterUrl = replacedOfferLetter.secure_url;
+        offerLetterId = replacedOfferLetter.public_id;
+        await fs.unlink(path);
+      }
+
+      const session = await mongoose.startSession();
+      session.startTransaction();
+
+      try {
+        // Find the user by userid and populate the appliedplacements
+        const user = await userModel
+          .findOne({ userid: id })
+          .populate("appliedplacements")
+          .session(session);
+
+        if (!user) {
+          return res.status(404).json({ error: "User not found" });
+        }
+
+        // Find the appliedplacement that matches the offerletter's creator (user)
+        const matchedAppliedPlacement = user.appliedplacements.find(
+          (placement) => placementid === placement.placementid
+        );
+
+        // Update the offerletterurl for the found matchedAppliedPlacement
+        matchedAppliedPlacement.offerletterurl = offerLetterUrl;
+        matchedAppliedPlacement.offerletterpublicid = offerLetterId;
+
+        // Save the changes to the matchedAppliedPlacement
+        await matchedAppliedPlacement.save();
+
+        await session.commitTransaction();
+        return res.status(200).json(`Offer letter to ${id} is updated`);
+      } catch (error) {
+        await session.abortTransaction();
+        throw error;
+      } finally {
+        session.endSession();
+      }
+    }
+
+    // this is for new resume upload
+    else {
+      if (req.file) {
+        const { path } = req.file;
+        const uploadedOfferLetter = await cloudinary.uploader.upload(path);
+        offerLetterUrl = uploadedOfferLetter.secure_url;
+        offerLetterId = uploadedOfferLetter.public_id;
+        await fs.unlink(path);
+      }
+
+      const session = await mongoose.startSession();
+      session.startTransaction();
+
+      try {
+        const user = await userModel
+          .findOne({ userid: id })
+          .populate("appliedplacements")
+          .session(session);
+
+        if (!user) {
+          return res.status(404).json({ error: "User not found" });
+        }
+
+        // Find the appliedplacement that matches the offerletter's creator (user)
+        const matchedAppliedPlacement = user.appliedplacements.find(
+          (placement) => placementid === placement.placementid
+        );
+
+        // Update the offerletterurl for the found matchedAppliedPlacement
+        matchedAppliedPlacement.offerletterurl = offerLetterUrl;
+        matchedAppliedPlacement.offerletterpublicid = offerLetterId;
+
+        // Save the changes to the matchedAppliedPlacement
+        await matchedAppliedPlacement.save();
+
+        await session.commitTransaction();
+        return res.status(200).json(`Offer letter sent to ${id}`);
+      } catch (error) {
+        await session.abortTransaction();
+        throw error;
+      } finally {
+        session.endSession();
+      }
+    }
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+export {
+  getAllPlacementIds,
+  createPlacements,
+  getPlacementsById,
+  updatePlacementsOfferLetter,
+};

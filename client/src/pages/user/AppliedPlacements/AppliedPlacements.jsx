@@ -123,13 +123,12 @@ const AppliedPlacements = () => {
 
     {
       title: "Offer letter",
-      width: 150,
+      width: 130,
       align: "center",
       render: (_, record) => {
         return (
           <Button
             shape="round"
-            icon={<EyeOutlined />}
             size="large"
             className="bg-orange-500 text-white hover:bg-white"
             onClick={() => {
@@ -138,7 +137,10 @@ const AppliedPlacements = () => {
               }
             }}
           >
-            View
+            <div className="flex items-center gap-x-2">
+              <EyeOutlined />
+              View
+            </div>
           </Button>
         );
       },
