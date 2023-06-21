@@ -50,7 +50,7 @@ const Home = () => {
       <div className="flex justify-between items-center">
         <Typography.Title level={4}>All Placements</Typography.Title>
         <span>
-          <CSVbutton data={statedata} />
+          <CSVbutton data={statedata} filename={`All_Placements`} />
         </span>
       </div>
 

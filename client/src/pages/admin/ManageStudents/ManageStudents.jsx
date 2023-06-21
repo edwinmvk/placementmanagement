@@ -8,6 +8,7 @@ const ManageStudents = () => {
   const [statedata, setstatedata] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editRec, setEditRec] = useState(null);
+  const [disableDelete, setDisabledDelete] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -25,6 +26,7 @@ const ManageStudents = () => {
   };
 
   const sendDeleteData = async (userid) => {
+    setDisabledDelete(true);
     message.warning("Please wait for confirmation. This may take some time");
     // This async function is to send the updated state data to the server for updating the database
     try {
@@ -46,6 +48,8 @@ const ManageStudents = () => {
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setDisabledDelete(false);
     }
   };
 
@@ -149,7 +153,9 @@ const ManageStudents = () => {
               onClick={() => onClickUpdate(record)}
             />
             <DeleteFilled
-              className="text-xl text-red-500"
+              className={`text-xl text-red-500 ${
+                disableDelete ? `pointer-events-none opacity-20` : ``
+              }`}
               onClick={() => onClickDelete(record)}
             />
           </div>
@@ -228,7 +234,7 @@ const ManageStudents = () => {
           <Typography.Title level={3}>Manage Student Details</Typography.Title>
         </div>
         <span>
-          <CSVbutton data={statedata} />
+          <CSVbutton data={statedata} filename={`All_Student_Details`} />
         </span>
       </div>
       <Table

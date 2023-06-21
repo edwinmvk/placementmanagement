@@ -14,6 +14,7 @@ const ForMe = () => {
   const [list, setList] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [disableApply, setDisabledApply] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -97,7 +98,9 @@ const ForMe = () => {
             shape="round"
             icon={<SelectOutlined />}
             size="large"
-            className="bg-blue-500 text-white"
+            className={`bg-blue-500 text-white ${
+              disableApply ? `pointer-events-none opacity-20` : ``
+            }`}
             onClick={() => onApply(record)}
           >
             Apply now
@@ -122,6 +125,7 @@ const ForMe = () => {
 
   async function onApply(record) {
     if (userDetails?.resumeurl) {
+      setDisabledApply(true);
       try {
         const id = userDetails?.userid;
         const response = await fetch(
@@ -173,6 +177,8 @@ const ForMe = () => {
         }
       } catch (error) {
         console.log(error);
+      } finally {
+        setDisabledApply(false);
       }
     } else {
       message.error("No resume uploaded. Please upload a resume and try again");
