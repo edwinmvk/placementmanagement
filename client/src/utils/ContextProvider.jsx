@@ -35,9 +35,17 @@ const ContextProvider = ({ children }) => {
       } else if (data === "registered") {
         // console.log(data);
         setRegisteredGoogleUser(signedInUser);
-      } else {
-        console.log(data);
       }
+
+      // Calculate the timestamp for 5 days from now
+      const fiveDaysLater = new Date();
+      oneDayLater.setDate(fiveDaysLater.getDate() + 1);
+
+      // Store the sign-in timestamp in local storage
+      localStorage.setItem(
+        "googleSignInTime",
+        fiveDaysLater.getTime().toString()
+      );
     } catch (error) {
       googleSignOut(); // signing out is necessary response is not obtained. If we didnt write this function, even though the page is protected and not shown, the user details are stil existing
       console.error(error);
@@ -53,6 +61,17 @@ const ContextProvider = ({ children }) => {
         setRegisteredGoogleUser(null);
       }
     });
+
+    // Check if the user is signed in even when offline
+    const storedSignInTime = localStorage.getItem("googleSignInTime");
+    if (storedSignInTime) {
+      const currentTime = new Date().getTime();
+      if (currentTime >= parseInt(storedSignInTime)) {
+        signOut(auth); // Sign out the user if 5 days have passed
+        localStorage.removeItem("googleSignInTime"); // Remove the stored sign-in time
+      }
+    }
+
     return () => {
       unsubscribe();
     };
@@ -60,7 +79,7 @@ const ContextProvider = ({ children }) => {
 
   const [admin, setAdmin] = useState(() => {
     // Load admin from localStorage upon refresh if it exists and hasn't expired
-    const adminJson = localStorage.getItem("browseradmin");
+    const adminJson = sessionStorage.getItem("browseradmin");
     if (adminJson) {
       const { data, expiry } = JSON.parse(adminJson);
       if (expiry > Date.now()) {
@@ -74,12 +93,12 @@ const ContextProvider = ({ children }) => {
   useEffect(() => {
     if (admin) {
       const expiry = Date.now() + 1000 * 60 * 10; // expires in 10 minutes
-      localStorage.setItem(
+      sessionStorage.setItem(
         "browseradmin",
         JSON.stringify({ data: admin, expiry })
       );
     } else {
-      localStorage.removeItem("browseradmin");
+      sessionStorage.removeItem("browseradmin");
     }
   }, [admin]);
 
@@ -110,20 +129,27 @@ const ContextProvider = ({ children }) => {
     setAdmin(null);
   };
 
-  const googleSignIn = () => {
-    const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({
-      prompt: "select_account",
-      hd: "jecc.ac.in",
-    });
+  const googleSignIn = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      provider.setCustomParameters({
+        prompt: "select_account",
+        hd: "jecc.ac.in",
+      });
 
-    signInWithPopup(auth, provider).catch((error) => {
-      console.error(error);
-    });
+      await signInWithPopup(auth, provider);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const googleSignOut = () => {
-    signOut(auth);
+  const googleSignOut = async () => {
+    try {
+      await signOut(auth);
+      localStorage.removeItem("googleSignInTime");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
