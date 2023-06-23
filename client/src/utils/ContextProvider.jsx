@@ -16,7 +16,56 @@ const ContextProvider = ({ children }) => {
   const [unRegisteredGoogleUser, setUnRegisteredGoogleUser] = useState(null);
   const [registeredGoogleUser, setRegisteredGoogleUser] = useState(null);
 
-  const checkUser = async (signedInUser) => {
+  // Usually if the user signed out properly, the googleSignInTime will not exist in the local storage
+  // Check if the user's signin period is expired when the user login after a long period of time or when the page refreshes
+  const storedSignInTime = localStorage.getItem("googleSignInTime");
+  if (storedSignInTime) {
+    const currentTime = new Date().getTime(); // getTime function converts the data into milliseconds from 1970
+    if (currentTime >= parseInt(storedSignInTime)) {
+      // we are parsing Int because, the storedSigninTime was converted to string while storing in the session storage
+      signOut(auth); // Sign out the user if 5 days have passed
+      localStorage.removeItem("googleSignInTime"); // Remove the stored sign-in time
+    }
+  }
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (signedInUser) => {
+      if (signedInUser) {
+        checkUser(signedInUser); // this function sends the signedInUser object from firebase to the backend and checks whether the user is registered or not.
+      } else {
+        setUnRegisteredGoogleUser(null);
+        setRegisteredGoogleUser(null);
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  const googleSignIn = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      provider.setCustomParameters({
+        prompt: "select_account",
+        hd: "jecc.ac.in",
+      });
+      await signInWithPopup(auth, provider);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const googleSignOut = async () => {
+    try {
+      await signOut(auth);
+      localStorage.removeItem("googleSignInTime");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  async function checkUser(signedInUser) {
     try {
       const response = await fetch("http://localhost:3000/api/user", {
         method: "POST",
@@ -37,9 +86,9 @@ const ContextProvider = ({ children }) => {
         setRegisteredGoogleUser(signedInUser);
       }
 
-      // Calculate the timestamp for 5 days from now
+      // Each time after the user successfully logs in the login time details are stored in the local storage for 5 days from now
       const fiveDaysLater = new Date();
-      oneDayLater.setDate(fiveDaysLater.getDate() + 1);
+      fiveDaysLater.setDate(fiveDaysLater.getDate() + 5);
 
       // Store the sign-in timestamp in local storage
       localStorage.setItem(
@@ -50,55 +99,35 @@ const ContextProvider = ({ children }) => {
       googleSignOut(); // signing out is necessary response is not obtained. If we didnt write this function, even though the page is protected and not shown, the user details are stil existing
       console.error(error);
     }
-  };
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (signedInUser) => {
-      if (signedInUser) {
-        checkUser(signedInUser); // this function sends the signedInUser object from firebase to the backend and checks whether the user is registered or not.
-      } else {
-        setUnRegisteredGoogleUser(null);
-        setRegisteredGoogleUser(null);
-      }
-    });
-
-    // Check if the user is signed in even when offline
-    const storedSignInTime = localStorage.getItem("googleSignInTime");
-    if (storedSignInTime) {
-      const currentTime = new Date().getTime();
-      if (currentTime >= parseInt(storedSignInTime)) {
-        signOut(auth); // Sign out the user if 5 days have passed
-        localStorage.removeItem("googleSignInTime"); // Remove the stored sign-in time
-      }
-    }
-
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+  }
 
   const [admin, setAdmin] = useState(() => {
-    // Load admin from localStorage upon refresh if it exists and hasn't expired
+    // Load admin from localStorage if it exists and hasn't expired upon refresh
     const adminJson = sessionStorage.getItem("browseradmin");
     if (adminJson) {
-      const { data, expiry } = JSON.parse(adminJson);
-      if (expiry > Date.now()) {
+      const currentTime = new Date().getTime();
+      const { data, adminSignInTime } = JSON.parse(adminJson);
+      if (currentTime <= parseInt(adminSignInTime)) {
         return data;
+      } else {
+        sessionStorage.removeItem("browseradmin"); // remove the browser admin if the session is expired
       }
     }
     return null;
   });
 
-  // Save admin to localStorage when it changes
   useEffect(() => {
+    // admin contains data only if the login is successful or if the useState puts data in admin from session storage
     if (admin) {
-      const expiry = Date.now() + 1000 * 60 * 10; // expires in 10 minutes
+      const tenMinutesLater = new Date();
+      tenMinutesLater.setMinutes(tenMinutesLater.getMinutes() + 10);
       sessionStorage.setItem(
         "browseradmin",
-        JSON.stringify({ data: admin, expiry })
+        JSON.stringify({
+          data: admin,
+          adminSignInTime: tenMinutesLater.getTime().toString(),
+        })
       );
-    } else {
-      sessionStorage.removeItem("browseradmin");
     }
   }, [admin]);
 
@@ -127,29 +156,7 @@ const ContextProvider = ({ children }) => {
 
   const logout = () => {
     setAdmin(null);
-  };
-
-  const googleSignIn = async () => {
-    try {
-      const provider = new GoogleAuthProvider();
-      provider.setCustomParameters({
-        prompt: "select_account",
-        hd: "jecc.ac.in",
-      });
-
-      await signInWithPopup(auth, provider);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const googleSignOut = async () => {
-    try {
-      await signOut(auth);
-      localStorage.removeItem("googleSignInTime");
-    } catch (error) {
-      console.log(error);
-    }
+    sessionStorage.removeItem("browseradmin");
   };
 
   return (

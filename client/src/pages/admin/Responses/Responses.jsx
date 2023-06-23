@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Typography } from "antd";
-import { RightOutlined } from "@ant-design/icons";
+import { ClockCircleFilled, RightOutlined } from "@ant-design/icons";
 
 const Responses = () => {
   const navigate = useNavigate();
@@ -36,7 +36,15 @@ const Responses = () => {
       <Typography.Title level={5}>
         Click to edit the status of responses
       </Typography.Title>
-      <div className="bg-stone-100 p-5 px-8 h-screen rounded-lg overflow-y-scroll">
+      <div className="bg-stone-100 p-5 px-8 h-80 max-h-full rounded-lg overflow-y-scroll">
+        {statedata.length === 0 ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="flex flex-col justify-center items-center">
+              <ClockCircleFilled className="text-6xl opacity-30" />
+              <h1 className="m-6 text-xl opacity-30">No responses currently</h1>
+            </div>
+          </div>
+        ) : null}
         {statedata.map((placement, index) => {
           return (
             <div

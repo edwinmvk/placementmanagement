@@ -95,7 +95,7 @@ const createUser = async (req, res) => {
 const updateUserByAdmin = async (req, res) => {
   try {
     const { id } = req.params;
-    const { cgpa, arrears, passoutyear } = req.body;
+    const { cgpa, arrears } = req.body;
 
     // Finds the required user by the id
     const userToUpdate = await userModel.findOne({ userid: id });
@@ -116,7 +116,7 @@ const updateUserByAdmin = async (req, res) => {
       await userModel
         .findOneAndUpdate(
           { userid: id }, // id to update
-          { cgpa, arrears, passoutyear } // fields to be patched
+          { cgpa, arrears } // fields to be patched
           // { new: true } // Return the updated user object (optional)
         )
         .session(session);
@@ -278,17 +278,6 @@ const deleteUser = async (req, res) => {
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
-      // Delete all related appliedplacements
-      const appliedPlacementsIds = userToDelete.appliedplacements.map(
-        (ap) => ap._id
-      );
-
-      await appliedPlacementsModel
-        .deleteMany({
-          _id: { $in: appliedPlacementsIds },
-        })
-        .session(session);
-
       // Delete the avatar, resume, offerletter from cloudinary if they are present
       if (userToDelete.avatarpublicid) {
         await cloudinary.uploader.destroy(
@@ -312,27 +301,33 @@ const deleteUser = async (req, res) => {
         );
       }
 
-      // // extract the offerletterpublic id from the user's applied placement array
-      // offerLetterPublicId = userToDelete.appliedplacements.map((placement) => {
-      //   if (placement.offerletterpublicid) {
-      //     return placement.offerletterpublicid;
-      //   }
-      // });
+      // Extract the offerletterpublic id from the user's applied placement array
+      // Filter out undefined values because they can have undefined values instead of null which cause errors
 
-      // // Filter out undefined values because they can have undefined values instead of null which cause errors
-      // offerLetterPublicId = offerLetterPublicId.filter(
-      //   (id) => id !== undefined
-      // );
+      const offerLetterPublicId = userToDelete.appliedplacements
+        .map((placement) => placement.offerletterpublicid)
+        .filter((publicId) => publicId !== null && publicId !== undefined);
 
-      // if (offerLetterPublicId.length > 0) {
-      //   for (const id of offerLetterPublicId) {
-      //     await cloudinary.uploader.destroy(id, (error, result) => {
-      //       if (error) {
-      //         console.log("Error deleting file:", error);
-      //       }
-      //     });
-      //   }
-      // }
+      if (offerLetterPublicId.length > 0) {
+        for (const id of offerLetterPublicId) {
+          await cloudinary.uploader.destroy(id, (error, result) => {
+            if (error) {
+              console.log("Error deleting file:", error);
+            }
+          });
+        }
+      }
+
+      // Delete all related appliedplacements
+      const appliedPlacementsIds = userToDelete.appliedplacements.map(
+        (ap) => ap._id
+      );
+
+      await appliedPlacementsModel
+        .deleteMany({
+          _id: { $in: appliedPlacementsIds },
+        })
+        .session(session);
 
       // Delete the user
       await userModel.findOneAndDelete({ userid: id }).session(session);
