@@ -56,7 +56,7 @@ const NewPlacement = () => {
 
   const validateMessages = {
     required: "${label} is required!",
-    type: {
+    types: {
       number: "${label} is not a valid number!",
     },
     number: {
@@ -83,7 +83,7 @@ const NewPlacement = () => {
           Create New Placement Drive
         </Typography.Title>
       </div>
-      <div className="mt-3 p-3 w-full lg:w-4/5 bg-stone-100 shadow-sm rounded-md">
+      <div className="mt-3 p-3 w-full bg-stone-100 shadow-sm rounded-md">
         <Form
           className="max-w-4xl"
           form={form}

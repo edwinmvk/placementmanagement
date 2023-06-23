@@ -53,7 +53,7 @@ const AdminSignin = () => {
                 </g>
               </svg>
             </div>
-            <div className="text-3xl text-indigo-800 tracking-wide mr-8 font-semibold">
+            <div className="text-5xl text-indigo-800 tracking-wide mr-8 font-bold">
               Welcome back Admin
             </div>
           </div>
@@ -68,7 +68,7 @@ const AdminSignin = () => {
           <div className="mt-12">
             <form onSubmit={handleLogin}>
               <div>
-                <div className="text-sm font-bold text-gray-700 tracking-wide">
+                <div className="text-lg font-bold text-gray-700 tracking-wide">
                   Username
                 </div>
                 <input
@@ -87,7 +87,7 @@ const AdminSignin = () => {
               </div>
               <div className="mt-8">
                 <div className="flex justify-between items-center">
-                  <div className="text-sm font-bold text-gray-700 tracking-wide">
+                  <div className="text-lg font-bold text-gray-700 tracking-wide">
                     Password
                   </div>
                 </div>

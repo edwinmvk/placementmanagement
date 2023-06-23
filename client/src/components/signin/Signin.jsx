@@ -42,10 +42,10 @@ const Signin = () => {
       className="h-full flex flex-col md:flex-row"
       style={{
         backgroundImage:
-          "url('https://tecdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp')",
+          "url('https://kinsta.com/wp-content/uploads/2017/05/how-to-optimize-images-for-web-and-performance.jpg')",
       }}
     >
-      <div className="py-3 flex-1 flex flex-col justify-center items-center backdrop-blur-lg bg-white/50">
+      <div className="py-3 flex-1 flex flex-col justify-center items-center backdrop-blur-lg bg-white/40">
         <div className="m-3 p-7 rounded-xl bg-white shadow-xl">
           <div className="space-y-4">
             <img
@@ -54,8 +54,8 @@ const Signin = () => {
               className="w-20 rounded-full shadow-md"
               alt="tailus logo"
             />
-            <h2 className="mb-8 text-4xl text-blue-950 font-bold">
-              Sign in to apply for <br /> Placements.
+            <h2 className="mb-8 text-5xl text-blue-950 font-black">
+              Sign in to apply for <br /> Placements
             </h2>
           </div>
           <div className="mt-16 grid space-y-4">
@@ -70,7 +70,7 @@ const Signin = () => {
                   className="absolute left-0 w-6"
                   alt="google logo"
                 />
-                <span className="block w-max font-semibold tracking-wide text-gray-700 text-md transition duration-300 group-hover:text-blue-600">
+                <span className="block w-max font-semibold tracking-wide text-gray-700 text-lg transition duration-300 group-hover:text-blue-600">
                   Continue with Google
                 </span>
               </div>
@@ -81,7 +81,7 @@ const Signin = () => {
      hover:border-blue-400 focus:bg-blue-50 active:bg-blue-100"
             >
               <div className="relative flex items-center space-x-4 justify-center">
-                <span className="block w-max font-semibold tracking-wide text-gray-700 text-md transition duration-300 group-hover:text-blue-600">
+                <span className="block w-max font-semibold tracking-wide text-gray-700 text-lg transition duration-300 group-hover:text-blue-600">
                   Signin as Admin
                 </span>
               </div>
