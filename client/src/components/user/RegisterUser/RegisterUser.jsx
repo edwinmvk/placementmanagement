@@ -136,7 +136,7 @@ const RegisterUser = () => {
                   }}
                 >
                   <h3 className="font-medium text-3xl">Academic Details</h3>
-                  <p className="text-xl">Please fill out all the fields.</p>
+                  <p className="text-xl">Please fill out all the fields</p>
                 </div>
 
                 <div className="lg:col-span-2 md:row-span-3">
@@ -237,6 +237,7 @@ const RegisterUser = () => {
                               width: "100%",
                               backgroundColor: "#f5f4f0",
                             }}
+                            precision={2}
                           />
                         </Form.Item>
                       </div>
@@ -260,6 +261,7 @@ const RegisterUser = () => {
                               width: "100%",
                               backgroundColor: "#f5f4f0",
                             }}
+                            parser={(value) => parseInt(value)}
                           />
                         </Form.Item>
                       </div>
