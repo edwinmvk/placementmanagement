@@ -73,6 +73,13 @@ const RegisterUser = () => {
     userid: parseInt(unRegisteredGoogleUser?.displayName.substring(0, 8)), // 8th character is the space which is excluded
     username: unRegisteredGoogleUser?.displayName.substring(9), // the charcters starting from 9th index to the end of string is taken
     email: unRegisteredGoogleUser?.email,
+    passoutyear:
+      parseInt(
+        unRegisteredGoogleUser?.email.substring(
+          unRegisteredGoogleUser?.email.length - 11,
+          unRegisteredGoogleUser?.email.length - 13
+        )
+      ) + 2004,
     avatar: [],
   };
 
@@ -198,17 +205,10 @@ const RegisterUser = () => {
                         <Form.Item
                           name="passoutyear"
                           label="Passout Year"
-                          rules={[
-                            {
-                              type: "number",
-                              required: true,
-                              min: 2024,
-                              max: 2028,
-                            },
-                          ]}
                           style={{ marginBottom: "-3px" }}
                         >
                           <InputNumber
+                            readOnly
                             style={{
                               height: "40px",
                               width: "100%",

@@ -149,7 +149,9 @@ const ManageStudents = () => {
         return (
           <div className="mx-1 flex justify-between">
             <EditFilled
-              className="text-xl text-green-500"
+              className={`text-xl text-green-500 ${
+                disableDelete ? `pointer-events-none opacity-20` : ``
+              }`}
               onClick={() => onClickUpdate(record)}
             />
             <DeleteFilled
@@ -202,28 +204,32 @@ const ManageStudents = () => {
     }
   };
 
-  const onChangeYear = (input) => {
-    setEditRec((previouseditrec) => {
-      // here we are updating the old year key in previoseditrecord with the new year key
-      let convertedvalue = parseInt(input.target.value, 10); // the inputed value is converted to an integer
-      let checkedvalue = isNaN(convertedvalue) ? "" : convertedvalue; // if its of type NaN, i.e.,empty string, then we return an ""
-      return { ...previouseditrec, passoutyear: checkedvalue };
-    });
-  };
-
   const onChangeArrears = (input) => {
     setEditRec((previouseditrec) => {
       let convertedvalue = parseInt(input.target.value, 10);
-      let checkedvalue = isNaN(convertedvalue) ? "" : convertedvalue;
-      return { ...previouseditrec, arrears: checkedvalue };
+      let typecheckedvalue = isNaN(convertedvalue) ? "" : convertedvalue;
+      if (typecheckedvalue < 0) {
+        message.error("Negative number should not be entered");
+        return { ...previouseditrec, arrears: "" };
+      } else {
+        return { ...previouseditrec, arrears: typecheckedvalue };
+      }
     });
   };
 
   const onChangeCgpa = (input) => {
     setEditRec((previouseditrec) => {
       let convertedvalue = parseFloat(input.target.value, 10);
-      let checkedvalue = isNaN(convertedvalue) ? "" : convertedvalue;
-      return { ...previouseditrec, cgpa: checkedvalue };
+      let typecheckedvalue = isNaN(convertedvalue) ? "" : convertedvalue;
+      if (typecheckedvalue < 0) {
+        message.error("Negative number should not be entered");
+        return { ...previouseditrec, cgpa: "" };
+      } else if (typecheckedvalue > 10) {
+        message.error("Cgpa must be less than 10");
+        return { ...previouseditrec, cgpa: "" };
+      } else {
+        return { ...previouseditrec, cgpa: typecheckedvalue };
+      }
     });
   };
 
@@ -255,14 +261,6 @@ const ManageStudents = () => {
         onOk={onOk}
         okButtonProps={{ className: "bg-blue-500" }}
       >
-        <label htmlFor="passoutyear">Passout year :</label>
-        <Input
-          type="number"
-          id="passoutyear"
-          value={editRec?.passoutyear}
-          onChange={onChangeYear}
-        />
-
         <label htmlFor="arrears">Arrears :</label>
         <Input
           type="number"
