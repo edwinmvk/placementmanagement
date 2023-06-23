@@ -2,8 +2,7 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-@import url("https://fonts.googleapis.com/css2?family=DynaPuff:wght@500&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@600&display=swap");
 /* * {
   outline: 1px solid rgb(255, 53, 53) !important;
   background: rgb(0 100 0 / 0.1);
@@ -12,5 +11,5 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: "DynaPuff", cursive;
+  font-family: "Outfit", sans-serif;
 }
