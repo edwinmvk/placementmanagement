@@ -20,6 +20,7 @@ import {
   EyeOutlined,
   HourglassOutlined,
 } from "@ant-design/icons";
+import CSVbutton from "../../../components/CSVbutton/CSVbutton";
 
 const EditStatus = () => {
   const { id } = useParams();
@@ -412,12 +413,28 @@ const EditStatus = () => {
     },
   ];
 
+  const csvdata = statedata?.map((item) => {
+    return {
+      ...item,
+      creator: item.creator.username,
+      userid: item.creator.userid,
+    };
+  });
+
   return (
     <div className="mx-5">
-      <div className="px-2.5 py-0.5 mb-8 w-fit bg-stone-100 shadow-lg rounded-md">
-        <Typography.Title level={4}>
-          Placement id: {id.toUpperCase()}
-        </Typography.Title>
+      <div className="flex justify-between item-center">
+        <div className="px-2.5 py-0.5 mb-8 w-fit bg-stone-100 shadow-lg rounded-md">
+          <Typography.Title level={4}>
+            Placement id: {id.toUpperCase()}
+          </Typography.Title>
+        </div>
+        <span>
+          <CSVbutton
+            data={csvdata}
+            filename={`Placement_id:${id.toUpperCase()}`}
+          />
+        </span>
       </div>
 
       <Table

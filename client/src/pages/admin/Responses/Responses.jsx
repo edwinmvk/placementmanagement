@@ -45,45 +45,51 @@ const Responses = () => {
             </div>
           </div>
         ) : null}
-        {statedata.map((placement, index) => {
-          return (
-            <div
-              key={index} // Use index as the key
-              onClick={() => navigateToEditStatus(placement._id)}
-              className="bg-white cursor-pointer flex items-center justify-between p-5 w-full h-14 mb-3 rounded-lg shadow-sm hover:scale-x-105 transition delay-50 duration-200 ease-in-out"
-            >
-              <div className="flex items-center justify-between gap-x-5">
-                <span className="flex items-center gap-x-2">
-                  <Typography.Title
-                    level={5}
-                    style={{
-                      margin: 0,
-                    }}
-                  >
-                    Placement id:
-                  </Typography.Title>
-                  <h1 className="mt-1">{placement._id.toUpperCase()}</h1>
-                </span>
-                <span className="flex items-center gap-x-2">
-                  <Typography.Title
-                    level={5}
-                    style={{
-                      margin: 0,
-                    }}
-                  >
-                    Company name:
-                  </Typography.Title>
-                  <h1 className="mt-1">
-                    {placement.companyname.toUpperCase()}
-                  </h1>
-                </span>
+        {statedata
+          // the statedata is first sorted and then mapped
+          .sort((a, b) => a.companyname.localeCompare(b.companyname))
+          .map((placement, index) => {
+            return (
+              <div
+                key={index} // Use index as the key
+                onClick={() => navigateToEditStatus(placement._id)}
+                className="bg-white cursor-pointer flex items-center justify-between p-5 w-full h-14 mb-3 rounded-md shadow-sm hover:scale-x-105 transition delay-50 duration-100 ease-in-out"
+              >
+                <div className="flex items-center justify-between gap-x-5">
+                  <span className="flex items-center">
+                    <h1 className="mt-1">{index + 1}.</h1>
+                  </span>
+                  <span className="flex items-center gap-x-2">
+                    <Typography.Title
+                      level={5}
+                      style={{
+                        margin: 0,
+                      }}
+                    >
+                      Placement id:
+                    </Typography.Title>
+                    <h1 className="mt-1">{placement._id.toUpperCase()}</h1>
+                  </span>
+                  <span className="flex items-center gap-x-2">
+                    <Typography.Title
+                      level={5}
+                      style={{
+                        margin: 0,
+                      }}
+                    >
+                      Company name:
+                    </Typography.Title>
+                    <h1 className="mt-1">
+                      {placement.companyname.toUpperCase()}
+                    </h1>
+                  </span>
+                </div>
+                <div>
+                  <RightOutlined />
+                </div>
               </div>
-              <div>
-                <RightOutlined />
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
       </div>
     </div>
   );
