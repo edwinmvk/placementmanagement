@@ -135,7 +135,7 @@ const NewPlacement = () => {
               },
             ]}
           >
-            <InputNumber />
+            <InputNumber precision={2} />
           </Form.Item>
           <Form.Item
             name="arrears"
