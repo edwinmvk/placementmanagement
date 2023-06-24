@@ -3,6 +3,7 @@ import { Button, Table, Tag, Typography } from "antd";
 import { Context } from "../../../utils/ContextProvider";
 import {
   CheckCircleOutlined,
+  CheckOutlined,
   CloseCircleOutlined,
   EyeOutlined,
 } from "@ant-design/icons";
@@ -71,7 +72,7 @@ const AppliedPlacements = () => {
       case "Failed":
         return (
           <Tag color="red">
-            <div className="flex items-center gap-x-1 h-8">
+            <div className="flex items-center justify-center gap-x-1 h-8 w-20">
               <CloseCircleOutlined />
               <h3>Failed</h3>
             </div>

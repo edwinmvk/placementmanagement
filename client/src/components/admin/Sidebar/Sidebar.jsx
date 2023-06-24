@@ -13,12 +13,12 @@ import {
 } from "antd";
 import {
   HomeOutlined,
-  AudioOutlined,
+  MessageOutlined,
   KeyOutlined,
   PlusCircleOutlined,
   LogoutOutlined,
-  AuditOutlined,
   RightOutlined,
+  UsergroupDeleteOutlined,
 } from "@ant-design/icons";
 import placementcell from "../../../assets/placementcell.png";
 import admin from "../../../assets/admin.png";
@@ -135,12 +135,12 @@ const Sidebar = () => {
     },
     {
       label: "Responses",
-      icon: <AudioOutlined />,
+      icon: <MessageOutlined />,
       key: "/admin/responses",
     },
     {
       label: "Manage Students",
-      icon: <AuditOutlined />,
+      icon: <UsergroupDeleteOutlined />,
       key: "/admin/manage",
     },
   ];
