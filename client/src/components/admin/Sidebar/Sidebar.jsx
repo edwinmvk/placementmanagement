@@ -22,7 +22,6 @@ import {
 } from "@ant-design/icons";
 import placementcell from "../../../assets/placementcell.png";
 import admin from "../../../assets/admin.png";
-// import { LocalDetails } from "./LocalDetails";
 
 const { Sider } = Layout;
 
@@ -31,7 +30,7 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [currentPath, setCurrentPath] = useState("/admin");
-  const [statedata, setstatedata] = useState([]); // this state will eventually hold ALL the data from the DATABASE
+  const [statedata, setstatedata] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
@@ -63,7 +62,7 @@ const Sidebar = () => {
     try {
       const response = await fetch(`http://localhost:3000/api/admin`);
       const data = await response.json();
-      setstatedata([data]);
+      setstatedata([data]); // the data we recieved is an object. that is why we are enclosing it inside an array
     } catch (error) {
       console.error(error);
     }
@@ -84,32 +83,25 @@ const Sidebar = () => {
       const data = await response.json();
 
       if (response.status === 200) {
-        setstatedata((previousstatedata) => {
-          return previousstatedata.map((passwordobj) => {
-            if (passwordobj.username === values.username) {
-              return { ...passwordobj, password: values.newpassword };
-            } else {
-              return passwordobj; // Return the original object when the condition is not met
-            }
-          });
-        });
+        fetchData();
         message.success(data);
         setLoading(false);
         form.resetFields();
         form.setFieldsValue({
           username: values.username,
-          oldpassword: values.newpassword,
         });
         setTimeout(() => {
           setIsEditing(false);
         }, 1500);
-      } else if (response.status === 404) {
+      } else if (response.status === 404 || response.status === 401) {
         message.error(data);
       } else if (response.status === 500) {
         message.error("Please try again");
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -162,14 +154,6 @@ const Sidebar = () => {
 
   const initialValues = {
     username: statedata?.[0]?.username,
-    oldpassword: statedata?.[0]?.password,
-  };
-
-  const validateNewPassword = (rule, value) => {
-    return new Promise((resolve, reject) => {
-      if (value && value !== form.getFieldValue("oldpassword")) resolve();
-      else reject("Old password cannot be reused");
-    });
   };
 
   const validateConfirmPassword = (rule, value) => {
@@ -291,18 +275,23 @@ const Sidebar = () => {
           <Form.Item name="username" label="Username">
             <Input readOnly />
           </Form.Item>
-          <Form.Item name="oldpassword" label="Old Password">
-            <Input readOnly />
+          <Form.Item
+            name="oldpassword"
+            label="Old Password"
+            rules={[
+              { required: true, message: "Please enter your old password" },
+            ]}
+          >
+            <Input type="password" />
           </Form.Item>
           <Form.Item
             name="newpassword"
             label="New Password"
             rules={[
               { required: true, message: "Please enter your new password" },
-              { validator: validateNewPassword },
             ]}
           >
-            <Input />
+            <Input placeholder="Donot reuse old password" type="password" />
           </Form.Item>
           <Form.Item
             name="confirmnewpassword"
@@ -312,7 +301,7 @@ const Sidebar = () => {
               { validator: validateConfirmPassword },
             ]}
           >
-            <Input />
+            <Input type="password" />
           </Form.Item>
           <Form.Item wrapperCol={{ offset: 7 }}>
             <Button
@@ -321,7 +310,7 @@ const Sidebar = () => {
               htmlType="submit"
               loading={loading}
             >
-              {loading ? "Updating..." : "Update password"}
+              {loading ? "Updating..." : "Verify and Update password"}
             </Button>
           </Form.Item>
         </Form>
