@@ -8,6 +8,7 @@ import {
   createPlacements,
   getPlacementsById,
   updatePlacementsOfferLetter,
+  updatePlacementsStatus,
 } from "../controllers/appliedPlacementsModel.controller.js";
 
 const router = express.Router();
@@ -19,5 +20,6 @@ router
   .route("/:id")
   .put(upload.single("offerletterurl"), updatePlacementsOfferLetter);
 router.route("/:id").get(getPlacementsById);
+router.route("/:id").patch(updatePlacementsStatus);
 
 export default router;

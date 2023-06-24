@@ -195,9 +195,38 @@ const updatePlacementsOfferLetter = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+const updatePlacementsStatus = async (req, res) => {
+  try {
+    const { id } = req.params; // this is the userid
+    const { placementid } = req.body;
+
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+      const user = await appliedPlacementsModel
+        .findOneAndUpdate({ placementid: placementid, userid: id }, req.body, {
+          new: true,
+        })
+        .populate("creator")
+        .session(session);
+      await session.commitTransaction();
+    } catch (error) {
+      await session.abortTransaction();
+      throw error;
+    } finally {
+      session.endSession();
+    }
+    return res.status(200).json("Status updated");
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 export {
   getAllPlacementIds,
   createPlacements,
   getPlacementsById,
   updatePlacementsOfferLetter,
+  updatePlacementsStatus,
 };

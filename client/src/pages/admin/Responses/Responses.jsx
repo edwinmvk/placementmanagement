@@ -31,7 +31,7 @@ const Responses = () => {
   return (
     <div className="mx-5">
       <div className="px-2.5 py-0.5 mb-4 w-fit bg-stone-100 shadow-lg rounded-md">
-        <Typography.Title level={3}>Responses</Typography.Title>
+        <Typography.Title level={3}>Student Responses</Typography.Title>
       </div>
       <Typography.Title level={5}>
         Click to edit the status of responses
