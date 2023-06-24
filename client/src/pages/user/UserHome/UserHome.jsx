@@ -73,7 +73,7 @@ const UserHome = () => {
                   style={{ color: "#c95149" }}
                 />
                 <Statistic
-                  title="Arrears"
+                  title="Pending Arrears"
                   value={statedata?.arrears}
                   className="ml-2"
                 />
