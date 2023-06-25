@@ -3,7 +3,7 @@ import userNotificationModel from "../mongodb/models/userNotificationModel.js";
 const createUserNotification = async (req, res) => {
   try {
     const { id } = req.params;
-    const newNotification = await userNotificationModel.create({
+    await userNotificationModel.create({
       userid: id,
       description: req.body.description,
     });
