@@ -30,7 +30,8 @@ const EditStatus = () => {
   const [list, setList] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isUploadButtonDisabled, setIsUploadButtonDisabled] = useState(false);
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState({}); // Use an object to store the open state for each row
   const [rowData, setRowDData] = useState(null);
   const [newStatus, setNewStatus] = useState(null);
 
@@ -224,8 +225,17 @@ const EditStatus = () => {
     }
   };
 
-  const handleOpenChange = (toggleopen) => {
-    setOpen(toggleopen);
+  const handleOpenChange = (toggle, record) => {
+    //  this if condition runs when the Dropdown is made to be opened
+    if (record) {
+      setOpen((prevState) => ({
+        ...prevState,
+        [record.creator.userid]: toggle,
+      }));
+    } else {
+      // this else condition runs when the Dropdown is made to be closed on clicking the ok button in the Popconfirm
+      setOpen(Object.fromEntries(Object.keys(open).map((key) => [key, false])));
+    }
   };
 
   const columns = [
@@ -297,8 +307,8 @@ const EditStatus = () => {
                   );
                 },
               }}
-              onOpenChange={handleOpenChange}
-              open={open}
+              onOpenChange={(toggle) => handleOpenChange(toggle, record)}
+              open={open[record.creator.userid]} // Use the open state for the current record
               destroyPopupOnHide={true} // this is set to true so that the Popup destroys when the Dropdown is also destroyed
               trigger={["click"]} // hover can also be used
             >
