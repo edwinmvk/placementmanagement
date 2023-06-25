@@ -7,6 +7,7 @@ import userRouter from "./routes/userModel.routes.js";
 import appliedPlacementsRouter from "./routes/appliedPlacementsModel.routes.js";
 import adminRouter from "./routes/adminModel.routes.js";
 import placementsRouter from "./routes/placementsModel.routes.js";
+import userNotificationsRouter from "./routes/userNotificationModel.routes.js";
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.use("/api/user", userRouter);
 app.use("/api/appliedplacements", appliedPlacementsRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/placements", placementsRouter);
+app.use("/api/usernotifications", userNotificationsRouter);
 
 const startServer = async () => {
   try {
