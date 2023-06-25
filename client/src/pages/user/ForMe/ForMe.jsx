@@ -96,14 +96,16 @@ const ForMe = () => {
           <Button
             type="primary"
             shape="round"
-            icon={<SelectOutlined />}
             size="large"
-            className={`bg-blue-500 text-white ${
+            className={`bg-blue-500 text-white${
               disableApply ? `pointer-events-none opacity-20` : ``
             }`}
             onClick={() => onApply(record)}
           >
-            Apply now
+            <div className="flex items-center gap-x-1">
+              <SelectOutlined style={{ marginTop: "4px" }} />
+              Apply now
+            </div>
           </Button>
         );
       },
@@ -163,6 +165,20 @@ const ForMe = () => {
               return placement.placementid !== record.placementid;
             });
           });
+
+          // send notification
+          fetch(
+            `http://localhost:3000/api/adminnotifications/${userDetails?.userid}`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                description: `${userDetails?.username} has applied for placement with id:${record.placementid}`,
+              }),
+            }
+          );
         } else if (response.status === 404) {
           Modal.error({
             title: data,
@@ -254,10 +270,10 @@ const ForMe = () => {
         </div>
         <Button
           type="text"
-          className="bg-green-500 text-white"
+          className="bg-green-600 text-white flex items-center "
           onClick={() => setIsModalVisible(true)}
-          icon={<CloudUploadOutlined />}
         >
+          <CloudUploadOutlined />
           Upload Resume
         </Button>
       </div>
@@ -297,7 +313,7 @@ const ForMe = () => {
         </Upload.Dragger>
         <Button
           type="text"
-          className="m-1 bg-green-500 text-white"
+          className="m-1 bg-green-600 text-white"
           onClick={() => {
             userDetails?.resumeurl
               ? window.open(userDetails?.resumeurl, "_blank")

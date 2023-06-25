@@ -36,6 +36,11 @@ const Header = () => {
 
   async function fetchAdminData() {
     try {
+      const response = await fetch(
+        `http://localhost:3000/api/adminnotifications`
+      );
+      const data = await response.json();
+      setNotify(data);
     } catch (error) {
       console.log(error);
     }
@@ -72,12 +77,9 @@ const Header = () => {
 
   async function clearAdminNotifications() {
     try {
-      await fetch(
-        `http://localhost:3000/api/adminnotifications/${currentUser}`,
-        {
-          method: "DELETE",
-        }
-      )
+      await fetch(`http://localhost:3000/api/adminnotifications`, {
+        method: "DELETE",
+      })
         .then(setNotifyDrawer(false))
         .then(setNotify([]));
     } catch (error) {
