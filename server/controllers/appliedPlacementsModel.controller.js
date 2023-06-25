@@ -200,14 +200,14 @@ const updatePlacementsStatus = async (req, res) => {
   try {
     const { id } = req.params; // this is the userid
     const { placementid } = req.body;
-
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
-      const user = await appliedPlacementsModel
-        .findOneAndUpdate({ placementid: placementid, userid: id }, req.body, {
-          new: true,
-        })
+      await appliedPlacementsModel
+        .findOneAndUpdate(
+          { placementid: placementid, userid: id },
+          { status: req.body.status }
+        )
         .populate("creator")
         .session(session);
       await session.commitTransaction();
