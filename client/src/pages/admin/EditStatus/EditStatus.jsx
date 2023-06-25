@@ -134,7 +134,7 @@ const EditStatus = () => {
         setstatedata(copystatedata);
 
         // send notification
-        await fetch(`http://localhost:3000/api/usernotifications/${userid}`, {
+        fetch(`http://localhost:3000/api/usernotifications/${userid}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -325,7 +325,7 @@ const EditStatus = () => {
       render: (_, record) => {
         return (
           <Button
-            className="bg-green-500 hover:bg-green-400"
+            className="bg-green-600 hover:bg-green-400"
             style={{ border: "white", color: "white" }}
             onClick={() => {
               setUserDetails(record);
@@ -483,7 +483,7 @@ const EditStatus = () => {
         </Upload.Dragger>
         <Button
           type="text"
-          className="m-1 bg-green-500 text-white"
+          className="m-1 bg-green-600 text-white"
           onClick={() => {
             userDetails.offerletterurl
               ? window.open(userDetails.offerletterurl, "_blank")
