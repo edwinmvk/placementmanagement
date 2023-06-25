@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { useLocation } from "react-router-dom";
 import { Context } from "../../utils/ContextProvider";
 import { Badge, Button, Drawer, Calendar, List, Modal } from "antd";
 import {
@@ -9,50 +10,109 @@ import {
 } from "@ant-design/icons";
 
 const Header = () => {
-  const { isCollapsed, setCollapsed } = useContext(Context);
+  const { isCollapsed, setCollapsed, registeredGoogleUser, admin } =
+    useContext(Context);
+  const location = useLocation();
+
   const [notify, setNotify] = useState([]);
   const [notifyDrawer, setNotifyDrawer] = useState(false);
   const [isCalender, setIsCalender] = useState(false);
+  const [currentUser, setCurrentUser] = useState();
 
-  const fetchData = async () => {
-    // This is used to obtain the data from the server and set it to Hooks
+  useEffect(() => {
+    if (location.pathname.includes("admin")) {
+      // if admin logged in
+      setCurrentUser(admin.username);
+      fetchAdminData();
+    } else {
+      // if student logged in
+      const userid = parseInt(
+        registeredGoogleUser?.displayName.substring(0, 8)
+      );
+      setCurrentUser(userid);
+      fetchUserData();
+    }
+  }, [currentUser]);
+
+  async function fetchAdminData() {
+    try {
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function fetchUserData() {
     try {
       const response = await fetch(
-        "https://jsonplaceholder.typicode.com/comments"
+        `http://localhost:3000/api/usernotifications/${currentUser}`
       );
       const data = await response.json();
       setNotify(data);
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
+  }
+
+  const clearButton = () => {
+    return (
+      <div className="w-full flex justify-center">
+        <button
+          className=" bg-blue-700 text-white w-20 rounded-full text-lg p-1 hover:bg-sky-600 font-sans"
+          onClick={
+            location.pathname.includes("admin")
+              ? clearAdminNotifications
+              : clearUserNotifications
+          }
+        >
+          Clear
+        </button>
+      </div>
+    );
   };
 
-  useEffect(() => {
-    fetchData();
+  async function clearAdminNotifications() {
+    try {
+      await fetch(
+        `http://localhost:3000/api/adminnotifications/${currentUser}`,
+        {
+          method: "DELETE",
+        }
+      )
+        .then(setNotifyDrawer(false))
+        .then(setNotify([]));
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
-    // // Old method
-    // fetch('https://jsonplaceholder.typicode.com/comments')
-    // .then((response)=> {
-    //     return response.json();
-    // })
-    // .then(data => {
-    //     setNotify(data)
-    // })
-  }, []);
+  async function clearUserNotifications() {
+    try {
+      await fetch(
+        `http://localhost:3000/api/usernotifications/${currentUser}`,
+        {
+          method: "DELETE",
+        }
+      )
+        .then(setNotifyDrawer(false))
+        .then(setNotify([]));
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <div className="m-2 mb-5 p-2 flex justify-between items-center rounded-md shadow-md bg-stone-50">
       <Button type="default" onClick={() => setCollapsed(!isCollapsed)}>
         {isCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
       </Button>
-      <div className="flex justify-between gap-x-4">
+      <div className="flex justify-between items-center gap-x-4">
         <CalendarOutlined
           className="text-2xl my-1 cursor-pointer"
           onClick={() => setIsCalender(true)}
         />
         <Badge count={notify.length} /*dot*/>
           <BellFilled
-            className="text-2xl my-1 cursor-pointer"
+            className="text-2xl cursor-pointer"
             onClick={() => setNotifyDrawer(true)}
           />
         </Badge>
@@ -72,13 +132,20 @@ const Header = () => {
         open={notifyDrawer}
         onClose={() => setNotifyDrawer(false)}
         maskClosable={true}
+        footer={clearButton()}
       >
-        <List
-          dataSource={notify}
-          renderItem={(item) => {
-            return <List.Item>{item.email} has responded</List.Item>;
-          }}
-        ></List>
+        <div className="flex flex-col justify-between">
+          <List
+            dataSource={notify}
+            renderItem={(item) => {
+              return (
+                <List.Item className="font-semibold">
+                  {item.description}.
+                </List.Item>
+              );
+            }}
+          ></List>
+        </div>
       </Drawer>
     </div>
   );

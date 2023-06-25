@@ -117,6 +117,7 @@ const EditStatus = () => {
 
       if (response.status === 200) {
         message.success(data);
+
         // we first make a copy of the statedatarray
         const copystatedata = [...statedata];
         // we then find the index of the data to be updated
@@ -131,6 +132,17 @@ const EditStatus = () => {
           status: newStatus,
         });
         setstatedata(copystatedata);
+
+        // send notification
+        await fetch(`http://localhost:3000/api/usernotifications/${userid}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            description: `The status of placementid: ${id} is updated to ${newStatus}`,
+          }),
+        });
       } else if (response.status === 500) {
         message.error("Please try again");
       }
