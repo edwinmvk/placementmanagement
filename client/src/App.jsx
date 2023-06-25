@@ -6,7 +6,7 @@ import Protected from "./utils/ProtectedRoutes";
 import Signin from "./components/signin/Signin";
 import AdminSignin from "./components/signin/AdminSignin";
 import Admin from "./components/admin/Admin";
-import RegisterUser from "./components/user/RegisterUser/RegisterUser";
+import RegisterUser from "./pages/user/RegisterUser/RegisterUser";
 import User from "./components/user/User";
 import Error404 from "./components/Error404/Error404";
 

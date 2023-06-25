@@ -144,7 +144,7 @@ const ContextProvider = ({ children }) => {
         const data = await response.json();
         if (response.status === 200) {
           message.success(data);
-          setAdmin(adminobj);
+          setAdmin({ username: adminobj.username }); // we only store the username in the context admin
         } else {
           message.error(data);
         }
