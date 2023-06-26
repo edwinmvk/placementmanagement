@@ -202,22 +202,52 @@ const updatePlacementsStatus = async (req, res) => {
     const { placementid } = req.body;
     const session = await mongoose.startSession();
     session.startTransaction();
+    //   try {
+    //     await appliedPlacementsModel
+    //       .findOneAndUpdate(
+    //         { placementid: placementid, userid: id },
+    //         { status: req.body.status }
+    //       )
+    //       .populate("creator")
+    //       .session(session);
+    //     await session.commitTransaction();
+    //   } catch (error) {
+    //     await session.abortTransaction();
+    //     throw error;
+    //   } finally {
+    //     session.endSession();
+    //   }
+    //   return res.status(200).json("Status updated");
+    // } catch (error) {
+    //   return res.status(500).json({ message: error.message });
+    // }
+
     try {
-      await appliedPlacementsModel
-        .findOneAndUpdate(
-          { placementid: placementid, userid: id },
-          { status: req.body.status }
-        )
+      const allplacementwithid = await appliedPlacementsModel
+        .find({ placementid: placementid })
         .populate("creator")
         .session(session);
+
+      const placementsByUserId = allplacementwithid.filter(
+        (placement) => placement.creator.userid == id
+      );
+
+      // Update status in each result
+      placementsByUserId.forEach((result) => {
+        result.status = req.body.status;
+      });
+
+      // Save the changes to the database
+      await Promise.all(placementsByUserId.map((result) => result.save()));
+
       await session.commitTransaction();
+      return res.status(200).json("Status updated");
     } catch (error) {
       await session.abortTransaction();
       throw error;
     } finally {
       session.endSession();
     }
-    return res.status(200).json("Status updated");
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
