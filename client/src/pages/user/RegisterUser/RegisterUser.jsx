@@ -29,7 +29,7 @@ const RegisterUser = () => {
       formData.append("arrears", values.arrears);
       formData.append("cgpa", values.cgpa);
       formData.append("avatar", values.avatar[0]?.originFileObj);
-      const response = await fetch(`${DomainNames.local}/api/user/register`, {
+      const response = await fetch(`${DomainNames.netlify}/api/user/register`, {
         method: "POST",
         body: formData,
       });

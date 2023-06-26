@@ -1,4 +1,4 @@
 {
   "local": "http://localhost:3000",
-  "netlify": ""
+  "netlify": "https://jec-placement-management-app.onrender.com"
 }
