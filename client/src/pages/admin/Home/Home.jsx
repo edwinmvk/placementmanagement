@@ -3,6 +3,7 @@ import { Space, Card, Statistic, Table, Typography } from "antd";
 import { ProfileFilled } from "@ant-design/icons";
 import "../../../components/CustomTableCss/CustomTable.css";
 import CSVbutton from "../../../components/CSVbutton/CSVbutton";
+import DomainNames from "../../../utils/DomainNames.json";
 
 const Home = () => {
   const [statedata, setstatedata] = useState([]); // this state will eventually hold ALL the data from the DATABASE
@@ -14,7 +15,7 @@ const Home = () => {
   async function fetchData() {
     // This is used to obtain the data from the server and set it to Hooks
     try {
-      const response = await fetch("http://localhost:3000/api/placements");
+      const response = await fetch(`${DomainNames.local}/api/placements`);
       const data = await response.json();
       setstatedata(data);
     } catch (error) {

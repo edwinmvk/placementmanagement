@@ -22,6 +22,7 @@ import {
 } from "@ant-design/icons";
 import placementcell from "../../../assets/placementcell.png";
 import admin from "../../../assets/admin.png";
+import DomainNames from "../../../utils/DomainNames.json";
 
 const { Sider } = Layout;
 
@@ -60,7 +61,7 @@ const Sidebar = () => {
   const fetchData = async () => {
     // This is used to obtain the data from the server and set it to Hooks for the first time only
     try {
-      const response = await fetch(`http://localhost:3000/api/admin`);
+      const response = await fetch(`${DomainNames.local}/api/admin`);
       const data = await response.json();
       setstatedata([data]); // the data we recieved is an object. that is why we are enclosing it inside an array
     } catch (error) {
@@ -71,7 +72,7 @@ const Sidebar = () => {
   const sendUpdatedData = async (values) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/admin/${values.username}`,
+        `${DomainNames.local}/api/admin/${values.username}`,
         {
           method: "PATCH",
           headers: {

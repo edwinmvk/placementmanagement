@@ -21,6 +21,7 @@ import {
   HourglassOutlined,
 } from "@ant-design/icons";
 import CSVbutton from "../../../components/CSVbutton/CSVbutton";
+import DomainNames from "../../../utils/DomainNames.json";
 
 const EditStatus = () => {
   const { id } = useParams();
@@ -42,7 +43,7 @@ const EditStatus = () => {
   async function fetchData(id) {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/appliedplacements/${id}`
+        `${DomainNames.local}/api/appliedplacements/${id}`
       );
       const data = await response.json();
       setstatedata(data);
@@ -67,7 +68,7 @@ const EditStatus = () => {
             )
           : null;
         const response = await fetch(
-          `http://localhost:3000/api/appliedplacements/${userid}`,
+          `${DomainNames.local}/api/appliedplacements/${userid}`,
           {
             method: "PUT",
             body: formData,
@@ -105,7 +106,7 @@ const EditStatus = () => {
       };
 
       const response = await fetch(
-        `http://localhost:3000/api/appliedplacements/${userid}`,
+        `${DomainNames.local}/api/appliedplacements/${userid}`,
         {
           method: "PATCH",
           headers: {
@@ -135,7 +136,7 @@ const EditStatus = () => {
         setstatedata(copystatedata);
 
         // send notification
-        fetch(`http://localhost:3000/api/usernotifications/${userid}`, {
+        fetch(`${DomainNames.local}/api/usernotifications/${userid}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

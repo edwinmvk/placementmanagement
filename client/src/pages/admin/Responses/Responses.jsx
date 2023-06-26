@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Typography } from "antd";
 import { ClockCircleFilled, RightOutlined } from "@ant-design/icons";
+import DomainNames from "../../../utils/DomainNames.json";
 
 const Responses = () => {
   const navigate = useNavigate();
@@ -18,9 +19,7 @@ const Responses = () => {
 
   async function fetchPlacementsList() {
     try {
-      const response = await fetch(
-        "http://localhost:3000/api/appliedplacements"
-      );
+      const response = await fetch(`${DomainNames.local}/api/appliedplacement`);
       const data = await response.json();
       setstatedata(data);
     } catch (error) {
