@@ -23,7 +23,7 @@ const AppliedPlacements = () => {
   async function appliedPlacements() {
     try {
       const response = await fetch(
-        `${DomainNames.local}/api/user/appliedplacements/${userid}`
+        `${DomainNames.netlify}/api/user/appliedplacements/${userid}`
       );
       const data = await response.json();
       setstatedata(data);

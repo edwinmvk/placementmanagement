@@ -43,7 +43,7 @@ const EditStatus = () => {
   async function fetchData(id) {
     try {
       const response = await fetch(
-        `${DomainNames.local}/api/appliedplacements/${id}`
+        `${DomainNames.netlify}/api/appliedplacements/${id}`
       );
       const data = await response.json();
       setstatedata(data);
@@ -68,7 +68,7 @@ const EditStatus = () => {
             )
           : null;
         const response = await fetch(
-          `${DomainNames.local}/api/appliedplacements/${userid}`,
+          `${DomainNames.netlify}/api/appliedplacements/${userid}`,
           {
             method: "PUT",
             body: formData,
@@ -106,7 +106,7 @@ const EditStatus = () => {
       };
 
       const response = await fetch(
-        `${DomainNames.local}/api/appliedplacements/${userid}`,
+        `${DomainNames.netlify}/api/appliedplacements/${userid}`,
         {
           method: "PATCH",
           headers: {
@@ -136,7 +136,7 @@ const EditStatus = () => {
         setstatedata(copystatedata);
 
         // send notification
-        fetch(`${DomainNames.local}/api/usernotifications/${userid}`, {
+        fetch(`${DomainNames.netlify}/api/usernotifications/${userid}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

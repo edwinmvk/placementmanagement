@@ -25,7 +25,7 @@ const ForMe = () => {
     // This is used to obtain the data from the server and set it to Hooks
     try {
       const response = await fetch(
-        `${DomainNames.local}/api/placements/${userid}`
+        `${DomainNames.netlify}/api/placements/${userid}`
       );
       const data = await response.json();
       setstatedata(data);
@@ -38,7 +38,7 @@ const ForMe = () => {
 
   async function fetchUserDetails() {
     try {
-      const response = await fetch(`${DomainNames.local}/api/user/${userid}`);
+      const response = await fetch(`${DomainNames.netlify}/api/user/${userid}`);
       const data = await response.json();
       setUserDetails(data);
     } catch (error) {
@@ -132,7 +132,7 @@ const ForMe = () => {
       try {
         const id = userDetails?.userid;
         const response = await fetch(
-          `${DomainNames.local}/api/appliedplacements/${id}`,
+          `${DomainNames.netlify}/api/appliedplacements/${id}`,
           {
             method: "POST",
             headers: {
@@ -169,7 +169,7 @@ const ForMe = () => {
 
           // send notification
           fetch(
-            `${DomainNames.local}/api/adminnotifications/${userDetails?.userid}`,
+            `${DomainNames.netlify}/api/adminnotifications/${userDetails?.userid}`,
             {
               method: "POST",
               headers: {
@@ -214,7 +214,7 @@ const ForMe = () => {
           ? formData.append("resumepublicid", userDetails?.resumepublicid)
           : null; // contains if there are any previous uploaded resume
         const response = await fetch(
-          `${DomainNames.local}/api/user/resume/${id}`,
+          `${DomainNames.netlify}/api/user/resume/${id}`,
           {
             method: "POST",
             body: formData,
