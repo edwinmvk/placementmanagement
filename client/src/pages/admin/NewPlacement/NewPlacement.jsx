@@ -20,7 +20,7 @@ const NewPlacement = () => {
     message.warning("Please wait for confirmation");
     // This async function is to send the form data to the server for updating the database
     try {
-      const response = await fetch(`${DomainNames.netlify}/api/placements`, {
+      const response = await fetch(`${DomainNames.local}/api/placements`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

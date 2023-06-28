@@ -38,7 +38,7 @@ const Header = () => {
   async function fetchAdminData() {
     try {
       const response = await fetch(
-        `${DomainNames.netlify}/api/adminnotifications`
+        `${DomainNames.local}/api/adminnotifications`
       );
       const data = await response.json();
       setNotify(data);
@@ -50,7 +50,7 @@ const Header = () => {
   async function fetchUserData() {
     try {
       const response = await fetch(
-        `${DomainNames.netlify}/api/usernotifications/${currentUser}`
+        `${DomainNames.local}/api/usernotifications/${currentUser}`
       );
       const data = await response.json();
       setNotify(data);
@@ -78,7 +78,7 @@ const Header = () => {
 
   async function clearAdminNotifications() {
     try {
-      await fetch(`${DomainNames.netlify}/api/adminnotifications`, {
+      await fetch(`${DomainNames.local}/api/adminnotifications`, {
         method: "DELETE",
       })
         .then(setNotifyDrawer(false))
@@ -90,12 +90,9 @@ const Header = () => {
 
   async function clearUserNotifications() {
     try {
-      await fetch(
-        `${DomainNames.netlify}/api/usernotifications/${currentUser}`,
-        {
-          method: "DELETE",
-        }
-      )
+      await fetch(`${DomainNames.local}/api/usernotifications/${currentUser}`, {
+        method: "DELETE",
+      })
         .then(setNotifyDrawer(false))
         .then(setNotify([]));
     } catch (error) {
