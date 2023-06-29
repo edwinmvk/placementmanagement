@@ -31,7 +31,6 @@ const EditStatus = () => {
   const [list, setList] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isUploadButtonDisabled, setIsUploadButtonDisabled] = useState(false);
-  // const [open, setOpen] = useState(false);
   const [open, setOpen] = useState({}); // Use an object to store the open state for each row
   const [rowData, setRowDData] = useState(null);
   const [newStatus, setNewStatus] = useState(null);
@@ -226,16 +225,16 @@ const EditStatus = () => {
     }
   };
 
-  const handleOpenChange = (toggle, record) => {
+  const handleOpenChange = (toggle, key) => {
     //  this if condition runs when the Dropdown is made to be opened
-    if (record) {
-      setOpen((prevState) => ({
-        ...prevState,
-        [record.creator.userid]: toggle,
+    if (key) {
+      setOpen((prev) => ({
+        ...prev,
+        [key]: toggle,
       }));
     } else {
       // this else condition runs when the Dropdown is made to be closed on clicking the ok button in the Popconfirm
-      setOpen(Object.fromEntries(Object.keys(open).map((key) => [key, false])));
+      setOpen(Object.fromEntries(Object.keys(open).map((key) => [key, false]))); // here all the keys (Dropdowns) will be set to false (closed)
     }
   };
 
@@ -272,8 +271,7 @@ const EditStatus = () => {
           <Button
             shape="round"
             // size="large"
-            className="bg-orange-500 hover:bg-orange-300"
-            style={{ border: "white", color: "white" }}
+            className="bg-orange-500 text-white hover:bg-white"
             onClick={() => {
               if (record.resumeurl) {
                 window.open(record.resumeurl, "_blank");
@@ -296,6 +294,7 @@ const EditStatus = () => {
         return (
           <div className="flex flex-wrap justify-center">
             <Dropdown
+              key={record.creator.userid}
               menu={{
                 items,
                 // onclicking the options in the Dropdown, we get the key from event. Using this key we find the label of that key from the items array and store it to newStatus state
@@ -308,8 +307,10 @@ const EditStatus = () => {
                   );
                 },
               }}
-              onOpenChange={(toggle) => handleOpenChange(toggle, record)}
-              open={open[record.creator.userid]} // Use the open state for the current record
+              onOpenChange={
+                (toggle) => handleOpenChange(toggle, record.creator.userid) // we are passing the toggle and the key of this particular Dropdown
+              }
+              open={open[record.creator.userid]} // the state of Dropdowm is checked bu checking specific key's value in the open state object
               destroyPopupOnHide={true} // this is set to true so that the Popup destroys when the Dropdown is also destroyed
               trigger={["click"]} // hover can also be used
             >
@@ -336,7 +337,7 @@ const EditStatus = () => {
       render: (_, record) => {
         return (
           <Button
-            className="bg-green-600 hover:bg-green-400"
+            className="bg-green-600 hover:bg-green-500"
             style={{ border: "white", color: "white" }}
             onClick={() => {
               setUserDetails(record);
@@ -493,8 +494,8 @@ const EditStatus = () => {
           (formats: .pdf) (maxsize: 500kb)
         </Upload.Dragger>
         <Button
-          type="text"
-          className="m-1 bg-green-600 text-white"
+          className="mt-3 bg-green-600 hover:bg-green-500"
+          style={{ border: "white", color: "white" }}
           onClick={() => {
             userDetails.offerletterurl
               ? window.open(userDetails.offerletterurl, "_blank")
