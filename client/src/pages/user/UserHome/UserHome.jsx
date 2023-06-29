@@ -8,7 +8,7 @@ import {
 } from "@ant-design/icons";
 import { Context } from "../../../utils/ContextProvider";
 import "../../../components/CustomTableCss/CustomTable.css"; // Import the CSS file
-import DomainNames from "../../../utils/DomainNames.json";
+import Domain from "../../../utils/Domain.json";
 
 const UserHome = () => {
   const { registeredGoogleUser } = useContext(Context);
@@ -23,7 +23,7 @@ const UserHome = () => {
   async function fetchData() {
     // This is used to obtain the data from the server and set it to Hooks
     try {
-      const response = await fetch(`${DomainNames.local}/api/user/${userid}`);
+      const response = await fetch(`${Domain.name}/api/user/${userid}`);
       const data = await response.json();
       setstatedata(data);
     } catch (error) {
@@ -112,7 +112,7 @@ const DatabaseData = () => {
   const fetchData = async () => {
     // This is used to obtain the data from the server and set it to Hooks
     try {
-      const response = await fetch(`${DomainNames.local}/api/placements`);
+      const response = await fetch(`${Domain.name}/api/placements`);
       const data = await response.json();
       setstatedata(data);
     } catch (error) {

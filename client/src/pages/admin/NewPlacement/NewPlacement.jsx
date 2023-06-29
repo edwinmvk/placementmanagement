@@ -11,7 +11,7 @@ import {
 } from "antd";
 import moment from "moment";
 import { v4 as uuidv4 } from "uuid";
-import DomainNames from "../../../utils/DomainNames.json";
+import Domain from "../../../utils/Domain.json";
 
 const NewPlacement = () => {
   const [form] = Form.useForm();
@@ -20,7 +20,7 @@ const NewPlacement = () => {
     message.warning("Please wait for confirmation");
     // This async function is to send the form data to the server for updating the database
     try {
-      const response = await fetch(`${DomainNames.local}/api/placements`, {
+      const response = await fetch(`${Domain.name}/api/placements`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

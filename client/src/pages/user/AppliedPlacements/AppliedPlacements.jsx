@@ -8,7 +8,7 @@ import {
   EyeOutlined,
 } from "@ant-design/icons";
 import "../../../components/CustomTableCss/CustomTable.css";
-import DomainNames from "../../../utils/DomainNames.json";
+import Domain from "../../../utils/Domain.json";
 
 const AppliedPlacements = () => {
   const { registeredGoogleUser } = useContext(Context);
@@ -23,7 +23,7 @@ const AppliedPlacements = () => {
   async function appliedPlacements() {
     try {
       const response = await fetch(
-        `${DomainNames.local}/api/user/appliedplacements/${userid}`
+        `${Domain.name}/api/user/appliedplacements/${userid}`
       );
       const data = await response.json();
       setstatedata(data);

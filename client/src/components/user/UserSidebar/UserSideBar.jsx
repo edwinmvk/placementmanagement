@@ -11,7 +11,7 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import placementcell from "../../../assets/placementcell.png";
-import DomainNames from "../../../utils/DomainNames.json";
+import Domain from "../../../utils/Domain.json";
 
 const { Sider } = Layout;
 
@@ -29,7 +29,7 @@ const UserSideBar = () => {
   const fetchData = async (id) => {
     // This is used to obtain the data from the server and set it to Hooks for the first time only
     try {
-      const response = await fetch(`${DomainNames.local}/api/user/${id}`);
+      const response = await fetch(`${Domain.name}/api/user/${id}`);
       const data = await response.json();
       setstatedata(data);
     } catch (error) {
@@ -94,7 +94,7 @@ const UserSideBar = () => {
         formData.append("avatar", list[0]?.originFileObj);
         formData.append("avatarpublicid", statedata?.avatarpublicid);
         const response = await fetch(
-          `${DomainNames.local}/api/user/userupdate/${userid}`,
+          `${Domain.name}/api/user/userupdate/${userid}`,
           {
             method: "POST",
             body: formData,

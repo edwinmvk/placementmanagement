@@ -8,7 +8,7 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
 } from "@ant-design/icons";
-import DomainNames from "../../utils/DomainNames.json";
+import Domain from "../../utils/Domain.json";
 
 const Header = () => {
   const { isCollapsed, setCollapsed, registeredGoogleUser, admin } =
@@ -37,9 +37,7 @@ const Header = () => {
 
   async function fetchAdminData() {
     try {
-      const response = await fetch(
-        `${DomainNames.local}/api/adminnotifications`
-      );
+      const response = await fetch(`${Domain.name}/api/adminnotifications`);
       const data = await response.json();
       setNotify(data);
     } catch (error) {
@@ -50,7 +48,7 @@ const Header = () => {
   async function fetchUserData() {
     try {
       const response = await fetch(
-        `${DomainNames.local}/api/usernotifications/${currentUser}`
+        `${Domain.name}/api/usernotifications/${currentUser}`
       );
       const data = await response.json();
       setNotify(data);
@@ -78,7 +76,7 @@ const Header = () => {
 
   async function clearAdminNotifications() {
     try {
-      await fetch(`${DomainNames.local}/api/adminnotifications`, {
+      await fetch(`${Domain.name}/api/adminnotifications`, {
         method: "DELETE",
       })
         .then(setNotifyDrawer(false))
@@ -90,7 +88,7 @@ const Header = () => {
 
   async function clearUserNotifications() {
     try {
-      await fetch(`${DomainNames.local}/api/usernotifications/${currentUser}`, {
+      await fetch(`${Domain.name}/api/usernotifications/${currentUser}`, {
         method: "DELETE",
       })
         .then(setNotifyDrawer(false))

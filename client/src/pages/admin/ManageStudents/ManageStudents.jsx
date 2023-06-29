@@ -3,7 +3,7 @@ import { Typography, Table, Avatar, Modal, Input, message } from "antd";
 import { DeleteFilled, EditFilled } from "@ant-design/icons";
 import "../../../components/CustomTableCss/CustomTable.css";
 import CSVbutton from "../../../components/CSVbutton/CSVbutton";
-import DomainNames from "../../../utils/DomainNames.json";
+import Domain from "../../../utils/Domain.json";
 
 const ManageStudents = () => {
   const [statedata, setstatedata] = useState([]);
@@ -18,7 +18,7 @@ const ManageStudents = () => {
   const fetchData = async () => {
     // This is used to obtain the data from the server and set it to Hooks for the first time only
     try {
-      const response = await fetch(`${DomainNames.local}/api/user`);
+      const response = await fetch(`${Domain.name}/api/user`);
       const data = await response.json();
       setstatedata(data);
     } catch (error) {
@@ -31,7 +31,7 @@ const ManageStudents = () => {
     message.warning("Please wait for confirmation. This may take some time");
     // This async function is to send the updated state data to the server for updating the database
     try {
-      const response = await fetch(`${DomainNames.local}/api/user/${userid}`, {
+      const response = await fetch(`${Domain.name}/api/user/${userid}`, {
         method: "DELETE",
       });
       const data = await response.json();
@@ -57,7 +57,7 @@ const ManageStudents = () => {
   const sendPatchedData = async (userid) => {
     // This async function is to send the updated state data to the server for updating the database
     try {
-      const response = await fetch(`${DomainNames.local}/api/user/${userid}`, {
+      const response = await fetch(`${Domain.name}/api/user/${userid}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

@@ -7,7 +7,7 @@ import {
 } from "firebase/auth";
 import { auth } from "./Firebase";
 import { message } from "antd";
-import DomainNames from "../utils/DomainNames.json";
+import Domain from "../utils/Domain.json";
 
 export const Context = createContext(null);
 
@@ -68,7 +68,7 @@ const ContextProvider = ({ children }) => {
 
   async function checkUser(signedInUser) {
     try {
-      const response = await fetch(`${DomainNames.local}/api/user`, {
+      const response = await fetch(`${Domain.name}/api/user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -135,7 +135,7 @@ const ContextProvider = ({ children }) => {
   const login = async (adminobj) => {
     try {
       if (adminobj) {
-        const response = await fetch(`${DomainNames.local}/api/admin`, {
+        const response = await fetch(`${Domain.name}/api/admin`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

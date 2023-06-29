@@ -10,7 +10,7 @@ import {
   message,
   Spin,
 } from "antd";
-import DomainNames from "../../../utils/DomainNames.json";
+import Domain from "../../../utils/Domain.json";
 
 const RegisterUser = () => {
   const [loading, setLoading] = useState(false);
@@ -29,7 +29,7 @@ const RegisterUser = () => {
       formData.append("arrears", values.arrears);
       formData.append("cgpa", values.cgpa);
       formData.append("avatar", values.avatar[0]?.originFileObj);
-      const response = await fetch(`${DomainNames.local}/api/user/register`, {
+      const response = await fetch(`${Domain.name}/api/user/register`, {
         method: "POST",
         body: formData,
       });

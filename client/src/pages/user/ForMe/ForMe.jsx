@@ -3,7 +3,7 @@ import { Button, Modal, Table, Typography, Upload, message } from "antd";
 import { Context } from "../../../utils/ContextProvider";
 import { CloudUploadOutlined, SelectOutlined } from "@ant-design/icons";
 import "../../../components/CustomTableCss/CustomTable.css";
-import DomainNames from "../../../utils/DomainNames.json";
+import Domain from "../../../utils/Domain.json";
 
 const ForMe = () => {
   const { registeredGoogleUser } = useContext(Context);
@@ -24,9 +24,7 @@ const ForMe = () => {
   async function fetchData() {
     // This is used to obtain the data from the server and set it to Hooks
     try {
-      const response = await fetch(
-        `${DomainNames.local}/api/placements/${userid}`
-      );
+      const response = await fetch(`${Domain.name}/api/placements/${userid}`);
       const data = await response.json();
       setstatedata(data);
 
@@ -38,7 +36,7 @@ const ForMe = () => {
 
   async function fetchUserDetails() {
     try {
-      const response = await fetch(`${DomainNames.local}/api/user/${userid}`);
+      const response = await fetch(`${Domain.name}/api/user/${userid}`);
       const data = await response.json();
       setUserDetails(data);
     } catch (error) {
@@ -132,7 +130,7 @@ const ForMe = () => {
       try {
         const id = userDetails?.userid;
         const response = await fetch(
-          `${DomainNames.local}/api/appliedplacements/${id}`,
+          `${Domain.name}/api/appliedplacements/${id}`,
           {
             method: "POST",
             headers: {
@@ -169,7 +167,7 @@ const ForMe = () => {
 
           // send notification
           fetch(
-            `${DomainNames.local}/api/adminnotifications/${userDetails?.userid}`,
+            `${Domain.name}/api/adminnotifications/${userDetails?.userid}`,
             {
               method: "POST",
               headers: {
@@ -213,13 +211,10 @@ const ForMe = () => {
         userDetails?.resumepublicid
           ? formData.append("resumepublicid", userDetails?.resumepublicid)
           : null; // contains if there are any previous uploaded resume
-        const response = await fetch(
-          `${DomainNames.local}/api/user/resume/${id}`,
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
+        const response = await fetch(`${Domain.name}/api/user/resume/${id}`, {
+          method: "POST",
+          body: formData,
+        });
         const data = await response.json();
         if (response.status === 200) {
           message.success("Resume uploaded");
