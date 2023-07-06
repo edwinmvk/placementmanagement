@@ -5,7 +5,7 @@
     </a>
 </p>
 
-## ✨ [Live demo : https://jecplacementmanagement.netlify.app ](https://jecplacementmanagement.netlify.app)
+✨ Live demo : [https://jecplacementmanagement.netlify.app](https://jecplacementmanagement.netlify.app)
 
 ## Introduction
 
