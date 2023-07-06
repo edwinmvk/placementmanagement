@@ -6,6 +6,7 @@ import multer from "multer";
 import {
   getAllPlacementIds,
   createPlacements,
+  getPlacedNumber,
   getPlacementsById,
   updatePlacementsOfferLetter,
   updatePlacementsStatus,
@@ -19,6 +20,7 @@ router.route("/:id").post(createPlacements);
 router
   .route("/:id")
   .put(upload.single("offerletterurl"), updatePlacementsOfferLetter);
+router.route("/placednumber").get(getPlacedNumber);
 router.route("/:id").get(getPlacementsById);
 router.route("/:id").patch(updatePlacementsStatus);
 

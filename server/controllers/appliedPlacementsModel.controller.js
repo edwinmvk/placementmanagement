@@ -78,6 +78,18 @@ const createPlacements = async (req, res) => {
   }
 };
 
+const getPlacedNumber = async (req, res) => {
+  try {
+    const allApplied = await appliedPlacementsModel.find({});
+    const placed = allApplied.filter((placemnt) => {
+      return placemnt.status === "You have been Placed";
+    });
+    return res.status(200).json(placed.length);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 const getPlacementsById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -245,6 +257,7 @@ const updatePlacementsStatus = async (req, res) => {
 export {
   getAllPlacementIds,
   createPlacements,
+  getPlacedNumber,
   getPlacementsById,
   updatePlacementsOfferLetter,
   updatePlacementsStatus,
