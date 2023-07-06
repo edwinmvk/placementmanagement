@@ -74,6 +74,7 @@ const ForMe = () => {
         const dateB = new Date(b.createdate);
         return dateA - dateB;
       },
+      showSorterTooltip: false,
     },
     {
       title: "Last date",
@@ -85,6 +86,7 @@ const ForMe = () => {
         const dateB = new Date(b.lastdate);
         return dateA - dateB;
       },
+      showSorterTooltip: false,
     },
     {
       title: "Action",

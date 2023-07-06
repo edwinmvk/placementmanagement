@@ -113,6 +113,11 @@ const ManageStudents = () => {
       render: (text) => {
         return text.toUpperCase();
       },
+      defaultSortOrder: "ascend",
+      sorter: (a, b) => {
+        return a.username.localeCompare(b.username);
+      },
+      showSorterTooltip: false,
     },
     {
       title: "Passout Year",
@@ -122,6 +127,7 @@ const ManageStudents = () => {
       sorter: (a, b) => {
         return a.passoutyear - b.passoutyear;
       },
+      showSorterTooltip: false,
     },
     {
       title: "Arrears",
@@ -131,6 +137,7 @@ const ManageStudents = () => {
       sorter: (a, b) => {
         return a.arrears - b.arrears;
       },
+      showSorterTooltip: false,
     },
     {
       title: "CGPA",
@@ -140,6 +147,7 @@ const ManageStudents = () => {
       sorter: (a, b) => {
         return a.cgpa - b.cgpa;
       },
+      showSorterTooltip: false,
     },
     {
       title: "Actions",

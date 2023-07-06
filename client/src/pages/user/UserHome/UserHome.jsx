@@ -154,6 +154,7 @@ const DatabaseData = () => {
         const dateB = new Date(b.createdate);
         return dateA - dateB;
       },
+      showSorterTooltip: false,
     },
     {
       title: "Last date",
@@ -165,6 +166,7 @@ const DatabaseData = () => {
         const dateB = new Date(b.lastdate);
         return dateA - dateB;
       },
+      showSorterTooltip: false,
     },
     {
       title: "Passout year",
@@ -174,6 +176,7 @@ const DatabaseData = () => {
       sorter: (a, b) => {
         return a.passoutyear - b.passoutyear;
       },
+      showSorterTooltip: false,
     },
     {
       title: "Min CGPA",
@@ -183,6 +186,7 @@ const DatabaseData = () => {
       sorter: (a, b) => {
         return a.cgpa - b.cgpa;
       },
+      showSorterTooltip: false,
     },
     {
       title: "Max arrears",
@@ -192,6 +196,7 @@ const DatabaseData = () => {
       sorter: (a, b) => {
         return a.arrears - b.arrears;
       },
+      showSorterTooltip: false,
     },
   ];
 

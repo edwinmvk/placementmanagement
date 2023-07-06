@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../../utils/ContextProvider";
+import { Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const AdminSignin = () => {
   const { admin, login } = useContext(Context);
@@ -12,10 +14,15 @@ const AdminSignin = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const handleLogin = async (event) => {
-    setIsButtonDisabled(true);
     event.preventDefault();
-    await login(adminobj);
-    setIsButtonDisabled(false);
+    setIsButtonDisabled(true);
+    try {
+      await login(adminobj);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsButtonDisabled(false);
+    }
   };
 
   useEffect(() => {
@@ -23,6 +30,16 @@ const AdminSignin = () => {
       navigate("/admin");
     }
   }, [admin]);
+
+  const antIcon = (
+    <LoadingOutlined
+      style={{
+        color: "blue",
+        fontSize: 24,
+      }}
+      spin
+    />
+  );
 
   return (
     <div className="lg:flex">
@@ -112,10 +129,10 @@ const AdminSignin = () => {
                   className={`mb-3 bg-indigo-500 text-gray-100 p-4 w-full rounded-full tracking-wide
                   font-semibold font-display focus:outline-none focus:shadow-outline 
                   shadow-lg ${
-                    isButtonDisabled ? `bg-blue-300 ` : `hover:bg-indigo-600`
+                    isButtonDisabled ? `bg-blue-200 ` : `hover:bg-indigo-600`
                   }`}
                 >
-                  Log In
+                  {isButtonDisabled ? <Spin indicator={antIcon} /> : `Login`}
                 </button>
               </div>
             </form>
