@@ -35,7 +35,7 @@ const Responses = () => {
       <Typography.Title level={5}>
         Click to edit the status of responses
       </Typography.Title>
-      <div className="bg-stone-100 p-5 px-8 h-80 max-h-full rounded-lg overflow-y-scroll">
+      <div className="bg-stone-100 p-2 md:p-5 md:px-8 h-80 max-h-full rounded-lg overflow-y-scroll">
         {statedata.length === 0 ? (
           <div className="flex items-center justify-center h-full">
             <div className="flex flex-col justify-center items-center">
@@ -52,39 +52,23 @@ const Responses = () => {
               <div
                 key={index} // Use index as the key
                 onClick={() => navigateToEditStatus(placement._id)}
-                className="bg-white cursor-pointer flex items-center justify-between p-5 w-full h-14 mb-3 rounded-md shadow-sm hover:scale-x-105 transition delay-50 duration-100 ease-in-out"
+                className="bg-white cursor-pointer flex items-center p-1 md:p-5 w-full h-inherit mb-3 rounded-md shadow-sm hover:scale-x-105 transition delay-50 duration-100 ease-in-out"
               >
-                <div className="flex items-center justify-between gap-x-5">
-                  <span className="flex items-center">
-                    <h1 className="mt-1">{index + 1}.</h1>
-                  </span>
-                  <span className="flex items-center gap-x-2">
-                    <Typography.Title
-                      level={5}
-                      style={{
-                        margin: 0,
-                      }}
-                    >
-                      Placement id:
-                    </Typography.Title>
-                    <h1 className="mt-1">{placement._id.toUpperCase()}</h1>
-                  </span>
-                  <span className="flex items-center gap-x-2">
-                    <Typography.Title
-                      level={5}
-                      style={{
-                        margin: 0,
-                      }}
-                    >
-                      Company name:
-                    </Typography.Title>
-                    <h1 className="mt-1">
-                      {placement.companyname.toUpperCase()}
-                    </h1>
-                  </span>
-                </div>
-                <div>
-                  <RightOutlined />
+                <h1 className="w-10 text-slate-700">{index + 1}.</h1>
+                <div className="w-full flex items-center justify-between">
+                  <div className="flex flex-wrap items-center gap-x-5">
+                    <span className="gap-x-2">
+                      <h1 className="text-sm text-slate-600">Placement id:</h1>
+                      <h1>{placement._id.toUpperCase()}</h1>
+                    </span>
+                    <span className="gap-x-2">
+                      <h1 className="text-sm text-slate-600">Company name: </h1>
+                      <h1>{placement.companyname.toUpperCase()}</h1>
+                    </span>
+                  </div>
+                  <div>
+                    <RightOutlined />
+                  </div>
                 </div>
               </div>
             );

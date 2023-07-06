@@ -13,6 +13,7 @@ export const Context = createContext(null);
 
 const ContextProvider = ({ children }) => {
   const [isCollapsed, setCollapsed] = useState(false);
+  const [collapsedWidth, setCollapsedWidth] = useState(80);
 
   const [unRegisteredGoogleUser, setUnRegisteredGoogleUser] = useState(null);
   const [registeredGoogleUser, setRegisteredGoogleUser] = useState(null);
@@ -172,6 +173,8 @@ const ContextProvider = ({ children }) => {
         registeredGoogleUser,
         isCollapsed,
         setCollapsed,
+        collapsedWidth,
+        setCollapsedWidth,
       }}
     >
       {children}

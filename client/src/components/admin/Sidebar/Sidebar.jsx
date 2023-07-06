@@ -27,7 +27,13 @@ import Domain from "../../../utils/Domain.json";
 const { Sider } = Layout;
 
 const Sidebar = () => {
-  const { logout, isCollapsed, setCollapsed } = useContext(Context);
+  const {
+    logout,
+    isCollapsed,
+    setCollapsed,
+    collapsedWidth,
+    setCollapsedWidth,
+  } = useContext(Context);
   const navigate = useNavigate();
   const location = useLocation();
   const [currentPath, setCurrentPath] = useState("/admin");
@@ -37,10 +43,6 @@ const Sidebar = () => {
   const [form] = Form.useForm();
 
   useEffect(() => {
-    fetchData();
-  }, []);
-
-  useEffect(() => {
     handleWindowSizeChange();
     window.addEventListener("resize", handleWindowSizeChange); // This code sets up an event listener for the "resize" event on the window object when the component mounts (i.e., when we load admin page)
     return () => window.removeEventListener("resize", handleWindowSizeChange); // This code removes the event listener when the component unmounts (i.e., when we exit the admin page)
@@ -48,11 +50,18 @@ const Sidebar = () => {
 
   const handleWindowSizeChange = () => {
     if (window.innerWidth <= 768) {
+      setCollapsedWidth(80);
       setCollapsed(true);
     } else {
+      setCollapsedWidth(80);
       setCollapsed(false);
     }
+    if (window.innerWidth < 500) setCollapsedWidth(0);
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   useEffect(() => {
     setCurrentPath(location.pathname);
@@ -188,7 +197,7 @@ const Sidebar = () => {
         trigger={null} // this is used to remove the black arrrow on the side of Sider component
         collapsible
         theme="dark"
-        collapsedWidth={80}
+        collapsedWidth={collapsedWidth}
         collapsed={isCollapsed}
         width="200px"
         style={{

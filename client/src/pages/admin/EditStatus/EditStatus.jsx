@@ -447,13 +447,13 @@ const EditStatus = () => {
 
   return (
     <div className="mx-5">
-      <div className="flex justify-between item-center">
-        <div className="px-2.5 py-0.5 mb-8 w-fit bg-stone-100 shadow-lg rounded-md">
+      <div className="flex flex-wrap justify-between item-center">
+        <div className="px-2.5 py-0.5 mb-6 w-fit bg-stone-100 shadow-lg rounded-md">
           <Typography.Title level={4}>
             Placement id: {id.toUpperCase()}
           </Typography.Title>
         </div>
-        <span>
+        <span className="mb-2">
           <CSVbutton
             data={csvdata}
             filename={`Placement_id:${id.toUpperCase()}`}

@@ -16,8 +16,14 @@ import Domain from "../../../utils/Domain.json";
 const { Sider } = Layout;
 
 const UserSideBar = () => {
-  const { isCollapsed, setCollapsed, registeredGoogleUser, googleSignOut } =
-    useContext(Context);
+  const {
+    isCollapsed,
+    setCollapsed,
+    collapsedWidth,
+    setCollapsedWidth,
+    registeredGoogleUser,
+    googleSignOut,
+  } = useContext(Context);
   const navigate = useNavigate();
   const location = useLocation();
   const [currentPath, setCurrentPath] = useState("/userprofile");
@@ -26,7 +32,33 @@ const UserSideBar = () => {
   const [list, setList] = useState([]);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-  const fetchData = async (id) => {
+  useEffect(() => {
+    handleWindowSizeChange();
+    window.addEventListener("resize", handleWindowSizeChange); // This code sets up an event listener for the "resize" event on the window object when the component mounts (i.e., when we load admin page)
+    return () => window.removeEventListener("resize", handleWindowSizeChange); // This code removes the event listener when the component unmounts (i.e., when we exit the admin page)
+  }, []);
+
+  const handleWindowSizeChange = () => {
+    if (window.innerWidth <= 768) {
+      setCollapsedWidth(80);
+      setCollapsed(true);
+    } else {
+      setCollapsedWidth(80);
+      setCollapsed(false);
+    }
+    if (window.innerWidth < 500) setCollapsedWidth(0);
+  };
+
+  useEffect(() => {
+    const userid = parseInt(registeredGoogleUser?.displayName.substring(0, 8));
+    fetchData(userid);
+  }, []);
+
+  useEffect(() => {
+    setCurrentPath(location.pathname);
+  }, [location.pathname]); // the state changes when the location.pathname changes
+
+  async function fetchData(id) {
     // This is used to obtain the data from the server and set it to Hooks for the first time only
     try {
       const response = await fetch(`${Domain.name}/api/user/${id}`);
@@ -35,29 +67,7 @@ const UserSideBar = () => {
     } catch (error) {
       console.error(error);
     }
-  };
-
-  useEffect(() => {
-    const userid = parseInt(registeredGoogleUser?.displayName.substring(0, 8));
-
-    fetchData(userid);
-
-    handleWindowSizeChange();
-    window.addEventListener("resize", handleWindowSizeChange); // This code sets up an event listener for the "resize" event on the window object when the component mounts (i.e., when we load admin page)
-    return () => window.removeEventListener("resize", handleWindowSizeChange); // This code removes the event listener when the component unmounts (i.e., when we exit the admin page)
-  }, []);
-
-  const handleWindowSizeChange = () => {
-    if (window.innerWidth <= 768) {
-      setCollapsed(true);
-    } else {
-      setCollapsed(false);
-    }
-  };
-
-  useEffect(() => {
-    setCurrentPath(location.pathname);
-  }, [location.pathname]); // the state changes when the location.pathname changes
+  }
 
   const logoutHandleClick = async () => {
     try {
@@ -155,7 +165,7 @@ const UserSideBar = () => {
         trigger={null} // this is used to remove the black arrrow on the side of Sider component
         collapsible
         theme="dark"
-        collapsedWidth={80}
+        collapsedWidth={collapsedWidth}
         collapsed={isCollapsed}
         width="200px"
         style={{

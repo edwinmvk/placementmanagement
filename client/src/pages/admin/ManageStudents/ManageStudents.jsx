@@ -236,11 +236,11 @@ const ManageStudents = () => {
 
   return (
     <div className="mx-5">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-wrap justify-between items-center">
         <div className="px-2.5 py-0.5 mb-4 w-fit bg-stone-100 shadow-lg rounded-md">
           <Typography.Title level={3}>Manage Student Details</Typography.Title>
         </div>
-        <span>
+        <span className="mb-1">
           <CSVbutton data={statedata} filename={`All_Student_Details`} />
         </span>
       </div>

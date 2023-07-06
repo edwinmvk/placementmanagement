@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Space, Card, Statistic, Table, Typography } from "antd";
-import { ProfileFilled } from "@ant-design/icons";
+import { ProfileFilled, SafetyOutlined } from "@ant-design/icons";
 import "../../../components/CustomTableCss/CustomTable.css";
 import CSVbutton from "../../../components/CSVbutton/CSVbutton";
 import Domain from "../../../utils/Domain.json";
@@ -46,11 +46,26 @@ const Home = () => {
               </Space>
             </div>
           </Card>
+          <Card className="w-full md:w-60 bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl transition delay-50 duration-300 ease-in-out">
+            <div className="flex justify-center">
+              <Space direction="horizontal">
+                <SafetyOutlined
+                  className="text-4xl"
+                  style={{ color: "green" }}
+                />
+                <Statistic
+                  title="Total Students Placed"
+                  value={String(10)}
+                  className="ml-2"
+                />
+              </Space>
+            </div>
+          </Card>
         </div>
       </Space>
-      <div className="flex justify-between items-center">
+      <div className="flex flex-wrap justify-between items-center">
         <Typography.Title level={4}>All Placements</Typography.Title>
-        <span>
+        <span className="mb-1">
           <CSVbutton data={statedata} filename={`All_Placements`} />
         </span>
       </div>

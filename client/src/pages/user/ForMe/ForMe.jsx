@@ -260,13 +260,13 @@ const ForMe = () => {
 
   return (
     <div className="mx-5">
-      <div className="flex justify-between">
+      <div className="flex flex-wrap justify-between items-center">
         <div className="px-2.5 py-0.5 mb-4 w-fit bg-stone-100 shadow-lg rounded-md">
           <Typography.Title level={3}>Placements For Me</Typography.Title>
         </div>
         <Button
-          type="text"
-          className="bg-green-600 text-white flex items-center "
+          className="flex items-center mb-3 bg-green-600 hover:bg-green-500"
+          style={{ border: "white", color: "white" }}
           onClick={() => setIsModalVisible(true)}
         >
           <CloudUploadOutlined />
@@ -308,8 +308,8 @@ const ForMe = () => {
           (formats: .pdf) (maxsize: 500kb)
         </Upload.Dragger>
         <Button
-          type="text"
-          className="m-1 bg-green-600 text-white"
+          className="m-1 bg-green-600 hover:bg-green-500"
+          style={{ border: "white", color: "white" }}
           onClick={() => {
             userDetails?.resumeurl
               ? window.open(userDetails?.resumeurl, "_blank")
