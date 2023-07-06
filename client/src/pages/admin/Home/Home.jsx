@@ -7,9 +7,11 @@ import Domain from "../../../utils/Domain.json";
 
 const Home = () => {
   const [statedata, setstatedata] = useState([]); // this state will eventually hold ALL the data from the DATABASE
+  const [stateTotPlaced, setStateTotPlaced] = useState(0);
 
   useEffect(() => {
     fetchData();
+    fetchPlaced();
   }, []);
 
   async function fetchData() {
@@ -23,7 +25,19 @@ const Home = () => {
     }
   }
 
-  let totalplacements = statedata.length;
+  async function fetchPlaced() {
+    try {
+      const response = await fetch(
+        `${Domain.name}/api/appliedplacements/placednumber`
+      );
+      const data = await response.json();
+      setStateTotPlaced(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  let totalplacements = statedata?.length;
 
   return (
     <div className="mx-5">
@@ -55,7 +69,7 @@ const Home = () => {
                 />
                 <Statistic
                   title="Total Students Placed"
-                  value={String(10)}
+                  value={stateTotPlaced}
                   className="ml-2"
                 />
               </Space>
