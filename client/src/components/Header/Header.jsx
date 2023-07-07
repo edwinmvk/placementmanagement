@@ -6,13 +6,20 @@ import {
   BellFilled,
   CalendarOutlined,
   MenuFoldOutlined,
+  MenuOutlined,
   MenuUnfoldOutlined,
 } from "@ant-design/icons";
 import Domain from "../../utils/Domain.json";
 
 const Header = () => {
-  const { isCollapsed, setCollapsed, registeredGoogleUser, admin } =
-    useContext(Context);
+  const {
+    isCollapsed,
+    setCollapsed,
+    mobileView,
+    setMobilePopout,
+    registeredGoogleUser,
+    admin,
+  } = useContext(Context);
   const location = useLocation();
 
   const [notify, setNotify] = useState([]);
@@ -100,9 +107,17 @@ const Header = () => {
 
   return (
     <div className="m-2 mb-5 p-2 flex justify-between items-center rounded-md shadow-md bg-stone-50">
-      <Button type="default" onClick={() => setCollapsed(!isCollapsed)}>
-        {isCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-      </Button>
+      {mobileView ? (
+        <MenuOutlined
+          className="ml-2 text-2xl"
+          onClick={() => setMobilePopout(true)}
+        />
+      ) : (
+        <Button type="default" onClick={() => setCollapsed(!isCollapsed)}>
+          {isCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+        </Button>
+      )}
+
       <div className="flex justify-between items-center gap-x-4">
         <CalendarOutlined
           className="text-2xl my-1 cursor-pointer"

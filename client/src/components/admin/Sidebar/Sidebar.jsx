@@ -19,6 +19,7 @@ import {
   LogoutOutlined,
   RightOutlined,
   UsergroupDeleteOutlined,
+  CloseCircleOutlined,
 } from "@ant-design/icons";
 import placementcell from "../../../assets/placementcell.png";
 import admin from "../../../assets/admin.png";
@@ -31,32 +32,40 @@ const Sidebar = () => {
     logout,
     isCollapsed,
     setCollapsed,
-    collapsedWidth,
-    setCollapsedWidth,
+    mobileView,
+    setMobileView,
+    mobilePopout,
+    setMobilePopout,
   } = useContext(Context);
   const navigate = useNavigate();
   const location = useLocation();
   const [currentPath, setCurrentPath] = useState("/admin");
   const [statedata, setstatedata] = useState([]);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isModelOpen, setIsModelOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
   useEffect(() => {
     handleWindowSizeChange();
     window.addEventListener("resize", handleWindowSizeChange); // This code sets up an event listener for the "resize" event on the window object when the component mounts (i.e., when we load admin page)
-    return () => window.removeEventListener("resize", handleWindowSizeChange); // This code removes the event listener when the component unmounts (i.e., when we exit the admin page)
+    return () => {
+      window.removeEventListener("resize", handleWindowSizeChange); // This code removes the event listener when the component unmounts (i.e., when we exit the admin page)
+    };
   }, []);
 
   const handleWindowSizeChange = () => {
+    // this if condition determines whether it is mobile view
+    if (window.innerWidth < 500) {
+      setMobileView(true);
+    } else {
+      setMobileView(false);
+    }
+    // this if condition determines whether the sider must be collapsed or not in the desktop view
     if (window.innerWidth <= 768) {
-      setCollapsedWidth(80);
       setCollapsed(true);
     } else {
-      setCollapsedWidth(80);
       setCollapsed(false);
     }
-    if (window.innerWidth < 500) setCollapsedWidth(0);
   };
 
   useEffect(() => {
@@ -76,6 +85,11 @@ const Sidebar = () => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const logoutHandleClick = () => {
+    setMobilePopout(false); // this should me manually closed
+    logout();
   };
 
   const sendUpdatedData = async (values) => {
@@ -101,7 +115,7 @@ const Sidebar = () => {
           username: values.username,
         });
         setTimeout(() => {
-          setIsEditing(false);
+          setIsModelOpen(false);
         }, 1500);
       } else if (response.status === 404 || response.status === 401) {
         message.error(data);
@@ -117,11 +131,7 @@ const Sidebar = () => {
 
   const passwordHandleClick = () => {
     // this function is written first becz we cannot access 'passwordHandleClick' funtion in the MenuContents array before initialization
-    setIsEditing(true);
-  };
-
-  const logoutHandleClick = () => {
-    logout();
+    setIsModelOpen(true);
   };
 
   const MenuContents = [
@@ -177,7 +187,7 @@ const Sidebar = () => {
 
   const onCancel = () => {
     form.resetFields();
-    setIsEditing(false);
+    setIsModelOpen(false);
   };
 
   const onFinish = (values) => {
@@ -190,18 +200,17 @@ const Sidebar = () => {
     console.log("Failed:", errorInfo);
   };
 
-  return (
-    <Layout>
+  const CommonSidebar = () => (
+    <Layout hasSider={true}>
       <Sider
         mode="vertical"
         trigger={null} // this is used to remove the black arrrow on the side of Sider component
         collapsible
-        theme="dark"
-        collapsedWidth={collapsedWidth}
-        collapsed={isCollapsed}
-        width="200px"
+        collapsedWidth={80}
+        collapsed={mobileView ? false : isCollapsed} // the sider must be always open in the mobile view
+        width={mobileView ? "230px" : "200px"}
         style={{
-          backgroundColor: "#141929",
+          backgroundColor: "rgba(20, 25, 41, 1)",
           backgroundImage: `repeating-linear-gradient(120deg, rgba(255,255,255,.1), rgba(255,255,255,.1) 1px, transparent 1px, transparent 60px),
                     repeating-linear-gradient(60deg, rgba(255,255,255,.1), rgba(255,255,255,.1) 1px, transparent 1px, transparent 60px),
                     linear-gradient(60deg, rgba(0,0,0,.1) 25%, transparent 25%, transparent 75%, rgba(0,0,0,.1) 75%, rgba(0,0,0,.1)),
@@ -210,12 +219,22 @@ const Sidebar = () => {
         }}
       >
         <div
-          className={`p-2 flex flex-row items-center justify-center backdrop-blur-sm bg-white/30 ${
-            isCollapsed ? "m-2 rounded-full" : "m-0"
+          className={`p-3 flex flex-row items-center justify-center backdrop-blur-sm bg-white/30 ${
+            mobileView ? `` : isCollapsed ? "m-2 rounded-full" : ""
           }`}
         >
           <img alt="" src={placementcell} width={50} className="rounded-full" />
-          {isCollapsed ? null : (
+          {mobileView ? (
+            <>
+              <h1 className="m-2 text-white text-lg font-extrabold uppercase">
+                Placement Cell
+              </h1>
+              <CloseCircleOutlined
+                className="text-gray-200 text-2xl mb-1"
+                onClick={() => setMobilePopout(false)}
+              />
+            </>
+          ) : isCollapsed ? null : (
             <h1 className="m-2 text-white text-lg font-extrabold uppercase">
               Placement Cell
             </h1>
@@ -227,14 +246,13 @@ const Sidebar = () => {
           selectedKeys={[currentPath]}
           mode="vertical"
           onClick={(item) => {
-            item.key !== "1" && item.key !== "2"
-              ? navigate(item.key)
-              : () => {}; // this is done to prevent the routing of changepassword, inorder to display only the Model
+            navigate(item.key);
+            setMobilePopout(false);
           }}
           style={{
             marginTop: "10px",
             background: "transparent",
-            color: "white",
+            color: "rgb(221, 232, 200)",
             border: "none",
           }}
         />
@@ -254,7 +272,12 @@ const Sidebar = () => {
                 />
               </div>
 
-              {isCollapsed ? (
+              {mobileView ? (
+                <>
+                  <h1 className="text-lg font-bold text-gray-200">Admin</h1>
+                  <RightOutlined className="text-gray-200" />
+                </>
+              ) : isCollapsed ? (
                 <></>
               ) : (
                 <>
@@ -268,7 +291,7 @@ const Sidebar = () => {
       </Sider>
       <Modal
         title="Change Password"
-        open={isEditing}
+        open={isModelOpen}
         maskClosable={false} // this will make the Model not disappear even if we click outside the Model
         onCancel={onCancel}
         okButtonProps={{ style: { display: "none" } }}
@@ -289,7 +312,10 @@ const Sidebar = () => {
             name="oldpassword"
             label="Old Password"
             rules={[
-              { required: true, message: "Please enter your old password" },
+              {
+                required: true,
+                message: "Please enter your old password",
+              },
             ]}
           >
             <Input type="password" />
@@ -298,7 +324,10 @@ const Sidebar = () => {
             name="newpassword"
             label="New Password"
             rules={[
-              { required: true, message: "Please enter your new password" },
+              {
+                required: true,
+                message: "Please enter your new password",
+              },
             ]}
           >
             <Input placeholder="Donot reuse old password" type="password" />
@@ -307,7 +336,10 @@ const Sidebar = () => {
             name="confirmnewpassword"
             label="Confirm New Password"
             rules={[
-              { required: true, message: "Please confirm your new password" },
+              {
+                required: true,
+                message: "Please confirm your new password",
+              },
               { validator: validateConfirmPassword },
             ]}
           >
@@ -326,6 +358,23 @@ const Sidebar = () => {
         </Form>
       </Modal>
     </Layout>
+  );
+
+  return (
+    <div>
+      {mobileView ? (
+        <div
+          className="flex flex-col h-full fixed top-0 left-0 items-start justify-start z-10 duration-500"
+          style={{ transform: mobilePopout ? "none" : "translateX(-100%)" }}
+        >
+          <CommonSidebar />
+        </div>
+      ) : (
+        <div className="flex flex-col h-full">
+          <CommonSidebar />
+        </div>
+      )}
+    </div>
   );
 };
 

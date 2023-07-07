@@ -9,6 +9,7 @@ import {
   AuditOutlined,
   RightOutlined,
   UserOutlined,
+  CloseCircleOutlined,
 } from "@ant-design/icons";
 import placementcell from "../../../assets/placementcell.png";
 import Domain from "../../../utils/Domain.json";
@@ -17,12 +18,14 @@ const { Sider } = Layout;
 
 const UserSideBar = () => {
   const {
-    isCollapsed,
-    setCollapsed,
-    collapsedWidth,
-    setCollapsedWidth,
     registeredGoogleUser,
     googleSignOut,
+    isCollapsed,
+    setCollapsed,
+    mobileView,
+    setMobileView,
+    mobilePopout,
+    setMobilePopout,
   } = useContext(Context);
   const navigate = useNavigate();
   const location = useLocation();
@@ -39,14 +42,18 @@ const UserSideBar = () => {
   }, []);
 
   const handleWindowSizeChange = () => {
+    // this if condition determines whether it is mobile view
+    if (window.innerWidth < 500) {
+      setMobileView(true);
+    } else {
+      setMobileView(false);
+    }
+    // this if condition determines whether the sider must be collapsed or not in the desktop view
     if (window.innerWidth <= 768) {
-      setCollapsedWidth(80);
       setCollapsed(true);
     } else {
-      setCollapsedWidth(80);
       setCollapsed(false);
     }
-    if (window.innerWidth < 500) setCollapsedWidth(0);
   };
 
   useEffect(() => {
@@ -70,6 +77,7 @@ const UserSideBar = () => {
   }
 
   const logoutHandleClick = async () => {
+    setMobilePopout(false);
     try {
       await googleSignOut();
     } catch (error) {
@@ -111,6 +119,7 @@ const UserSideBar = () => {
           }
         );
         const data = await response.json();
+        // console.log(data);
         if (response.status === 200) {
           message.success("Picture updated");
         } else if (response.status === 500) {
@@ -158,18 +167,18 @@ const UserSideBar = () => {
     },
   ];
 
-  return (
-    <Layout>
+  const CommonSidebar = () => (
+    <Layout hasSider={true}>
       <Sider
         mode="vertical"
         trigger={null} // this is used to remove the black arrrow on the side of Sider component
         collapsible
         theme="dark"
-        collapsedWidth={collapsedWidth}
-        collapsed={isCollapsed}
-        width="200px"
+        collapsedWidth={80}
+        collapsed={mobileView ? false : isCollapsed} // the sider must be always open in the mobile view
+        width={mobileView ? "230px" : "200px"}
         style={{
-          backgroundColor: "#141929",
+          backgroundColor: "rgba(20, 25, 41, 1)",
           backgroundImage: `repeating-linear-gradient(120deg, rgba(255,255,255,.1), rgba(255,255,255,.1) 1px, transparent 1px, transparent 60px),
                     repeating-linear-gradient(60deg, rgba(255,255,255,.1), rgba(255,255,255,.1) 1px, transparent 1px, transparent 60px),
                     linear-gradient(60deg, rgba(0,0,0,.1) 25%, transparent 25%, transparent 75%, rgba(0,0,0,.1) 75%, rgba(0,0,0,.1)),
@@ -178,12 +187,22 @@ const UserSideBar = () => {
         }}
       >
         <div
-          className={`p-2 flex flex-row items-center justify-center backdrop-blur-sm bg-white/30 ${
-            isCollapsed ? "m-2 rounded-full" : "m-0"
+          className={`p-3 flex flex-row items-center justify-center backdrop-blur-sm bg-white/30 ${
+            mobileView ? `` : isCollapsed ? "m-2 rounded-full" : ""
           }`}
         >
           <img alt="" src={placementcell} width={50} className="rounded-full" />
-          {isCollapsed ? null : (
+          {mobileView ? (
+            <>
+              <h1 className="m-2 text-white text-lg font-extrabold uppercase">
+                Placement Cell
+              </h1>
+              <CloseCircleOutlined
+                className="text-gray-200 text-2xl mb-1"
+                onClick={() => setMobilePopout(false)}
+              />
+            </>
+          ) : isCollapsed ? null : (
             <h1 className="m-2 text-white text-lg font-extrabold uppercase">
               Placement Cell
             </h1>
@@ -196,11 +215,12 @@ const UserSideBar = () => {
           mode="vertical"
           onClick={(item) => {
             navigate(item.key);
+            setMobilePopout(false);
           }}
           style={{
             marginTop: "10px",
             background: "transparent",
-            color: "white",
+            color: "rgb(221, 232, 200)",
             border: "none",
           }}
         />
@@ -220,14 +240,21 @@ const UserSideBar = () => {
                 />
               </div>
 
-              {isCollapsed ? (
+              {mobileView ? (
+                <div className="flex items-center w-2/3">
+                  <h1 className="text-md font-bold text-gray-200">
+                    {statedata?.username}
+                  </h1>
+                  <RightOutlined className="m-1 text-gray-200" />
+                </div>
+              ) : isCollapsed ? (
                 <></>
               ) : (
                 <div className="flex items-center w-2/3">
                   <h1 className="text-md font-bold text-gray-200">
                     {statedata?.username}
                   </h1>
-                  <RightOutlined className="text-gray-200" />
+                  <RightOutlined className="m-1 text-gray-200" />
                 </div>
               )}
             </div>
@@ -257,6 +284,22 @@ const UserSideBar = () => {
         </Upload.Dragger>
       </Modal>
     </Layout>
+  );
+  return (
+    <div>
+      {mobileView ? (
+        <div
+          className="flex flex-col h-full fixed top-0 left-0 items-start justify-start z-10 duration-500"
+          style={{ transform: mobilePopout ? "none" : "translateX(-100%)" }}
+        >
+          <CommonSidebar />
+        </div>
+      ) : (
+        <div className="flex flex-col h-full">
+          <CommonSidebar />
+        </div>
+      )}
+    </div>
   );
 };
 

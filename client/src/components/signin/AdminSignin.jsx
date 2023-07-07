@@ -34,7 +34,7 @@ const AdminSignin = () => {
   const antIcon = (
     <LoadingOutlined
       style={{
-        color: "blue",
+        color: "white",
         fontSize: 24,
       }}
       spin

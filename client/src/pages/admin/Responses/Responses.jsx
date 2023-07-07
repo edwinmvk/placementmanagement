@@ -52,7 +52,7 @@ const Responses = () => {
               <div
                 key={index} // Use index as the key
                 onClick={() => navigateToEditStatus(placement._id)}
-                className="bg-white cursor-pointer flex items-center p-1 md:p-5 w-full h-inherit mb-3 rounded-md shadow-sm hover:scale-x-105 transition delay-50 duration-100 ease-in-out"
+                className="bg-white cursor-pointer flex items-center p-2 md:p-3 w-full h-inherit mb-3 rounded-md shadow-sm hover:scale-x-105 transition delay-50 duration-100 ease-in-out"
               >
                 <h1 className="w-10 text-slate-700">{index + 1}.</h1>
                 <div className="w-full flex items-center justify-between">
