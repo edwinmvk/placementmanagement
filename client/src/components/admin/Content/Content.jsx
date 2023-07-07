@@ -1,11 +1,11 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Home from "../../../pages/admin/Home/Home";
-import ManageStudents from "../../../pages/admin/ManageStudents/ManageStudents";
-import NewPlacement from "../../../pages/admin/NewPlacement/NewPlacement";
-import Responses from "../../../pages/admin/Responses/Responses";
-import EditStatus from "../../../pages/admin/EditStatus/EditStatus";
-import Error404 from "../../Error404/Error404";
+import Home from "../../../pages/Admin/Home/Home";
+import ManageStudents from "../../../pages/Admin/ManageStudents/ManageStudents";
+import NewPlacement from "../../../pages/Admin/NewPlacement/NewPlacement";
+import Responses from "../../../pages/Admin/Responses/Responses";
+import EditStatus from "../../../pages/Admin/EditStatus/EditStatus";
+import Error404 from "../../../pages/Error404/Error404";
 
 const Content = () => {
   return (

@@ -88,7 +88,7 @@ const AppliedPlacements = () => {
     {
       title: "Placement ID",
       dataIndex: "placementid",
-      width: 150,
+      width: 130,
       align: "center",
       render: (text) => {
         return text.toUpperCase();
@@ -118,7 +118,7 @@ const AppliedPlacements = () => {
     {
       title: "Status",
       dataIndex: "status",
-      width: 150,
+      width: 180,
       align: "center",
       render: (text) => displaytags(text),
     },

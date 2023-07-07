@@ -1,18 +1,18 @@
 import React from "react";
-import Header from "../Header/Header";
-import Sidebar from "./Sidebar/Sidebar";
-import Content from "./Content/Content";
-import Footer from "./Footer/Footer";
+import Header from "../../components/Header/Header";
+import UserSideBar from "../../components/User/UserSidebar/UserSideBar";
+import UserContent from "../../components/User/UserContent/UserContent";
+import Footer from "../../components/Footer/Footer";
 
-const Admin = () => {
+const User = () => {
   return (
     <div>
       <div className="flex flex-col backdrop-blur	bg-stone-50/60">
         <div className="h-screen flex flex-row">
-          <Sidebar />
+          <UserSideBar />
           <div className="w-full flex flex-col overflow-y-scroll overflow-x-hidden">
             <Header />
-            <Content />
+            <UserContent />
             <div className="h-full mt-3 flex flex-col-reverse border-t-3">
               <Footer />
             </div>
@@ -23,4 +23,4 @@ const Admin = () => {
   );
 };
 
-export default Admin;
+export default User;

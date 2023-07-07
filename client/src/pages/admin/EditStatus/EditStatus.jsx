@@ -258,7 +258,7 @@ const EditStatus = () => {
     {
       title: "Status",
       dataIndex: "status",
-      width: 170,
+      width: 180,
       align: "center",
       render: (text) => displayTags(text),
     },

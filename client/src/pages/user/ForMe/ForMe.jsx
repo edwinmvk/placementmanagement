@@ -202,6 +202,18 @@ const ForMe = () => {
     }
   }
 
+  const sizeChecking = (fileList) => {
+    // this if condition is necessary for the delete button to work
+    if (fileList.length > 0) {
+      if (fileList[0].size > 614400) {
+        message.error("File size exceeded");
+        setList([]); // Clear the fileList state
+        return;
+      }
+    }
+    setList(fileList); // Update the fileList state
+  };
+
   const onOk = async () => {
     if (list.length > 0) {
       setIsButtonDisabled(true);
@@ -237,18 +249,6 @@ const ForMe = () => {
   const onCancel = () => {
     setList([]);
     setIsModalVisible(false);
-  };
-
-  const sizeChecking = (fileList) => {
-    // this if condition is necessary for the delete button to work
-    if (fileList.length > 0) {
-      if (fileList[0].size > 614400) {
-        message.error("File size exceeded");
-        setList([]); // Clear the fileList state
-        return;
-      }
-    }
-    setList(fileList); // Update the fileList state
   };
 
   const expandedRowRender = (record) => {

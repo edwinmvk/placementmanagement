@@ -97,11 +97,6 @@ const UserSideBar = () => {
     setList(fileList); // Update the fileList state
   };
 
-  const onCancel = () => {
-    setList([]);
-    setIsModelOpen(false);
-  };
-
   const onOk = async () => {
     if (list.length > 0) {
       setIsButtonDisabled(true);
@@ -132,6 +127,11 @@ const UserSideBar = () => {
         onCancel();
       }
     }
+  };
+
+  const onCancel = () => {
+    setList([]);
+    setIsModelOpen(false);
   };
 
   const MenuContents = [
@@ -262,12 +262,12 @@ const UserSideBar = () => {
         </div>
       </Sider>
       <Modal
-        title={<h1 className="font-bold text-2xl">Change profile picture</h1>}
+        title="Change profile picture"
         open={isModelOpen}
         maskClosable={false} // this will make the Model not disappear even if we click outside the Model
         okButtonProps={{ className: "bg-blue-500", disabled: isButtonDisabled }}
-        onCancel={onCancel}
         onOk={onOk}
+        onCancel={onCancel}
       >
         <Upload.Dragger
           maxCount={1}
