@@ -84,6 +84,8 @@ pnpm run dev
 
 This will start the client and open the app in your default browser. This may take 2-3 minutes.
 
+**NB**: **Make sure the server runs in PORT: `3000` and client runs in `http://localhost:5173` to avoid any CORS errors**
+
 ## Building
 
 If you want to build the app for production, you can run the following command from the `client` directory:
