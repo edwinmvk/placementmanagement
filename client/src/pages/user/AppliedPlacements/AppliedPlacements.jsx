@@ -23,7 +23,7 @@ const AppliedPlacements = () => {
   async function appliedPlacements() {
     try {
       const response = await fetch(
-        `${Domain.name}/api/user/appliedplacements/${userid}`
+        `${Domain.serveraddress}/api/user/appliedplacements/${userid}`
       );
       const data = await response.json();
       setstatedata(data);

@@ -23,7 +23,9 @@ const UserHome = () => {
   async function fetchData() {
     // This is used to obtain the data from the server and set it to Hooks
     try {
-      const response = await fetch(`${Domain.name}/api/user/${userid}`);
+      const response = await fetch(
+        `${Domain.serveraddress}/api/user/${userid}`
+      );
       const data = await response.json();
       setstatedata(data);
     } catch (error) {
@@ -112,7 +114,7 @@ const DatabaseData = () => {
   const fetchData = async () => {
     // This is used to obtain the data from the server and set it to Hooks
     try {
-      const response = await fetch(`${Domain.name}/api/placements`);
+      const response = await fetch(`${Domain.serveraddress}/api/placements`);
       const data = await response.json();
       setstatedata(data);
     } catch (error) {

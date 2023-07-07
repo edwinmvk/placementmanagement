@@ -44,7 +44,9 @@ const Header = () => {
 
   async function fetchAdminData() {
     try {
-      const response = await fetch(`${Domain.name}/api/adminnotifications`);
+      const response = await fetch(
+        `${Domain.serveraddress}/api/adminnotifications`
+      );
       const data = await response.json();
       setNotify(data);
     } catch (error) {
@@ -55,7 +57,7 @@ const Header = () => {
   async function fetchUserData() {
     try {
       const response = await fetch(
-        `${Domain.name}/api/usernotifications/${currentUser}`
+        `${Domain.serveraddress}/api/usernotifications/${currentUser}`
       );
       const data = await response.json();
       setNotify(data);
@@ -83,7 +85,7 @@ const Header = () => {
 
   async function clearAdminNotifications() {
     try {
-      await fetch(`${Domain.name}/api/adminnotifications`, {
+      await fetch(`${Domain.serveraddress}/api/adminnotifications`, {
         method: "DELETE",
       })
         .then(setNotifyDrawer(false))
@@ -95,9 +97,12 @@ const Header = () => {
 
   async function clearUserNotifications() {
     try {
-      await fetch(`${Domain.name}/api/usernotifications/${currentUser}`, {
-        method: "DELETE",
-      })
+      await fetch(
+        `${Domain.serveraddress}/api/usernotifications/${currentUser}`,
+        {
+          method: "DELETE",
+        }
+      )
         .then(setNotifyDrawer(false))
         .then(setNotify([]));
     } catch (error) {

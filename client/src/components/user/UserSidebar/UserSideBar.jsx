@@ -68,7 +68,7 @@ const UserSideBar = () => {
   async function fetchData(id) {
     // This is used to obtain the data from the server and set it to Hooks for the first time only
     try {
-      const response = await fetch(`${Domain.name}/api/user/${id}`);
+      const response = await fetch(`${Domain.serveraddress}/api/user/${id}`);
       const data = await response.json();
       setstatedata(data);
     } catch (error) {
@@ -107,7 +107,7 @@ const UserSideBar = () => {
         formData.append("avatar", list[0]?.originFileObj);
         formData.append("avatarpublicid", statedata?.avatarpublicid);
         const response = await fetch(
-          `${Domain.name}/api/user/userupdate/${userid}`,
+          `${Domain.serveraddress}/api/user/userupdate/${userid}`,
           {
             method: "POST",
             body: formData,

@@ -79,7 +79,7 @@ const Sidebar = () => {
   const fetchData = async () => {
     // This is used to obtain the data from the server and set it to Hooks for the first time only
     try {
-      const response = await fetch(`${Domain.name}/api/admin`);
+      const response = await fetch(`${Domain.serveraddress}/api/admin`);
       const data = await response.json();
       setstatedata([data]); // the data we recieved is an object. that is why we are enclosing it inside an array
     } catch (error) {
@@ -95,7 +95,7 @@ const Sidebar = () => {
   const sendUpdatedData = async (values) => {
     try {
       const response = await fetch(
-        `${Domain.name}/api/admin/${values.username}`,
+        `${Domain.serveraddress}/api/admin/${values.username}`,
         {
           method: "PATCH",
           headers: {

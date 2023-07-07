@@ -42,7 +42,7 @@ const EditStatus = () => {
   async function fetchData(id) {
     try {
       const response = await fetch(
-        `${Domain.name}/api/appliedplacements/${id}`
+        `${Domain.serveraddress}/api/appliedplacements/${id}`
       );
       const data = await response.json();
       setstatedata(data);
@@ -67,7 +67,7 @@ const EditStatus = () => {
             )
           : null;
         const response = await fetch(
-          `${Domain.name}/api/appliedplacements/${userid}`,
+          `${Domain.serveraddress}/api/appliedplacements/${userid}`,
           {
             method: "PUT",
             body: formData,
@@ -105,7 +105,7 @@ const EditStatus = () => {
       };
 
       const response = await fetch(
-        `${Domain.name}/api/appliedplacements/${userid}`,
+        `${Domain.serveraddress}/api/appliedplacements/${userid}`,
         {
           method: "PATCH",
           headers: {
@@ -135,7 +135,7 @@ const EditStatus = () => {
         setstatedata(copystatedata);
 
         // send notification
-        fetch(`${Domain.name}/api/usernotifications/${userid}`, {
+        fetch(`${Domain.serveraddress}/api/usernotifications/${userid}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

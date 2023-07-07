@@ -17,7 +17,7 @@ const Home = () => {
   async function fetchData() {
     // This is used to obtain the data from the server and set it to Hooks
     try {
-      const response = await fetch(`${Domain.name}/api/placements`);
+      const response = await fetch(`${Domain.serveraddress}/api/placements`);
       const data = await response.json();
       setstatedata(data);
     } catch (error) {
@@ -28,7 +28,7 @@ const Home = () => {
   async function fetchPlaced() {
     try {
       const response = await fetch(
-        `${Domain.name}/api/appliedplacements/placednumber`
+        `${Domain.serveraddress}/api/appliedplacements/placednumber`
       );
       const data = await response.json();
       setStateTotPlaced(data);

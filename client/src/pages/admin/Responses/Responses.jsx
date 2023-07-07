@@ -19,7 +19,9 @@ const Responses = () => {
 
   async function fetchPlacementsList() {
     try {
-      const response = await fetch(`${Domain.name}/api/appliedplacements`);
+      const response = await fetch(
+        `${Domain.serveraddress}/api/appliedplacements`
+      );
       const data = await response.json();
       setstatedata(data);
     } catch (error) {

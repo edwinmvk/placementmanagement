@@ -24,7 +24,9 @@ const ForMe = () => {
   async function fetchData() {
     // This is used to obtain the data from the server and set it to Hooks
     try {
-      const response = await fetch(`${Domain.name}/api/placements/${userid}`);
+      const response = await fetch(
+        `${Domain.serveraddress}/api/placements/${userid}`
+      );
       const data = await response.json();
       setstatedata(data);
 
@@ -36,7 +38,9 @@ const ForMe = () => {
 
   async function fetchUserDetails() {
     try {
-      const response = await fetch(`${Domain.name}/api/user/${userid}`);
+      const response = await fetch(
+        `${Domain.serveraddress}/api/user/${userid}`
+      );
       const data = await response.json();
       setUserDetails(data);
     } catch (error) {
@@ -132,7 +136,7 @@ const ForMe = () => {
       try {
         const id = userDetails?.userid;
         const response = await fetch(
-          `${Domain.name}/api/appliedplacements/${id}`,
+          `${Domain.serveraddress}/api/appliedplacements/${id}`,
           {
             method: "POST",
             headers: {
@@ -169,7 +173,7 @@ const ForMe = () => {
 
           // send notification
           fetch(
-            `${Domain.name}/api/adminnotifications/${userDetails?.userid}`,
+            `${Domain.serveraddress}/api/adminnotifications/${userDetails?.userid}`,
             {
               method: "POST",
               headers: {
@@ -225,10 +229,13 @@ const ForMe = () => {
         userDetails?.resumepublicid
           ? formData.append("resumepublicid", userDetails?.resumepublicid)
           : null; // contains if there are any previous uploaded resume
-        const response = await fetch(`${Domain.name}/api/user/resume/${id}`, {
-          method: "POST",
-          body: formData,
-        });
+        const response = await fetch(
+          `${Domain.serveraddress}/api/user/resume/${id}`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
         const data = await response.json();
         if (response.status === 200) {
           message.success("Resume uploaded");

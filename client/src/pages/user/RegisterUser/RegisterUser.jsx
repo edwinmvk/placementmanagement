@@ -29,10 +29,13 @@ const RegisterUser = () => {
       formData.append("arrears", values.arrears);
       formData.append("cgpa", values.cgpa);
       formData.append("avatar", values.avatar[0]?.originFileObj);
-      const response = await fetch(`${Domain.name}/api/user/register`, {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        `${Domain.serveraddress}/api/user/register`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       const data = await response.json();
       setLoading(false);

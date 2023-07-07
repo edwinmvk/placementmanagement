@@ -70,7 +70,7 @@ const ContextProvider = ({ children }) => {
 
   async function checkUser(signedInUser) {
     try {
-      const response = await fetch(`${Domain.name}/api/user`, {
+      const response = await fetch(`${Domain.serveraddress}/api/user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -137,7 +137,7 @@ const ContextProvider = ({ children }) => {
   const login = async (adminobj) => {
     try {
       if (adminobj) {
-        const response = await fetch(`${Domain.name}/api/admin`, {
+        const response = await fetch(`${Domain.serveraddress}/api/admin`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
