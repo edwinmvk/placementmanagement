@@ -319,33 +319,11 @@ const deleteUser = async (req, res) => {
               });
             })
           );
-          console.log("All files deleted successfully");
+          // console.log("All files deleted successfully");
         } catch (error) {
           console.log("Error occurred during file deletion:", error);
         }
       }
-
-      // if (offerLetterPublicId.length > 0) {
-      //   try {
-      //     await Promise.all(
-      //       offerLetterPublicId.map((id) => {
-      //         return new Promise((resolve, reject) => {
-      //           cloudinary.uploader.destroy(id, (error, result) => {
-      //             if (error) {
-      //               console.log("Error deleting file:", error);
-      //               reject(error); // Reject the promise if an error occurs
-      //             } else {
-      //               resolve(result); // Resolve the promise if deletion is successful
-      //             }
-      //           });
-      //         });
-      //       })
-      //     );
-      //     console.log("All files deleted successfully");
-      //   } catch (error) {
-      //     console.log("Error occurred during file deletion:", error);
-      //   }
-      // }
 
       // Delete all related appliedplacements
       const appliedPlacementsIds = userToDelete.appliedplacements.map(

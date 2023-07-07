@@ -1,6 +1,7 @@
 import express from "express";
 import * as dotenv from "dotenv";
 import cors from "cors";
+import { readFileSync } from "fs";
 
 import connectDB from "./mongodb/connectDB/connectDB.js";
 import userRouter from "./routes/userModel.routes.js";
@@ -13,7 +14,17 @@ import adminNotificationRouter from "./routes/adminNotificationModel.routes.js";
 dotenv.config();
 
 const app = express();
-app.use(cors());
+
+const domainData = readFileSync("./Domain.json", "utf8");
+const Domain = JSON.parse(domainData);
+
+app.use(
+  cors({
+    origin: Domain.clientaddress,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    credentials: false,
+  })
+);
 app.use(express.json({ limit: "50mb" }));
 
 app.get("/", (req, res) => {
