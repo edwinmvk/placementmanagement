@@ -38,15 +38,17 @@ app.use("/api/placements", placementsRouter);
 app.use("/api/usernotifications", userNotificationsRouter);
 app.use("/api/adminnotifications", adminNotificationRouter);
 
+const PORT = process.env.PORT || 3000;
+
 const startServer = async () => {
   try {
     // connect to database
     await connectDB(process.env.MONGODB_URL);
 
     // the server wil not run if the connectDB fails due to await
-    app.listen(3000, () => console.log("Server started at port 3000"));
+    app.listen(PORT, () => console.log(`Server started at port ${PORT}`));
   } catch (error) {
-    console.log(error);
+    console.error("Server cannot start:", error);
   }
 };
 

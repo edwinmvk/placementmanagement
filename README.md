@@ -73,7 +73,7 @@ CLOUDINARY_API_SECRET=*********
 Once you have installed the dependencies and set the environment variables, you can run the server by running the following command from the `server` directory:
 
 ```sh
-pnpm start
+pnpm dev
 ```
 
 You can then run the client by running the following command from the `client` directory:
