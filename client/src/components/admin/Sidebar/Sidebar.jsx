@@ -22,13 +22,14 @@ import {
   CloseCircleOutlined,
 } from "@ant-design/icons";
 import placementcell from "../../../assets/placementcell.png";
-import admin from "../../../assets/admin.png";
+import adminpic from "../../../assets/admin.png";
 import Domain from "../../../utils/Domain.json";
 
 const { Sider } = Layout;
 
 const Sidebar = () => {
   const {
+    admin,
     logout,
     isCollapsed,
     setCollapsed,
@@ -40,7 +41,6 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [currentPath, setCurrentPath] = useState("/admin");
-  const [statedata, setstatedata] = useState([]);
   const [isModelOpen, setIsModelOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
@@ -69,23 +69,8 @@ const Sidebar = () => {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
-
-  useEffect(() => {
     setCurrentPath(location.pathname);
   }, [location.pathname]); // the state changes when the location.pathname changes
-
-  const fetchData = async () => {
-    // This is used to obtain the data from the server and set it to Hooks for the first time only
-    try {
-      const response = await fetch(`${Domain.serveraddress}/api/admin`);
-      const data = await response.json();
-      setstatedata([data]); // the data we recieved is an object. that is why we are enclosing it inside an array
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const logoutHandleClick = () => {
     setMobilePopout(false); // this should me manually closed
@@ -98,6 +83,7 @@ const Sidebar = () => {
         `${Domain.serveraddress}/api/admin/${values.username}`,
         {
           method: "PATCH",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
@@ -107,7 +93,6 @@ const Sidebar = () => {
       const data = await response.json();
 
       if (response.status === 200) {
-        fetchData();
         message.success(data);
         setLoading(false);
         form.resetFields();
@@ -117,7 +102,11 @@ const Sidebar = () => {
         setTimeout(() => {
           setIsModelOpen(false);
         }, 1500);
-      } else if (response.status === 404 || response.status === 401) {
+      } else if (
+        response.status === 404 ||
+        response.status === 400 ||
+        response.status === 401
+      ) {
         message.error(data);
       } else if (response.status === 500) {
         message.error("Please try again");
@@ -173,7 +162,7 @@ const Sidebar = () => {
   ];
 
   const initialValues = {
-    username: statedata?.[0]?.username,
+    username: admin.username,
   };
 
   const validateConfirmPassword = (rule, value) => {
@@ -267,7 +256,7 @@ const Sidebar = () => {
               <div className="rounded-full w-10 h-10 overflow-hidden">
                 <img
                   alt=""
-                  src={admin}
+                  src={adminpic}
                   className="object-cover h-full w-full"
                 />
               </div>

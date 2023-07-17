@@ -1,6 +1,7 @@
 import adminModel from "../mongodb/models/adminModel.js";
 import mongoose from "mongoose";
 import bycrypt from "bcrypt";
+import { createAdminToken } from "../jwt/jwt.js";
 
 const getAdmin = async (req, res) => {
   try {
@@ -17,8 +18,18 @@ const getAdmin = async (req, res) => {
     if (!isValidPassword) {
       return res.status(401).json("Invalid password");
     }
+    // this is to create a jwt token
+    const jwtAccessToken = createAdminToken(adminObj);
 
-    return res.status(200).json("Successfully logged in");
+    // this saves the jwt token in an httponly cookie with 12 hr
+    return res
+      .status(200)
+      .cookie("jwtAdminAccessTokenCookie", jwtAccessToken, {
+        sameSite: "strict",
+        httpOnly: true,
+        maxAge: 60 * 60 * 12 * 1000,
+      })
+      .json("Successfully logged in");
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -45,23 +56,12 @@ const getAdmin = async (req, res) => {
   // }
 };
 
-const getUpdateAdmin = async (req, res) => {
-  try {
-    const adminObj = await adminModel.findOne({});
-    // only username is send to frontend
-    const filteredAdminObj = { username: adminObj.username };
-    return res.status(200).json(filteredAdminObj);
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-};
-
 const updateAdmin = async (req, res) => {
   try {
     const { id } = req.params;
     const { oldpassword, newpassword } = req.body;
 
-    // Finds the admin by the id
+    // Finds the admin details object from database
     const adminToUpdate = await adminModel.findOne({ username: id });
 
     // Check if the admin exists
@@ -75,9 +75,9 @@ const updateAdmin = async (req, res) => {
       adminToUpdate.password
     );
 
-    if (!isValidPassword) {
+    if (!isValidPassword || oldpassword === newpassword) {
       return res
-        .status(401)
+        .status(400)
         .json(
           "Invalid old password. Make sure not to reuse old password. Please contact the IT if forgot password"
         );
@@ -110,4 +110,4 @@ const updateAdmin = async (req, res) => {
   }
 };
 
-export { getAdmin, getUpdateAdmin, updateAdmin };
+export { getAdmin, updateAdmin };

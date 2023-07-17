@@ -1,13 +1,42 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { Context } from "./ContextProvider";
+import Domain from "./Domain.json";
 
 export const ProtectedAdmin = ({ children }) => {
-  const { admin } = useContext(Context);
+  const { admin, logout } = useContext(Context);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    checkAdminJwt();
+  }, []);
+
   if (!admin) {
     return <Navigate to="/signin" replace />;
   }
-  return children;
+
+  // we also need to check if the jwt token in the cookie is valid
+  async function checkAdminJwt() {
+    if (admin) {
+      try {
+        const response = await fetch(
+          `${Domain.serveraddress}/api/admin/checkreloadadminjwt`,
+          { credentials: "include" }
+        );
+        const data = await response.json();
+        if (!response.ok) {
+          setLoading(true);
+          logout();
+        } else {
+          setLoading(false);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+
+  return <>{loading ? null : children}</>;
 };
 
 export const ProtectedUserUnregistered = ({ children }) => {

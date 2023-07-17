@@ -25,7 +25,7 @@ const ContextProvider = ({ children }) => {
   if (storedSignInTime) {
     const currentTime = new Date().getTime(); // getTime function converts the data into milliseconds from 1970
     if (currentTime >= parseInt(storedSignInTime)) {
-      // we are parsing Int because, the storedSigninTime was converted to string while storing in the session storage
+      // we are parsing Int because, the storedSigninTime was converted to string while storing in the local storage
       signOut(auth); // Sign out the user if 5 days have passed
       localStorage.removeItem("googleSignInTime"); // Remove the stored sign-in time
     }
@@ -105,7 +105,7 @@ const ContextProvider = ({ children }) => {
   }
 
   const [admin, setAdmin] = useState(() => {
-    // Load admin from localStorage if it exists and hasn't expired upon refresh
+    // Load admin from sessionStorage if it exists and hasn't expired upon refresh
     const adminJson = sessionStorage.getItem("browseradmin");
     if (adminJson) {
       const currentTime = new Date().getTime();
@@ -139,6 +139,7 @@ const ContextProvider = ({ children }) => {
       if (adminobj) {
         const response = await fetch(`${Domain.serveraddress}/api/admin`, {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
@@ -157,9 +158,16 @@ const ContextProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
     setAdmin(null);
     sessionStorage.removeItem("browseradmin");
+    const response = await fetch(
+      `${Domain.serveraddress}/api/admin/deletecookie`,
+      {
+        credentials: "include",
+      }
+    );
+    const data = await response.json();
   };
 
   return (
