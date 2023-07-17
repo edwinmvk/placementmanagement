@@ -30,13 +30,6 @@ const Signin = () => {
     navigate("/adminsignin");
   };
 
-  const backgroundstyles = {
-    background: `radial-gradient(circle at 100% 50%, transparent 20%, rgba(255,255,255,.3) 21%, rgba(255,255,255,.3) 34%, transparent 35%, transparent),
-      radial-gradient(circle at 0% 50%, transparent 20%, rgba(255,255,255,.3) 21%, rgba(255,255,255,.3) 34%, transparent 35%, transparent) 0 -50px`,
-    backgroundColor: "slategray",
-    backgroundSize: "75px 100px",
-  };
-
   return (
     <div
       className="h-full flex flex-col md:flex-row"

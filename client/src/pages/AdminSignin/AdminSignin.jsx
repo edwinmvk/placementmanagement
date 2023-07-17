@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Context } from "../../utils/ContextProvider";
 import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
-import image from "../../assets/adminlogin.png";
+import image from "../../assets/adminlogin.webp";
 
 const AdminSignin = () => {
   const { admin, login } = useContext(Context);
@@ -44,13 +44,11 @@ const AdminSignin = () => {
 
   return (
     <div className="lg:flex">
-      <div className="lg:w-1/2 xl:max-w-screen-sm">
-        <div className="py-12 bg-indigo-100 flex justify-center items-center bg-indigo-100 lg:justify-start lg:px-12">
-          <div className="text-5xl text-indigo-800 tracking-wide font-bold">
-            Welcome back Admin
-          </div>
+      <div className="lg:w-1/2">
+        <div className="bg-indigo-100 text-5xl text-indigo-800 tracking-wide font-bold py-12 px-5 flex justify-center items-center lg:justify-start lg:px-12">
+          Welcome back Admin
         </div>
-        <div className="mt-10 px-12 sm:px-24 md:px-48 lg:px-12 lg:mt-16 xl:px-24 xl:max-w-2xl">
+        <div className="pt-10 px-12 sm:px-24 md:px-48 lg:px-12 lg:pt-16 xl:px-24 xl:max-w-2xl">
           <h2
             className="text-center text-4xl text-indigo-900 font-display font-semibold lg:text-left xl:text-5xl
                     xl:text-bold"
@@ -114,7 +112,7 @@ const AdminSignin = () => {
           </div>
         </div>
       </div>
-      <div className="flex items-center justify-center flex-1">
+      <div className="hidden lg:flex items-center justify-center flex-1">
         <img alt="" src={image} className="hover:scale-95 duration-100" />
       </div>
     </div>
