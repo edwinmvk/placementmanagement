@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Space, Card, Statistic, Table, Typography } from "antd";
+import { Space, Card, Statistic, Table, Typography, Spin } from "antd";
 import { ProfileFilled, SafetyOutlined } from "@ant-design/icons";
 import "../../../components/CustomTableCss/CustomTable.css";
 import CSVbutton from "../../../components/CSVbutton/CSVbutton";
@@ -40,52 +40,60 @@ const Home = () => {
   let totalplacements = statedata?.length;
 
   return (
-    <div className="mx-5">
-      <div className="px-2.5 py-0.5 mb-4 w-fit bg-stone-100 shadow-lg rounded-md">
-        <Typography.Title level={3}>Dashboard</Typography.Title>
-      </div>
+    <>
+      {statedata && stateTotPlaced ? (
+        <div className="mx-5">
+          <div className="px-2.5 py-0.5 mb-4 w-fit bg-stone-100 shadow-lg rounded-md">
+            <Typography.Title level={3}>Dashboard</Typography.Title>
+          </div>
 
-      <Space direction="horizontal" className="mb-4">
-        <div className="flex flex-wrap gap-2">
-          <Card className="w-full md:w-60 bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl transition delay-50 duration-300 ease-in-out">
-            <div className="flex justify-center">
-              <Space direction="horizontal">
-                <ProfileFilled className="text-4xl" style={{ color: "" }} />
-                <Statistic
-                  title="Total Placements"
-                  value={totalplacements}
-                  formatter={(value) => String(value)}
-                  className="ml-2"
-                />
-              </Space>
+          <Space direction="horizontal" className="mb-4">
+            <div className="flex flex-wrap gap-2">
+              <Card className="w-full md:w-60 bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl transition delay-50 duration-300 ease-in-out">
+                <div className="flex justify-center">
+                  <Space direction="horizontal">
+                    <ProfileFilled className="text-4xl" style={{ color: "" }} />
+                    <Statistic
+                      title="Total Placements"
+                      value={totalplacements}
+                      formatter={(value) => String(value)}
+                      className="ml-2"
+                    />
+                  </Space>
+                </div>
+              </Card>
+              <Card className="w-full md:w-60 bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl transition delay-50 duration-300 ease-in-out">
+                <div className="flex justify-center">
+                  <Space direction="horizontal">
+                    <SafetyOutlined
+                      className="text-4xl"
+                      style={{ color: "green" }}
+                    />
+                    <Statistic
+                      title="Total Students Placed"
+                      value={stateTotPlaced}
+                      className="ml-2"
+                    />
+                  </Space>
+                </div>
+              </Card>
             </div>
-          </Card>
-          <Card className="w-full md:w-60 bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl transition delay-50 duration-300 ease-in-out">
-            <div className="flex justify-center">
-              <Space direction="horizontal">
-                <SafetyOutlined
-                  className="text-4xl"
-                  style={{ color: "green" }}
-                />
-                <Statistic
-                  title="Total Students Placed"
-                  value={stateTotPlaced}
-                  className="ml-2"
-                />
-              </Space>
-            </div>
-          </Card>
+          </Space>
+          <div className="flex flex-wrap justify-between items-center">
+            <Typography.Title level={4}>All Placements</Typography.Title>
+            <span className="mb-1">
+              <CSVbutton data={statedata} filename={`All_Placements`} />
+            </span>
+          </div>
+
+          <DatabaseData placementsdata={statedata} />
         </div>
-      </Space>
-      <div className="flex flex-wrap justify-between items-center">
-        <Typography.Title level={4}>All Placements</Typography.Title>
-        <span className="mb-1">
-          <CSVbutton data={statedata} filename={`All_Placements`} />
-        </span>
-      </div>
-
-      <DatabaseData placementsdata={statedata} />
-    </div>
+      ) : (
+        <div className="h-screen flex items-center justify-center">
+          <Spin size="large" />
+        </div>
+      )}
+    </>
   );
 };
 

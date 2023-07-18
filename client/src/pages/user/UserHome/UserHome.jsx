@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Card, Space, Statistic, Table, Typography } from "antd";
+import { Card, Space, Spin, Statistic, Table, Typography } from "antd";
 import {
   CarryOutOutlined,
   PercentageOutlined,
@@ -34,76 +34,84 @@ const UserHome = () => {
   }
 
   return (
-    <div className="mx-5">
-      <div className="px-2.5 py-0.5 mb-4 w-fit bg-stone-100 shadow-lg rounded-md">
-        <Typography.Title level={3}>Dashboard</Typography.Title>
-      </div>
-      <Space direction="horizontal" className="mb-4">
-        <div className="flex flex-wrap gap-2">
-          <Card className="w-full md:w-60 bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl transition delay-50 duration-300 ease-in-out">
-            <div className="flex justify-center">
-              <Space direction="horizontal">
-                <UserOutlined className="text-4xl" style={{ color: "" }} />
-                <Statistic
-                  title="Student Id"
-                  value={statedata?.userid}
-                  formatter={(value) => String(value)}
-                  className="ml-2"
-                />
-              </Space>
+    <>
+      {statedata ? (
+        <div className="mx-5">
+          <div className="px-2.5 py-0.5 mb-4 w-fit bg-stone-100 shadow-lg rounded-md">
+            <Typography.Title level={3}>Dashboard</Typography.Title>
+          </div>
+          <Space direction="horizontal" className="mb-4">
+            <div className="flex flex-wrap gap-2">
+              <Card className="w-full md:w-60 bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl transition delay-50 duration-300 ease-in-out">
+                <div className="flex justify-center">
+                  <Space direction="horizontal">
+                    <UserOutlined className="text-4xl" style={{ color: "" }} />
+                    <Statistic
+                      title="Student Id"
+                      value={statedata?.userid}
+                      formatter={(value) => String(value)}
+                      className="ml-2"
+                    />
+                  </Space>
+                </div>
+              </Card>
+              <Card className="w-full md:w-40 bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl transition delay-50 duration-300 ease-in-out">
+                <div className="flex justify-center">
+                  <Space direction="horizontal">
+                    <PercentageOutlined
+                      className="text-4xl"
+                      style={{ color: "green" }}
+                    />
+                    <Statistic
+                      title="Average CGPA"
+                      value={String(statedata?.cgpa)}
+                      className="ml-2"
+                    />
+                  </Space>
+                </div>
+              </Card>
+              <Card className="w-full md:w-40 bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl transition delay-50 duration-300 ease-in-out">
+                <div className="flex justify-center">
+                  <Space direction="horizontal">
+                    <ReconciliationOutlined
+                      className="text-4xl"
+                      style={{ color: "#c95149" }}
+                    />
+                    <Statistic
+                      title="Pending Arrears"
+                      value={statedata?.arrears}
+                      className="ml-2"
+                    />
+                  </Space>
+                </div>
+              </Card>
+              <Card className="w-full md:w-40 bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl transition delay-50 duration-300 ease-in-out">
+                <div className="flex justify-center">
+                  <Space direction="horizontal">
+                    <CarryOutOutlined
+                      className="text-4xl"
+                      style={{ color: "#d4b148" }}
+                    />
+                    <Statistic
+                      title="Passout year"
+                      value={String(statedata?.passoutyear)}
+                      formatter={(value) => String(value)}
+                      className="ml-2"
+                    />
+                  </Space>
+                </div>
+              </Card>
             </div>
-          </Card>
-          <Card className="w-full md:w-40 bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl transition delay-50 duration-300 ease-in-out">
-            <div className="flex justify-center">
-              <Space direction="horizontal">
-                <PercentageOutlined
-                  className="text-4xl"
-                  style={{ color: "green" }}
-                />
-                <Statistic
-                  title="Average CGPA"
-                  value={String(statedata?.cgpa)}
-                  className="ml-2"
-                />
-              </Space>
-            </div>
-          </Card>
-          <Card className="w-full md:w-40 bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl transition delay-50 duration-300 ease-in-out">
-            <div className="flex justify-center">
-              <Space direction="horizontal">
-                <ReconciliationOutlined
-                  className="text-4xl"
-                  style={{ color: "#c95149" }}
-                />
-                <Statistic
-                  title="Pending Arrears"
-                  value={statedata?.arrears}
-                  className="ml-2"
-                />
-              </Space>
-            </div>
-          </Card>
-          <Card className="w-full md:w-40 bg-gradient-to-br from-fuchsia-100 to-indigo-100 hover:shadow-xl transition delay-50 duration-300 ease-in-out">
-            <div className="flex justify-center">
-              <Space direction="horizontal">
-                <CarryOutOutlined
-                  className="text-4xl"
-                  style={{ color: "#d4b148" }}
-                />
-                <Statistic
-                  title="Passout year"
-                  value={String(statedata?.passoutyear)}
-                  formatter={(value) => String(value)}
-                  className="ml-2"
-                />
-              </Space>
-            </div>
-          </Card>
+          </Space>
+          <Typography.Title level={4}>All Placements</Typography.Title>
+          <DatabaseData />
         </div>
-      </Space>
-      <Typography.Title level={4}>All Placements</Typography.Title>
-      <DatabaseData />
-    </div>
+      ) : (
+        <div className="h-screen flex items-center justify-center">
+          <Spin size="large" />
+        </div>
+      )}
+    </>
   );
 };
 
