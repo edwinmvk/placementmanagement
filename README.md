@@ -31,14 +31,12 @@ cd react-placementmanagement
 In the `client` directory, install client dependencies,
 
 ```sh
-cd client
 pnpm install
 ```
 
 In the `server` directory, install server dependencies,
 
 ```sh
-cd server
 pnpm install
 ```
 
@@ -66,7 +64,11 @@ MONGODB_URL=*******************
 CLOUDINARY_CLOUD_NAME=*********
 CLOUDINARY_API_KEY=************
 CLOUDINARY_API_SECRET=*********
+JWT_SECRET=********************
 ```
+
+JWT_SECRET can be given as a random string of any length.
+e.g., `JWT_SECRET=hjimwmwmo-2m0sls_2ksksskwd`
 
 ## Usage
 
