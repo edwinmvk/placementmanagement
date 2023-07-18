@@ -9,7 +9,7 @@
 
 ## Introduction
 
-This is a web application built with React and Javascript to ease and organize the process of placement drives for students of Jyothi Engineering College. The build tool used is [Vite](https://vitejs.dev/). [AntDesign](https://ant.design/) and [TailwindCSS](https://tailwindcss.com/docs/installation) are used for component library and styling respectively. The server is build using [Nodejs](https://nodejs.org/en). This repository contains the source code for the app.
+This is a web application built with React and Javascript to ease and organize the process of placement drives for students of Jyothi Engineering College. The build tool used is [Vite](https://vitejs.dev/). [AntDesign](https://ant.design/) and [TailwindCSS](https://tailwindcss.com/docs/installation) are used for the component library and styling, respectively. The server is built using [Nodejs](https://nodejs.org/en). This repository contains the source code for the app.
 
 ## Prerequisites
 
