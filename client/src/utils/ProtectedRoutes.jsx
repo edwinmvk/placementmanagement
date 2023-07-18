@@ -25,22 +25,19 @@ export const ProtectedAdmin = ({ children }) => {
 
   // we also need to check if the jwt token in the cookie is valid
   async function checkAdminJwt() {
-    if (admin) {
-      try {
-        const response = await fetch(
-          `${Domain.serveraddress}/api/admin/checkreloadadminjwt`,
-          { credentials: "include" }
-        );
-        const data = await response.json();
-        if (!response.ok) {
-          setLoading(true);
-          logout();
-        } else {
-          setLoading(false);
-        }
-      } catch (error) {
-        setServerLost(true);
+    try {
+      const response = await fetch(
+        `${Domain.serveraddress}/api/admin/checkreloadadminjwt`,
+        { credentials: "include" }
+      );
+      await response.json();
+      if (!response.ok) {
+        logout();
+      } else {
+        setLoading(false);
       }
+    } catch (error) {
+      setServerLost(true);
     }
   }
 
@@ -61,16 +58,18 @@ export const ProtectedUserUnregistered = ({ children }) => {
   const { unRegisteredGoogleUser } = useContext(Context);
   if (!unRegisteredGoogleUser) {
     return <Navigate to="/signin" replace />;
+  } else {
+    return children;
   }
-  return children;
 };
 
 export const ProtectedUserRegistered = ({ children }) => {
   const { registeredGoogleUser } = useContext(Context);
   if (!registeredGoogleUser) {
     return <Navigate to="/signin" replace />;
+  } else {
+    return children;
   }
-  return children;
 };
 
 export default {
