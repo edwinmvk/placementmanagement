@@ -56,7 +56,7 @@ const ContextProvider = ({ children }) => {
         prompt: "select_account",
         hd: "jecc.ac.in",
       });
-      await signInWithRedirect(auth, provider);
+      await signInWithPopup(auth, provider);
     } catch (error) {
       console.log(error);
     }
