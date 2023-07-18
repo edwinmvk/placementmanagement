@@ -2,16 +2,19 @@ import React, { createContext, useState, useEffect } from "react";
 import {
   GoogleAuthProvider,
   signInWithPopup,
+  signInWithRedirect,
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
 import { auth } from "./Firebase";
-import { message } from "antd";
+import { Spin, message } from "antd";
 import Domain from "../utils/Domain.json";
 
 export const Context = createContext(null);
 
 const ContextProvider = ({ children }) => {
+  const [loading, setLoading] = useState(false);
+
   const [isCollapsed, setCollapsed] = useState(false);
   const [mobileView, setMobileView] = useState(false);
   const [mobilePopout, setMobilePopout] = useState(false);
@@ -53,7 +56,7 @@ const ContextProvider = ({ children }) => {
         prompt: "select_account",
         hd: "jecc.ac.in",
       });
-      await signInWithPopup(auth, provider);
+      await signInWithRedirect(auth, provider);
     } catch (error) {
       console.log(error);
     }
@@ -69,6 +72,7 @@ const ContextProvider = ({ children }) => {
   };
 
   async function checkUser(signedInUser) {
+    setLoading(true);
     try {
       const response = await fetch(`${Domain.serveraddress}/api/user`, {
         method: "POST",
@@ -101,6 +105,8 @@ const ContextProvider = ({ children }) => {
     } catch (error) {
       googleSignOut(); // signing out is necessary response is not obtained. If we didnt write this function, even though the page is protected and not shown, the user details are stil existing
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -188,7 +194,13 @@ const ContextProvider = ({ children }) => {
         setMobilePopout,
       }}
     >
-      {children}
+      {loading ? (
+        <div className="h-screen flex items-center justify-center bg-slate-100">
+          <Spin size="large" />
+        </div>
+      ) : (
+        children
+      )}
     </Context.Provider>
   );
 };

@@ -1,19 +1,27 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { Context } from "./ContextProvider";
 import Domain from "./Domain.json";
+import { Spin, message } from "antd";
 
 export const ProtectedAdmin = ({ children }) => {
   const { admin, logout } = useContext(Context);
   const [loading, setLoading] = useState(true);
+  const [serverLost, setServerLost] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    checkAdminJwt();
-  }, []);
+    if (serverLost) {
+      message.error("Failed to connect to server");
+      navigate("/signin");
+    }
+  }, [serverLost]);
 
   if (!admin) {
     return <Navigate to="/signin" replace />;
   }
+
+  checkAdminJwt();
 
   // we also need to check if the jwt token in the cookie is valid
   async function checkAdminJwt() {
@@ -31,12 +39,22 @@ export const ProtectedAdmin = ({ children }) => {
           setLoading(false);
         }
       } catch (error) {
-        console.log(error);
+        setServerLost(true);
       }
     }
   }
 
-  return <>{loading ? null : children}</>;
+  return (
+    <>
+      {loading ? (
+        <div className="h-screen flex items-center justify-center bg-slate-100">
+          <Spin size="large" />
+        </div>
+      ) : (
+        children
+      )}
+    </>
+  );
 };
 
 export const ProtectedUserUnregistered = ({ children }) => {
