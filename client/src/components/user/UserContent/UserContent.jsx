@@ -1,8 +1,8 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import UserHome from "../../../pages/User/UserHome/UserHome";
-import ForMe from "../../../pages/User/ForMe/ForMe";
-import AppliedPlacements from "../../../pages/User/AppliedPlacements/AppliedPlacements";
+import UserHome from "../../../pages/user/UserHome/UserHome";
+import ForMe from "../../../pages/user/ForMe/ForMe";
+import AppliedPlacements from "../../../pages/user/AppliedPlacements/AppliedPlacements";
 import Error404 from "../../../pages/Error404/Error404";
 
 const UserContent = () => {
