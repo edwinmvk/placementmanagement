@@ -12,7 +12,6 @@ import {
   CloseCircleOutlined,
 } from "@ant-design/icons";
 import placementcell from "../../../assets/placementcell.png";
-import Domain from "../../../utils/Domain.json";
 
 const { Sider } = Layout;
 
@@ -68,7 +67,9 @@ const UserSideBar = () => {
   async function fetchData(id) {
     // This is used to obtain the data from the server and set it to Hooks for the first time only
     try {
-      const response = await fetch(`${Domain.serveraddress}/api/user/${id}`);
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_DOMAIN}/api/user/${id}`
+      );
       const data = await response.json();
       setstatedata(data);
     } catch (error) {
@@ -88,7 +89,7 @@ const UserSideBar = () => {
   const sizeChecking = (fileList) => {
     // this if condition is necessary for the delete button to work
     if (fileList.length > 0) {
-      if (fileList[0].size > 614400) {
+      if (fileList[0].size > 1500000) {
         message.error("File size exceeded");
         setList([]); // Clear the fileList state
         return;
@@ -107,14 +108,13 @@ const UserSideBar = () => {
         formData.append("avatar", list[0]?.originFileObj);
         formData.append("avatarpublicid", statedata?.avatarpublicid);
         const response = await fetch(
-          `${Domain.serveraddress}/api/user/userupdate/${userid}`,
+          `${import.meta.env.VITE_SERVER_DOMAIN}/api/user/userupdate/${userid}`,
           {
             method: "POST",
             body: formData,
           }
         );
-        const data = await response.json();
-        // console.log(data);
+        await response.json();
         if (response.status === 200) {
           message.success("Picture updated");
         } else if (response.status === 500) {
@@ -277,10 +277,11 @@ const UserSideBar = () => {
           accept=".png, .jpg, .jpeg"
           fileList={list}
           onChange={(event) => sizeChecking(event.fileList)}
+          beforeUpload={(file) => false} // This is stop the automatic uploading
         >
           Drag and drop Profile picture here
           <br />
-          (formats: .png, ,jpg) (maxsize: 500kb)
+          (formats: .png, ,jpg) (maxsize: 1Mb)
         </Upload.Dragger>
       </Modal>
     </Layout>

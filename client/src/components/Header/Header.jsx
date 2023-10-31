@@ -9,7 +9,6 @@ import {
   MenuOutlined,
   MenuUnfoldOutlined,
 } from "@ant-design/icons";
-import Domain from "../../utils/Domain.json";
 
 const Header = () => {
   const {
@@ -45,7 +44,7 @@ const Header = () => {
   async function fetchAdminData() {
     try {
       const response = await fetch(
-        `${Domain.serveraddress}/api/adminnotifications`
+        `${import.meta.env.VITE_SERVER_DOMAIN}/api/adminnotifications`
       );
       const data = await response.json();
       setNotify(data);
@@ -57,7 +56,9 @@ const Header = () => {
   async function fetchUserData() {
     try {
       const response = await fetch(
-        `${Domain.serveraddress}/api/usernotifications/${currentUser}`
+        `${
+          import.meta.env.VITE_SERVER_DOMAIN
+        }/api/usernotifications/${currentUser}`
       );
       const data = await response.json();
       setNotify(data);
@@ -85,9 +86,12 @@ const Header = () => {
 
   async function clearAdminNotifications() {
     try {
-      await fetch(`${Domain.serveraddress}/api/adminnotifications`, {
-        method: "DELETE",
-      })
+      await fetch(
+        `${import.meta.env.VITE_SERVER_DOMAIN}/api/adminnotifications`,
+        {
+          method: "DELETE",
+        }
+      )
         .then(setNotifyDrawer(false))
         .then(setNotify([]));
     } catch (error) {
@@ -98,7 +102,9 @@ const Header = () => {
   async function clearUserNotifications() {
     try {
       await fetch(
-        `${Domain.serveraddress}/api/usernotifications/${currentUser}`,
+        `${
+          import.meta.env.VITE_SERVER_DOMAIN
+        }/api/usernotifications/${currentUser}`,
         {
           method: "DELETE",
         }

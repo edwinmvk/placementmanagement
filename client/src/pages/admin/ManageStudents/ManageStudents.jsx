@@ -3,7 +3,6 @@ import { Typography, Table, Avatar, Modal, Input, message } from "antd";
 import { DeleteFilled, EditFilled } from "@ant-design/icons";
 import "../../../components/CustomTableCss/CustomTable.css";
 import CSVbutton from "../../../components/CSVbutton/CSVbutton";
-import Domain from "../../../utils/Domain.json";
 
 const ManageStudents = () => {
   const [statedata, setstatedata] = useState([]);
@@ -18,7 +17,9 @@ const ManageStudents = () => {
   const fetchData = async () => {
     // This is used to obtain the data from the server and set it to Hooks for the first time only
     try {
-      const response = await fetch(`${Domain.serveraddress}/api/user`);
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_DOMAIN}/api/user`
+      );
       const data = await response.json();
       setstatedata(data);
     } catch (error) {
@@ -32,7 +33,7 @@ const ManageStudents = () => {
     // This async function is to send the updated state data to the server for updating the database
     try {
       const response = await fetch(
-        `${Domain.serveraddress}/api/user/${userid}`,
+        `${import.meta.env.VITE_SERVER_DOMAIN}/api/user/${userid}`,
         {
           method: "DELETE",
         }
@@ -61,7 +62,7 @@ const ManageStudents = () => {
     // This async function is to send the updated state data to the server for updating the database
     try {
       const response = await fetch(
-        `${Domain.serveraddress}/api/user/${userid}`,
+        `${import.meta.env.VITE_SERVER_DOMAIN}/api/user/${userid}`,
         {
           method: "PATCH",
           headers: {

@@ -21,7 +21,6 @@ import {
   HourglassOutlined,
 } from "@ant-design/icons";
 import CSVbutton from "../../../components/CSVbutton/CSVbutton";
-import Domain from "../../../utils/Domain.json";
 
 const EditStatus = () => {
   const { id } = useParams();
@@ -42,7 +41,7 @@ const EditStatus = () => {
   async function fetchData(id) {
     try {
       const response = await fetch(
-        `${Domain.serveraddress}/api/appliedplacements/${id}`
+        `${import.meta.env.VITE_SERVER_DOMAIN}/api/appliedplacements/${id}`
       );
       const data = await response.json();
       setstatedata(data);
@@ -67,7 +66,9 @@ const EditStatus = () => {
             )
           : null;
         const response = await fetch(
-          `${Domain.serveraddress}/api/appliedplacements/${userid}`,
+          `${
+            import.meta.env.VITE_SERVER_DOMAIN
+          }/api/appliedplacements/${userid}`,
           {
             method: "PUT",
             body: formData,
@@ -105,7 +106,7 @@ const EditStatus = () => {
       };
 
       const response = await fetch(
-        `${Domain.serveraddress}/api/appliedplacements/${userid}`,
+        `${import.meta.env.VITE_SERVER_DOMAIN}/api/appliedplacements/${userid}`,
         {
           method: "PATCH",
           headers: {
@@ -135,15 +136,20 @@ const EditStatus = () => {
         setstatedata(copystatedata);
 
         // send notification
-        fetch(`${Domain.serveraddress}/api/usernotifications/${userid}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            description: `The status of placementid: ${id} is updated to ${newStatus}`,
-          }),
-        });
+        fetch(
+          `${
+            import.meta.env.VITE_SERVER_DOMAIN
+          }/api/usernotifications/${userid}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              description: `The status of placementid: ${id} is updated to ${newStatus}`,
+            }),
+          }
+        );
       } else if (response.status === 500) {
         message.error("Please try again");
       }
@@ -164,7 +170,7 @@ const EditStatus = () => {
   const sizeChecking = (fileList) => {
     // this if condition is necessary for the delete button to work
     if (fileList.length > 0) {
-      if (fileList[0].size > 614400) {
+      if (fileList[0].size > 1500000) {
         message.error("File size exceeded");
         setList([]); // Clear the fileList state
         return;
@@ -488,10 +494,11 @@ const EditStatus = () => {
           accept=".pdf"
           fileList={list}
           onChange={(event) => sizeChecking(event.fileList)}
+          beforeUpload={(file) => false} // This is stop the automatic uploading
         >
           Drag and drop the offer letter here
           <br />
-          (formats: .pdf) (maxsize: 500kb)
+          (formats: .pdf) (maxsize: 1Mb)
         </Upload.Dragger>
         <Button
           className="mt-3 bg-green-600 hover:bg-green-500"

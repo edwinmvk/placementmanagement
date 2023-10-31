@@ -8,7 +8,6 @@ import {
 } from "firebase/auth";
 import { auth } from "./Firebase";
 import { Spin, message } from "antd";
-import Domain from "../utils/Domain.json";
 
 export const Context = createContext(null);
 
@@ -74,15 +73,18 @@ const ContextProvider = ({ children }) => {
   async function checkUser(signedInUser) {
     setLoading(true);
     try {
-      const response = await fetch(`${Domain.serveraddress}/api/user`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userid: parseInt(signedInUser.displayName.substring(0, 8)),
-        }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_DOMAIN}/api/user`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userid: parseInt(signedInUser.displayName.substring(0, 8)),
+          }),
+        }
+      );
       const data = await response.json();
 
       if (data === "unregistered") {
@@ -143,14 +145,17 @@ const ContextProvider = ({ children }) => {
   const login = async (adminobj) => {
     try {
       if (adminobj) {
-        const response = await fetch(`${Domain.serveraddress}/api/admin`, {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(adminobj),
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_SERVER_DOMAIN}/api/admin`,
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(adminobj),
+          }
+        );
         const data = await response.json();
         if (response.status === 200) {
           message.success(data);
@@ -168,12 +173,12 @@ const ContextProvider = ({ children }) => {
     setAdmin(null);
     sessionStorage.removeItem("browseradmin");
     const response = await fetch(
-      `${Domain.serveraddress}/api/admin/deletecookie`,
+      `${import.meta.env.VITE_SERVER_DOMAIN}/api/admin/deletecookie`,
       {
         credentials: "include",
       }
     );
-    const data = await response.json();
+    await response.json();
   };
 
   return (

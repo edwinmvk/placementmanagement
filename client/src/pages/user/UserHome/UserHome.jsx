@@ -8,7 +8,6 @@ import {
 } from "@ant-design/icons";
 import { Context } from "../../../utils/ContextProvider";
 import "../../../components/CustomTableCss/CustomTable.css"; // Import the CSS file
-import Domain from "../../../utils/Domain.json";
 
 const UserHome = () => {
   const { registeredGoogleUser } = useContext(Context);
@@ -24,7 +23,7 @@ const UserHome = () => {
     // This is used to obtain the data from the server and set it to Hooks
     try {
       const response = await fetch(
-        `${Domain.serveraddress}/api/user/${userid}`
+        `${import.meta.env.VITE_SERVER_DOMAIN}/api/user/${userid}`
       );
       const data = await response.json();
       setstatedata(data);
@@ -117,12 +116,13 @@ const UserHome = () => {
 
 const DatabaseData = () => {
   const [statedata, setstatedata] = useState([]); // this state will eventually hold ALL the data from the DATABASE
-  const [expandedRowKeys, setExpandedRowKeys] = useState([]);
 
   const fetchData = async () => {
     // This is used to obtain the data from the server and set it to Hooks
     try {
-      const response = await fetch(`${Domain.serveraddress}/api/placements`);
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_DOMAIN}/api/placements`
+      );
       const data = await response.json();
       setstatedata(data);
     } catch (error) {
@@ -135,6 +135,7 @@ const DatabaseData = () => {
   }, []);
 
   const columns = [
+    Table.EXPAND_COLUMN,
     {
       title: "Placement ID",
       dataIndex: "placementid",
@@ -210,36 +211,21 @@ const DatabaseData = () => {
     },
   ];
 
-  // When a row is expanded, the function adds the key of the expanded row to the expandedRowKeys array.
-  // If a row is being collapsed, the function removes its key from the expandedRowKeys array
-  const handleRowExpand = (expanded, record) => {
-    // expanded is a boolean which is triggered by clicking the + or - button
-    setExpandedRowKeys((prevState) => {
-      if (expanded) {
-        return [...prevState, record.placementid];
-      } else {
-        return prevState.filter((key) => key !== record.placementid);
-      }
-    });
-  };
-
-  const expandedRowRender = (record) => {
-    return (
-      <p style={{ margin: 0 }}>
-        <strong>Description: </strong>
-        {record.description}
-      </p>
-    );
-  };
-
   return (
     <Table
       className="custom-table"
       dataSource={statedata}
       columns={columns}
-      expandedRowRender={expandedRowRender} // defines what component must be rendered in the expanded row
-      onExpand={handleRowExpand}
-      expandedRowKeys={expandedRowKeys}
+      expandable={{
+        expandedRowRender: (record) => {
+          return (
+            <p style={{ margin: 0 }}>
+              <strong>Description: </strong>
+              {record.description}
+            </p>
+          );
+        },
+      }}
       rowKey="placementid"
       bordered
       pagination={true}

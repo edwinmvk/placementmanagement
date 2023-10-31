@@ -9,58 +9,64 @@ import {
   Upload,
   message,
   Spin,
+  Button,
 } from "antd";
-import Domain from "../../../utils/Domain.json";
 
 const RegisterUser = () => {
   const [loading, setLoading] = useState(false);
+  const [list, setList] = useState([]);
   const [form] = Form.useForm();
   const { unRegisteredGoogleUser, googleSignOut } = useContext(Context);
+
   const onFinish = async (values) => {
-    message.warning("Please wait for confirmation");
-    setLoading(true);
-    // This async function is to send the form data to the server for updating the database
-    try {
-      const formData = new FormData();
-      formData.append("userid", values.userid);
-      formData.append("username", values.username);
-      formData.append("email", values.email);
-      formData.append("passoutyear", values.passoutyear);
-      formData.append("arrears", values.arrears);
-      formData.append("cgpa", values.cgpa);
-      formData.append("avatar", values.avatar[0]?.originFileObj);
-      const response = await fetch(
-        `${Domain.serveraddress}/api/user/register`,
-        {
-          method: "POST",
-          body: formData,
+    if (list.length > 0) {
+      setLoading(true);
+      message.warning("Please wait for confirmation");
+      try {
+        const formData = new FormData();
+        formData.append("userid", values.userid);
+        formData.append("username", values.username);
+        formData.append("email", values.email);
+        formData.append("passoutyear", values.passoutyear);
+        formData.append("arrears", values.arrears);
+        formData.append("cgpa", values.cgpa);
+        formData.append("avatar", list[0]?.originFileObj);
+        const response = await fetch(
+          `${import.meta.env.VITE_SERVER_DOMAIN}/api/user/register`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        const data = await response.json();
+        setLoading(false);
+
+        if (response.status === 200) {
+          Modal.success({
+            title: "Registration Successful",
+            okButtonProps: { className: "bg-blue-500" },
+          });
+          await googleSignOut(); // signout out function will take place only if the status is 200
+        } else if (response.status === 401) {
+          Modal.error({
+            title: "Registration Unsuccessful",
+            content: data,
+            okButtonProps: { className: "bg-blue-500" },
+          });
+        } else {
+          Modal.error({
+            title: "Registration Unsuccessful",
+            content: "Please try again",
+            okButtonProps: { className: "bg-blue-500" },
+          });
         }
-      );
-
-      const data = await response.json();
-      setLoading(false);
-
-      if (response.status === 200) {
-        Modal.success({
-          title: "Registration Successful",
-          okButtonProps: { className: "bg-blue-500" },
-        });
-        await googleSignOut(); // signout out function will take place only if the status is 200
-      } else if (response.status === 401) {
-        Modal.error({
-          title: "Registration Unsuccessful",
-          content: data,
-          okButtonProps: { className: "bg-blue-500" },
-        });
-      } else {
-        Modal.error({
-          title: "Registration Unsuccessful",
-          content: "Please try again",
-          okButtonProps: { className: "bg-blue-500" },
-        });
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
+    } else {
+      message.warning("Please upload a profile picture");
+      return;
     }
   };
 
@@ -95,28 +101,18 @@ const RegisterUser = () => {
     number: {
       range: "${name} must be between ${min} and ${max}",
     },
-    avatar: {
-      validator(_, fileList) {
-        return new Promise((resolve, reject) => {
-          if (fileList && fileList.length !== 0 && fileList[0].size > 614400) {
-            reject("File size exceeded");
-          } else {
-            resolve();
-          }
-        });
-      },
-    },
   };
 
-  const sizeChecking = (file) => {
-    return new Promise((resolve, reject) => {
-      if (file.size > 614400) {
-        message.error("Exceeded");
-        reject();
-      } else {
-        resolve();
+  const sizeChecking = (fileList) => {
+    // this if condition is necessary for the delete button to work
+    if (fileList.length > 0) {
+      if (fileList[0].size > 1500000) {
+        message.error("File size exceeded");
+        setList([]); // Clear the fileList state
+        return;
       }
-    });
+    }
+    setList(fileList); // Update the fileList state
   };
 
   return (
@@ -271,40 +267,23 @@ const RegisterUser = () => {
                       </div>
 
                       <div className="md:col-span-5">
-                        <Form.Item
-                          name="avatar"
-                          label="Profile Picture"
-                          style={{ marginBottom: "-3px" }}
-                          valuePropName="fileList" // all the files uploaded through upload will be stored as objects in the fileList array
-                          getValueFromEvent={(event) => {
-                            // this is a call back function that is similar to the onChange event. Used to obtain the list of images when the onnchange event takes place. This list is then passed for validation
-                            return event?.fileList;
-                          }}
-                          rules={[
-                            {
-                              required: true,
-                            },
-                            {
-                              validator: (_, fileList) =>
-                                validateMessages.avatar.validator(_, fileList),
-                            },
-                          ]}
-                        >
+                        <div className="mt-2">
+                          <h2 className="mb-3">Profile picture</h2>
                           <Upload.Dragger
                             maxCount={1}
                             multiple={false}
                             listType="picture"
                             showUploadList={{ showRemoveIcon: true }}
                             accept=".png, .jpg, .jpeg"
-                            beforeUpload={(file) => {
-                              sizeChecking(file);
-                            }}
+                            fileList={list}
+                            onChange={(event) => sizeChecking(event.fileList)}
+                            beforeUpload={(file) => false} // This is stop the automatic uploading
                           >
                             Drag and drop Profile picture here
                             <br />
-                            (formats: .png, ,jpg) (maxsize: 500kb)
+                            (formats: .png, ,jpg) (maxsize: 1Mb)
                           </Upload.Dragger>
-                        </Form.Item>
+                        </div>
                       </div>
 
                       <div className="m-7 md:col-span-5 text-right">
@@ -315,12 +294,13 @@ const RegisterUser = () => {
                           >
                             Cancel
                           </button>
-                          <button
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                            type="submit"
+                          <Button
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold"
+                            htmlType="submit"
+                            type="primary"
                           >
                             Submit
-                          </button>
+                          </Button>
                         </div>
                       </div>
                     </div>

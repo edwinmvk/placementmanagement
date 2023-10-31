@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Context } from "./ContextProvider";
-import Domain from "./Domain.json";
 import { Spin, message } from "antd";
 
 export const ProtectedAdmin = ({ children }) => {
@@ -27,7 +26,7 @@ export const ProtectedAdmin = ({ children }) => {
   async function checkAdminJwt() {
     try {
       const response = await fetch(
-        `${Domain.serveraddress}/api/admin/checkreloadadminjwt`,
+        `${import.meta.env.VITE_SERVER_DOMAIN}/api/admin/checkreloadadminjwt`,
         { credentials: "include" }
       );
       await response.json();

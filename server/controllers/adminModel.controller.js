@@ -1,6 +1,6 @@
 import adminModel from "../mongodb/models/adminModel.js";
 import mongoose from "mongoose";
-import bycrypt from "bcrypt";
+import bcrypt from "bcrypt";
 import { createAdminToken } from "../jwt/jwt.js";
 
 const getAdmin = async (req, res) => {
@@ -9,14 +9,14 @@ const getAdmin = async (req, res) => {
 
     const adminObj = await adminModel.findOne({ username: username });
     if (!adminObj) {
-      return res.status(401).json("Invalid username");
+      return res.status(401).json("Invalid username or username");
     }
 
     // compare the password with the hashed password in the database
-    const isValidPassword = await bycrypt.compare(password, adminObj.password);
+    const isValidPassword = await bcrypt.compare(password, adminObj.password);
 
     if (!isValidPassword) {
-      return res.status(401).json("Invalid password");
+      return res.status(401).json("Invalid password or username");
     }
     // this is to create a jwt token
     const jwtAccessToken = createAdminToken(adminObj);
@@ -25,9 +25,9 @@ const getAdmin = async (req, res) => {
     return res
       .status(200)
       .cookie("jwtAdminAccessTokenCookie", jwtAccessToken, {
-        sameSite: "strict",
+        // sameSite: "strict",
         httpOnly: true,
-        maxAge: 60 * 60 * 12 * 1000,
+        maxAge: 1000 * 60 * 60 * 1, // 1 hr
       })
       .json("Successfully logged in");
   } catch (error) {
@@ -38,7 +38,7 @@ const getAdmin = async (req, res) => {
   //   const { username, password } = req.body;
 
   //   // hash the password
-  //   const hashedpassword = await bycrypt.hash(password, 13);
+  //   const hashedpassword = await bcrypt.hash(password, 13);
 
   //   // This is the case of creating multiple admin accounts
   //   const adminExists = await adminModel.findOne({ username });
@@ -70,7 +70,7 @@ const updateAdmin = async (req, res) => {
     }
 
     // compare with  hashed password
-    const isValidPassword = await bycrypt.compare(
+    const isValidPassword = await bcrypt.compare(
       oldpassword,
       adminToUpdate.password
     );
@@ -89,7 +89,7 @@ const updateAdmin = async (req, res) => {
 
     try {
       // hash the password
-      const hashedpassword = await bycrypt.hash(newpassword, 13);
+      const hashedpassword = await bcrypt.hash(newpassword, 13);
 
       await adminModel
         .findOneAndUpdate(

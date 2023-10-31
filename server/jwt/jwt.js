@@ -10,7 +10,7 @@ export const createAdminToken = (adminObj) => {
     { username: adminObj.username },
     process.env.JWT_SECRET,
     {
-      expiresIn: "12h",
+      expiresIn: "1h",
     }
   );
   return accessToken;

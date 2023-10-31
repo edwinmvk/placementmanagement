@@ -11,7 +11,6 @@ import {
 } from "antd";
 import moment from "moment";
 import { v4 as uuidv4 } from "uuid";
-import Domain from "../../../utils/Domain.json";
 
 const NewPlacement = () => {
   const [form] = Form.useForm();
@@ -20,13 +19,16 @@ const NewPlacement = () => {
     message.warning("Please wait for confirmation");
     // This async function is to send the form data to the server for updating the database
     try {
-      const response = await fetch(`${Domain.serveraddress}/api/placements`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_DOMAIN}/api/placements`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        }
+      );
       const data = await response.json();
       if (response.status === 200) {
         Modal.success({

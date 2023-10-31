@@ -23,7 +23,6 @@ import {
 } from "@ant-design/icons";
 import placementcell from "../../../assets/placementcell.png";
 import adminpic from "../../../assets/admin.png";
-import Domain from "../../../utils/Domain.json";
 
 const { Sider } = Layout;
 
@@ -80,7 +79,7 @@ const Sidebar = () => {
   const sendUpdatedData = async (values) => {
     try {
       const response = await fetch(
-        `${Domain.serveraddress}/api/admin/${values.username}`,
+        `${import.meta.env.VITE_SERVER_DOMAIN}/api/admin/${values.username}`,
         {
           method: "PATCH",
           credentials: "include",

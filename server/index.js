@@ -12,16 +12,13 @@ import placementsRouter from "./routes/placementsModel.routes.js";
 import userNotificationsRouter from "./routes/userNotificationModel.routes.js";
 import adminNotificationRouter from "./routes/adminNotificationModel.routes.js";
 
-const domainData = readFileSync("./Domain.json", "utf8");
-const Domain = JSON.parse(domainData);
-
 dotenv.config();
 const app = express();
 
 app.use(express.json({ limit: "50mb" }));
 app.use(
   cors({
-    origin: Domain.clientaddress,
+    origin: process.env.CLIENT_DOMAIN,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true,
   })

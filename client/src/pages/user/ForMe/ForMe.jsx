@@ -3,14 +3,12 @@ import { Button, Modal, Table, Typography, Upload, message } from "antd";
 import { Context } from "../../../utils/ContextProvider";
 import { CloudUploadOutlined, SelectOutlined } from "@ant-design/icons";
 import "../../../components/CustomTableCss/CustomTable.css";
-import Domain from "../../../utils/Domain.json";
 
 const ForMe = () => {
   const { registeredGoogleUser } = useContext(Context);
   const userid = parseInt(registeredGoogleUser?.displayName.substring(0, 8));
 
   const [statedata, setstatedata] = useState([]); // this state will eventually hold ALL the data from the DATABASE
-  const [expandedRowKeys, setExpandedRowKeys] = useState([]);
   const [userDetails, setUserDetails] = useState(null);
   const [list, setList] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -25,7 +23,7 @@ const ForMe = () => {
     // This is used to obtain the data from the server and set it to Hooks
     try {
       const response = await fetch(
-        `${Domain.serveraddress}/api/placements/${userid}`
+        `${import.meta.env.VITE_SERVER_DOMAIN}/api/placements/${userid}`
       );
       const data = await response.json();
       setstatedata(data);
@@ -39,7 +37,7 @@ const ForMe = () => {
   async function fetchUserDetails() {
     try {
       const response = await fetch(
-        `${Domain.serveraddress}/api/user/${userid}`
+        `${import.meta.env.VITE_SERVER_DOMAIN}/api/user/${userid}`
       );
       const data = await response.json();
       setUserDetails(data);
@@ -49,6 +47,7 @@ const ForMe = () => {
   }
 
   const columns = [
+    Table.EXPAND_COLUMN,
     {
       title: "Placement ID",
       dataIndex: "placementid",
@@ -117,26 +116,13 @@ const ForMe = () => {
     },
   ];
 
-  // When a row is expanded, the function adds the key of the expanded row to the expandedRowKeys array.
-  // If a row is being collapsed, the function removes its key from the expandedRowKeys array
-  const handleRowExpand = (expanded, record) => {
-    // expanded is a boolean which is triggered by clicking the + or - button
-    setExpandedRowKeys((prevState) => {
-      if (expanded) {
-        return [...prevState, record.placementid];
-      } else {
-        return prevState.filter((key) => key !== record.placementid);
-      }
-    });
-  };
-
   async function onApply(record) {
     if (userDetails?.resumeurl) {
       setDisabledApply(true);
       try {
         const id = userDetails?.userid;
         const response = await fetch(
-          `${Domain.serveraddress}/api/appliedplacements/${id}`,
+          `${import.meta.env.VITE_SERVER_DOMAIN}/api/appliedplacements/${id}`,
           {
             method: "POST",
             headers: {
@@ -173,7 +159,9 @@ const ForMe = () => {
 
           // send notification
           fetch(
-            `${Domain.serveraddress}/api/adminnotifications/${userDetails?.userid}`,
+            `${import.meta.env.VITE_SERVER_DOMAIN}/api/adminnotifications/${
+              userDetails?.userid
+            }`,
             {
               method: "POST",
               headers: {
@@ -230,7 +218,7 @@ const ForMe = () => {
           ? formData.append("resumepublicid", userDetails?.resumepublicid)
           : null; // contains if there are any previous uploaded resume
         const response = await fetch(
-          `${Domain.serveraddress}/api/user/resume/${id}`,
+          `${import.meta.env.VITE_SERVER_DOMAIN}/api/user/resume/${id}`,
           {
             method: "POST",
             body: formData,
@@ -258,15 +246,6 @@ const ForMe = () => {
     setIsModalVisible(false);
   };
 
-  const expandedRowRender = (record) => {
-    return (
-      <p style={{ margin: 0 }}>
-        <strong>Description: </strong>
-        {record.description}
-      </p>
-    );
-  };
-
   return (
     <div className="mx-5">
       <div className="flex flex-wrap justify-between items-center">
@@ -287,9 +266,16 @@ const ForMe = () => {
         className="custom-table"
         dataSource={statedata}
         columns={columns}
-        expandedRowRender={expandedRowRender} // defines what component must be rendered in the expanded row
-        onExpand={handleRowExpand}
-        expandedRowKeys={expandedRowKeys}
+        expandable={{
+          expandedRowRender: (record) => {
+            return (
+              <p style={{ margin: 0 }}>
+                <strong>Description: </strong>
+                {record.description}
+              </p>
+            );
+          },
+        }}
         rowKey="placementid"
         bordered
         pagination={true}
@@ -311,6 +297,7 @@ const ForMe = () => {
           accept=".pdf"
           fileList={list}
           onChange={(event) => sizeChecking(event.fileList)}
+          beforeUpload={(file) => false} // This is stop the automatic uploading
         >
           Drag and drop your resume here
           <br />

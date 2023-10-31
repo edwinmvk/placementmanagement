@@ -53,6 +53,7 @@ VITE_PROJECTID=****************
 VITE_STORAGEBUCKET=************
 VITE_MESSAGINGSENDERID=********
 VITE_APPID=********************
+VITE_SERVER_DOMAIN=http://localhost:3000
 ```
 
 In `server` directory, create a file `.env`
