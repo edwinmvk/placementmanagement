@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "../../components/Header/Header";
-import UserSideBar from "../../components/User/UserSidebar/UserSideBar";
-import UserContent from "../../components/User/UserContent/UserContent";
+import UserSideBar from "../../components/user/UserSidebar/UserSideBar";
+import UserContent from "../../components/user/UserContent/UserContent";
 import Footer from "../../components/Footer/Footer";
 
 const User = () => {

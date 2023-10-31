@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "../../components/Header/Header";
-import Sidebar from "../../components/Admin/Sidebar/Sidebar";
-import Content from "../../components/Admin/Content/Content";
+import Sidebar from "../../components/admin/Sidebar/Sidebar";
+import Content from "../../components/admin/Content/Content";
 import Footer from "../../components/Footer/Footer";
 
 const Admin = () => {
