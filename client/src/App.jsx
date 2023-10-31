@@ -4,9 +4,9 @@ import ContextProvider from "./utils/ContextProvider";
 import Protected from "./utils/ProtectedRoutes";
 import UserSignin from "./pages/UserSignin/UserSignin";
 import AdminSignin from "./pages/AdminSignin/AdminSignin";
-import Admin from "./pages/Admin/Admin";
+import Admin from "./pages/admin/Admin";
 import RegisterUser from "./pages/user/RegisterUser/RegisterUser";
-import User from "./pages/User/User";
+import User from "./pages/user/User";
 import Error404 from "./pages/Error404/Error404";
 import "./App.css";
 
