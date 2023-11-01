@@ -66,14 +66,11 @@ CLOUDINARY_CLOUD_NAME=*********
 CLOUDINARY_API_KEY=************
 CLOUDINARY_API_SECRET=*********
 JWT_SECRET=********************
-CLIENT_DOMAIN_URL=http://localhost:5173
-CLIENT_DOMAIN=""
+CLIENT_DOMAIN=http://localhost:5173
 ```
 
 JWT_SECRET can be given as a random string of any length.
 e.g., `JWT_SECRET=hjimwmwmo-2m0sls_2ksksskwd`
-
-**NB**: `CLIENT_DOMAIN` must be set as an empty string as given above.
 
 ## Usage
 
