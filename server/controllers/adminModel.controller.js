@@ -25,9 +25,12 @@ const getAdmin = async (req, res) => {
     return res
       .status(200)
       .cookie("jwtAdminAccessTokenCookie", jwtAccessToken, {
-        // sameSite: "strict",
-        httpOnly: true,
         maxAge: 1000 * 60 * 60 * 1, // 1 hr
+        httpOnly: true,
+        sameSite: "none", // Use 'none' for cross-origin requests
+        domain: process.env.CLIENT_DOMAIN, // Set the domain of your React app. For local server, the domain is empty string
+        path: "/", // Set the path to '/' to make it available across the entire client site
+        secure: true, // Send the cookie only over HTTPS
       })
       .json("Successfully logged in");
   } catch (error) {

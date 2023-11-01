@@ -18,7 +18,7 @@ const app = express();
 app.use(express.json({ limit: "50mb" }));
 app.use(
   cors({
-    origin: process.env.CLIENT_DOMAIN,
+    origin: process.env.CLIENT_DOMAIN_URL,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true,
   })
