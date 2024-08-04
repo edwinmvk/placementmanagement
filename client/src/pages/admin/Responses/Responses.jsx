@@ -36,7 +36,7 @@ const Responses = () => {
       <Typography.Title level={5}>
         Click to edit the status of responses
       </Typography.Title>
-      <div className="bg-stone-100 p-2 md:p-5 md:px-8 h-80 max-h-full rounded-lg overflow-y-scroll">
+      <div className="bg-stone-100 p-2 md:p-5 md:px-8 max-h-screen rounded-lg overflow-y-scroll">
         {statedata.length === 0 ? (
           <div className="flex items-center justify-center h-full">
             <div className="flex flex-col justify-center items-center">

@@ -122,7 +122,7 @@ const RegisterUser = () => {
           <Spin size="large" />
         </div>
       ) : (
-        <div className="p-6 flex flex-col items-center justify-center sm:h-auto md:h-full lg:h-auto bg-slate-100">
+        <div className="p-6 flex flex-col items-center justify-center sm:h-auto md:h-full lg:h-screen bg-slate-100">
           <div className="flex flex-col">
             <Typography.Title level={2}>
               Student Registration Form

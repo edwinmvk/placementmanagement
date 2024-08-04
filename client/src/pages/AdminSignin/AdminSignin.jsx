@@ -43,7 +43,7 @@ const AdminSignin = () => {
   );
 
   return (
-    <div className="lg:flex">
+    <div className="lg:flex min-h-screen">
       <div className="lg:w-1/2">
         <div className="bg-indigo-100 text-5xl text-indigo-800 tracking-wide font-bold py-12 px-5 flex justify-center items-center lg:justify-start lg:px-12">
           Welcome back Admin
